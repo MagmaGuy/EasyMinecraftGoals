@@ -3,12 +3,12 @@ package com.magmaguy.easyminecraftgoals.v1_18_R2.wanderbacktopoint;
 import com.magmaguy.easyminecraftgoals.events.WanderBackToPointEndEvent;
 import com.magmaguy.easyminecraftgoals.events.WanderBackToPointStartEvent;
 import com.magmaguy.easyminecraftgoals.internal.AbstractWanderBackToPoint;
+import com.magmaguy.easyminecraftgoals.utils.Utils;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.pathfinder.Path;
-import net.minecraft.world.phys.Vec3;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
@@ -18,13 +18,12 @@ import java.util.EnumSet;
 
 public class WanderBackToPointGoal extends Goal implements AbstractWanderBackToPoint {
 
-    private Vec3 returnLocation;
-    private double maximumDistanceFromPoint;
-    private LivingEntity livingEntity;
-    private PathfinderMob pathfinderMob;
+    private final double maximumDistanceFromPoint;
+    private final LivingEntity livingEntity;
+    private final PathfinderMob pathfinderMob;
+    private final Mob mob;
+    Location returnLocation;
     private int priority;
-
-    private Mob mob;
     private Path path = null;
     private long lastTime;
 
@@ -47,7 +46,7 @@ public class WanderBackToPointGoal extends Goal implements AbstractWanderBackToP
         this.mob = mob;
         this.livingEntity = livingEntity;
         this.pathfinderMob = pathfinderMob;
-        this.returnLocation = new Vec3(location.getX(), location.getY(), location.getZ());
+        this.returnLocation = location;
         this.priority = priority;
         this.maxDurationTicks = maxDurationTicks;
 
@@ -73,8 +72,8 @@ public class WanderBackToPointGoal extends Goal implements AbstractWanderBackToP
             this.path = null;
         }
         if (hardObjective && (pathfinderMob == null || pathfinderMob.isPathFinding()))
-            livingEntity.teleport(new Location(livingEntity.getWorld(), returnLocation.x, returnLocation.y, returnLocation.z));
-        WanderBackToPointEndEvent wanderBackToPointEndEvent = new WanderBackToPointEndEvent(hardObjective, livingEntity);
+            livingEntity.teleport(returnLocation);
+        WanderBackToPointEndEvent wanderBackToPointEndEvent = new WanderBackToPointEndEvent(hardObjective, livingEntity, this);
         Bukkit.getPluginManager().callEvent(wanderBackToPointEndEvent);
         updateCooldown();
     }
@@ -88,13 +87,14 @@ public class WanderBackToPointGoal extends Goal implements AbstractWanderBackToP
         if ((lastTime + 50L * goalRefreshCooldownTicks) - System.currentTimeMillis() > 0) return false;
         updateCooldown();
         if (pathfinderMob != null) {
-            if (returnLocation.distanceToSqr(new Vec3(pathfinderMob.getX(), pathfinderMob.getY(), pathfinderMob.getZ())) < maximumDistanceFromPoint * maximumDistanceFromPoint)
+            if (Utils.distanceShorterThan(returnLocation.toVector(), livingEntity.getLocation().toVector(), maximumDistanceFromPoint))
                 return false;
-            path = this.pathfinderMob.getNavigation().createPath(returnLocation.x, returnLocation.y, returnLocation.z, stopReturnDistance);
+            path = this.pathfinderMob.getNavigation().createPath(returnLocation.getX(), returnLocation.getY(), returnLocation.getZ(), stopReturnDistance);
             // Not 100% sure of why this is happening, but I suspect that sometimes the path can't be updated
             if (path == null) return false;
         }
-        WanderBackToPointStartEvent wanderBackToPointStartEvent = new WanderBackToPointStartEvent(hardObjective, livingEntity);
+
+        WanderBackToPointStartEvent wanderBackToPointStartEvent = new WanderBackToPointStartEvent(hardObjective, livingEntity, this);
         Bukkit.getPluginManager().callEvent(wanderBackToPointStartEvent);
         if (wanderBackToPointStartEvent.isCancelled()) return false;
         if (teleportOnFail && (pathfinderMob == null || !path.canReach())) {
@@ -105,8 +105,8 @@ public class WanderBackToPointGoal extends Goal implements AbstractWanderBackToP
     }
 
     private void earlyPathfindingTermination() {
-        livingEntity.teleport(new Location(livingEntity.getWorld(), returnLocation.x, returnLocation.y, returnLocation.z));
-        WanderBackToPointEndEvent wanderBackToPointEndEvent = new WanderBackToPointEndEvent(hardObjective, livingEntity);
+        livingEntity.teleport(returnLocation);
+        WanderBackToPointEndEvent wanderBackToPointEndEvent = new WanderBackToPointEndEvent(hardObjective, livingEntity, this);
         Bukkit.getPluginManager().callEvent(wanderBackToPointEndEvent);
     }
 
@@ -125,9 +125,49 @@ public class WanderBackToPointGoal extends Goal implements AbstractWanderBackToP
     //AbstractWanderBackToPoint start
 
     @Override
+    public double getMaximumDistanceFromPoint() {
+        return maximumDistanceFromPoint;
+    }
+
+    @Override
+    public long getLastTime() {
+        return lastTime;
+    }
+
+    @Override
+    public LivingEntity getLivingEntity() {
+        return livingEntity;
+    }
+
+    @Override
+    public int getPriority() {
+        return priority;
+    }
+
+    @Override
+    public int getMaxDurationTicks() {
+        return maxDurationTicks;
+    }
+
+    @Override
+    public float getSpeed() {
+        return speed;
+    }
+
+    @Override
     public AbstractWanderBackToPoint setSpeed(float speed) {
         this.speed = speed;
         return this;
+    }
+
+    @Override
+    public Location getReturnLocation() {
+        return returnLocation;
+    }
+
+    @Override
+    public int getStopReturnDistance() {
+        return stopReturnDistance;
     }
 
     @Override
@@ -137,9 +177,19 @@ public class WanderBackToPointGoal extends Goal implements AbstractWanderBackToP
     }
 
     @Override
+    public int getGoalRefreshCooldownTicks() {
+        return goalRefreshCooldownTicks;
+    }
+
+    @Override
     public AbstractWanderBackToPoint setGoalRefreshCooldownTicks(int ticks) {
         this.goalRefreshCooldownTicks = ticks;
         return this;
+    }
+
+    @Override
+    public boolean isHardObjective() {
+        return hardObjective;
     }
 
     @Override
@@ -150,9 +200,19 @@ public class WanderBackToPointGoal extends Goal implements AbstractWanderBackToP
     }
 
     @Override
+    public boolean isTeleportOnFail() {
+        return teleportOnFail;
+    }
+
+    @Override
     public AbstractWanderBackToPoint setTeleportOnFail(boolean teleportOnFail) {
         this.teleportOnFail = teleportOnFail;
         return this;
+    }
+
+    @Override
+    public boolean isStartWithCooldown() {
+        return startWithCooldown;
     }
 
     @Override

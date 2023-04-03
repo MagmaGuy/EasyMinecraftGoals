@@ -6,7 +6,7 @@ public class Utils {
     private Utils() {
     }
 
-    public static boolean distanceSmallerThan(Vector source, Vector destination, double distance) {
+    public static boolean distanceShorterThan(Vector source, Vector destination, double distance) {
         return source.distanceSquared(destination) < distance * distance;
     }
 

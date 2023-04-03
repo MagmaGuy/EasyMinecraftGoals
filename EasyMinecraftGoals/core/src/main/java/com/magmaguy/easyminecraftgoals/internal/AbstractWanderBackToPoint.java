@@ -1,6 +1,21 @@
 package com.magmaguy.easyminecraftgoals.internal;
 
+import org.bukkit.Location;
+import org.bukkit.entity.LivingEntity;
+
 public interface AbstractWanderBackToPoint {
+    double getMaximumDistanceFromPoint();
+
+    long getLastTime();
+
+    LivingEntity getLivingEntity();
+
+    int getPriority();
+
+    int getMaxDurationTicks();
+
+    float getSpeed();
+
     /**
      * Sets the speed used to return. Defaults to the current movement speed of the entity
      *
@@ -8,6 +23,10 @@ public interface AbstractWanderBackToPoint {
      * @return Instance for builder pattern
      */
     AbstractWanderBackToPoint setSpeed(float speed);
+
+    Location getReturnLocation();
+
+    int getStopReturnDistance();
 
     /**
      * Sets the distance considered to be close enough to stop the wander behavior
@@ -17,6 +36,8 @@ public interface AbstractWanderBackToPoint {
      */
     AbstractWanderBackToPoint setStopReturnDistance(int distance);
 
+    int getGoalRefreshCooldownTicks();
+
     /**
      * Sets the cooldown of this goal. That is the interval between scans that verify if the behavior should happen.
      * Longer cooldowns are better for performance.
@@ -25,6 +46,8 @@ public interface AbstractWanderBackToPoint {
      * @return Instance for builder pattern
      */
     AbstractWanderBackToPoint setGoalRefreshCooldownTicks(int ticks);
+
+    boolean isHardObjective();
 
     /**
      * Sets if the priority of this objective is above all other goals. If set to true, this will have a higher probability
@@ -36,6 +59,8 @@ public interface AbstractWanderBackToPoint {
      */
     AbstractWanderBackToPoint setHardObjective(boolean hardObjective);
 
+    boolean isTeleportOnFail();
+
     /**
      * Sets if the entity will instantly teleport when it fails to find a valid path back to the point defined.
      * Failure is defined by either timing the maximum duration out or pathfinding being unable to find a valid path for
@@ -45,6 +70,8 @@ public interface AbstractWanderBackToPoint {
      * @return Instance for builder pattern
      */
     AbstractWanderBackToPoint setTeleportOnFail(boolean teleportOnFail);
+
+    boolean isStartWithCooldown();
 
     /**
      * Sets if the cooldown should start when the register runs, preventing it from potentially instantly running.

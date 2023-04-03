@@ -1,5 +1,6 @@
 package com.magmaguy.easyminecraftgoals.events;
 
+import com.magmaguy.easyminecraftgoals.internal.AbstractWanderBackToPoint;
 import lombok.Getter;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.Event;
@@ -11,10 +12,13 @@ public class WanderBackToPointEndEvent extends Event {
     private final boolean hardObjective;
     @Getter
     private final LivingEntity livingEntity;
+    @Getter
+    private AbstractWanderBackToPoint abstractWanderBackToPoint;
 
-    public WanderBackToPointEndEvent(boolean hard, LivingEntity livingEntity) {
+    public WanderBackToPointEndEvent(boolean hard, LivingEntity livingEntity, AbstractWanderBackToPoint abstractWanderBackToPoint) {
         this.hardObjective = hard;
         this.livingEntity = livingEntity;
+        this.abstractWanderBackToPoint = abstractWanderBackToPoint;
     }
 
     public static HandlerList getHandlerList() {
