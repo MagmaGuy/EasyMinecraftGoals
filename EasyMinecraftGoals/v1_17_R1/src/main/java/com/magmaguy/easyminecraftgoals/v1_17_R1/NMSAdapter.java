@@ -19,11 +19,11 @@ public class NMSAdapter extends com.magmaguy.easyminecraftgoals.NMSAdapter imple
     }
 
     @Override
-    public AbstractWanderBackToPoint returnToPointWhenOutOfCombatBehavior(LivingEntity livingEntity,
-                                                                          Location blockLocation,
-                                                                          double maximumDistanceFromPoint,
-                                                                          int maxDurationTicks,
-                                                                          OverridableWanderPriority overridableWanderPriority) {
+    public AbstractWanderBackToPoint wanderBackToPoint(LivingEntity livingEntity,
+                                                       Location blockLocation,
+                                                       double maximumDistanceFromPoint,
+                                                       int maxDurationTicks,
+                                                       OverridableWanderPriority overridableWanderPriority) {
         PathfinderMob pathfinderMob;
         if (((CraftLivingEntity) livingEntity).getHandle() instanceof PathfinderMob pathfinderMob1)
             pathfinderMob = pathfinderMob1;

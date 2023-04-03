@@ -15,11 +15,11 @@ public class NMSAdapter implements AbstractNMSAdapter {
     }
 
     @Override
-    public AbstractWanderBackToPoint returnToPointWhenOutOfCombatBehavior(LivingEntity livingEntity,
-                                                                          Location blockLocation,
-                                                                          double maximumDistanceFromPoint,
-                                                                          int maxDurationTicks,
-                                                                          OverridableWanderPriority overridableWanderPriority) {
+    public AbstractWanderBackToPoint wanderBackToPoint(LivingEntity livingEntity,
+                                                       Location blockLocation,
+                                                       double maximumDistanceFromPoint,
+                                                       int maxDurationTicks,
+                                                       OverridableWanderPriority overridableWanderPriority) {
         //Gets overriden by the correct adapter
         return null;
     }
@@ -39,10 +39,10 @@ public class NMSAdapter implements AbstractNMSAdapter {
      * @return The instance of the WanderBackToPoint. Can be used in a builder pattern!
      */
     @Nullable
-    public AbstractWanderBackToPoint returnToPointWhenOutOfCombatBehavior(@NonNull LivingEntity livingEntity,
-                                                                          @NonNull Location blockLocation,
-                                                                          double maximumDistanceFromPoint,
-                                                                          int maxDurationTicks) {
+    public AbstractWanderBackToPoint wanderBackToPoint(@NonNull LivingEntity livingEntity,
+                                                       @NonNull Location blockLocation,
+                                                       double maximumDistanceFromPoint,
+                                                       int maxDurationTicks) {
         OverridableWanderPriority overridableWanderPriority;
         try {
             overridableWanderPriority = OverridableWanderPriority.valueOf(livingEntity.getType().name());
@@ -50,7 +50,7 @@ public class NMSAdapter implements AbstractNMSAdapter {
             NMSManager.pluginProvider.getLogger().warning("[EasyMinecraftPathfinding] Attempted to assign return point to entity type " + livingEntity.getType().name() + " which is not a currently accepted entity type!");
             return null;
         }
-        return returnToPointWhenOutOfCombatBehavior(
+        return wanderBackToPoint(
                 livingEntity,
                 blockLocation,
                 maximumDistanceFromPoint,

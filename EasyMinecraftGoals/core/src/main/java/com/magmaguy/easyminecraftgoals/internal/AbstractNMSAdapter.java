@@ -29,9 +29,9 @@ public interface AbstractNMSAdapter {
      * @param overridableWanderPriority Priority to apply to the goal
      * @return The instance of the WanderBackToPoint. Can be used in a builder pattern!
      */
-    AbstractWanderBackToPoint returnToPointWhenOutOfCombatBehavior(LivingEntity livingEntity,
-                                                                   Location blockLocation,
-                                                                   double maximumDistanceFromPoint,
-                                                                   int maxDurationTicks,
-                                                                   OverridableWanderPriority overridableWanderPriority);
+    AbstractWanderBackToPoint wanderBackToPoint(LivingEntity livingEntity,
+                                                Location blockLocation,
+                                                double maximumDistanceFromPoint,
+                                                int maxDurationTicks,
+                                                OverridableWanderPriority overridableWanderPriority);
 }
