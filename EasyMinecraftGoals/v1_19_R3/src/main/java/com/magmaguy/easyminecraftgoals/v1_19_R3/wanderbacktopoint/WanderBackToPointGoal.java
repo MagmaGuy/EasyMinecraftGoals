@@ -86,9 +86,9 @@ public class WanderBackToPointGoal extends Goal implements AbstractWanderBackToP
         }
         if ((lastTime + 50L * goalRefreshCooldownTicks) - System.currentTimeMillis() > 0) return false;
         updateCooldown();
+        if (Utils.distanceShorterThan(returnLocation.toVector(), livingEntity.getLocation().toVector(), maximumDistanceFromPoint))
+            return false;
         if (pathfinderMob != null) {
-            if (Utils.distanceShorterThan(returnLocation.toVector(), livingEntity.getLocation().toVector(), maximumDistanceFromPoint))
-                return false;
             path = this.pathfinderMob.getNavigation().createPath(returnLocation.getX(), returnLocation.getY(), returnLocation.getZ(), stopReturnDistance);
             // Not 100% sure of why this is happening, but I suspect that sometimes the path can't be updated
             if (path == null) return false;
