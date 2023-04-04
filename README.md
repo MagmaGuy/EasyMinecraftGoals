@@ -23,9 +23,26 @@ This multi-module project is split into the following parts:
 
 ## Maven/Gradle repository
 
-Currently no maven repository exists for EasyMinecraftGoals. This will change soon.
+A maven repository for EasyMinecraftGoals is hosted via Sonatype.
 
-This library is meant to be shaded into a Minecraft plugin.
+Maven:
+```xml
+<dependency>
+    <groupId>com.magmaguy</groupId>
+    <artifactId>EasyMinecraftGoals</artifactId>
+    <version>1.0.0</version>
+</dependency>
+```
+
+Gradle:
+```kotlin
+repositories {
+    maven { url = 'https://s01.oss.sonatype.org/content/repositories/releases/' }
+}
+dependencies {
+    implementation group : 'com.magmaguy', name: 'EasyMinecraftGoals-dist', version: '1.0.0';
+}
+```
 
 ## Registering on startup
 
