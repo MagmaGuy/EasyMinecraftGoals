@@ -1,6 +1,7 @@
 package com.magmaguy.easyminecraftgoals.v1_19_R1.wanderbacktopoint;
 
 import com.google.common.collect.ImmutableList;
+import com.magmaguy.easyminecraftgoals.NMSManager;
 import com.magmaguy.easyminecraftgoals.events.WanderBackToPointEndEvent;
 import com.magmaguy.easyminecraftgoals.events.WanderBackToPointStartEvent;
 import com.magmaguy.easyminecraftgoals.internal.AbstractWanderBackToPoint;
@@ -9,30 +10,27 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.PathfinderMob;
-import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.behavior.Behavior;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.memory.MemoryStatus;
-import net.minecraft.world.entity.ai.memory.WalkTarget;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.schedule.Activity;
 import net.minecraft.world.level.pathfinder.Path;
-import net.minecraft.world.phys.Vec3;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Map;
 
 public class WanderBackToPointBehavior extends Behavior<LivingEntity> implements AbstractWanderBackToPoint {
 
-    private Location returnLocation;
-    private double maximumDistanceFromPoint;
+    private final Location returnLocation;
+    private final double maximumDistanceFromPoint;
+    private final org.bukkit.entity.LivingEntity livingEntity;
+    private final Mob mob;
+    private final int maxDurationTicks;
     private long lastTime;
-    private org.bukkit.entity.LivingEntity livingEntity;
-    private Mob mob;
     private int priority;
-    private int maxDurationTicks;
-
     private float speed;
     private int stopReturnDistance = 0;
     //Note: This assumes 20 tps
@@ -40,6 +38,8 @@ public class WanderBackToPointBehavior extends Behavior<LivingEntity> implements
     private boolean hardObjective = false;
     private boolean teleportOnFail = false;
     private boolean startWithCooldown = false;
+
+    private Path path;
 
     public WanderBackToPointBehavior(org.bukkit.entity.LivingEntity livingEntity,
                                      Mob mob,
@@ -64,16 +64,17 @@ public class WanderBackToPointBehavior extends Behavior<LivingEntity> implements
             updateCooldown();
             return false;
         }
-        if (lastTime < System.currentTimeMillis() + 50L * goalRefreshCooldownTicks) return false;
+        if ((lastTime + 50L * goalRefreshCooldownTicks) - System.currentTimeMillis() > 0) return false;
         updateCooldown();
         if (Utils.distanceShorterThan(returnLocation.toVector(), livingEntity.getLocation().toVector(), maximumDistanceFromPoint))
             return false;
         WanderBackToPointStartEvent wanderBackToPointStartEvent = new WanderBackToPointStartEvent(hardObjective, livingEntity, this);
         Bukkit.getPluginManager().callEvent(wanderBackToPointStartEvent);
         if (wanderBackToPointStartEvent.isCancelled()) return false;
+        path = ((PathfinderMob) nmsLivingEntity).getNavigation().createPath(returnLocation.getX(), returnLocation.getY(), returnLocation.getZ(), stopReturnDistance);
         if (teleportOnFail) {
-            Path path = ((PathfinderMob) nmsLivingEntity).getNavigation().createPath(returnLocation.getX(), returnLocation.getY(), returnLocation.getZ(), stopReturnDistance);
             if (path == null || !path.canReach()) {
+                path = null;
                 livingEntity.teleport(returnLocation);
                 WanderBackToPointEndEvent wanderBackToPointEndEvent = new WanderBackToPointEndEvent(hardObjective, livingEntity, this);
                 Bukkit.getPluginManager().callEvent(wanderBackToPointEndEvent);
@@ -85,30 +86,45 @@ public class WanderBackToPointBehavior extends Behavior<LivingEntity> implements
 
     @Override
     protected void start(ServerLevel var0, LivingEntity var1, long var2) {
-        setWalkAndLookTarget(var1);
+        this.mob.getNavigation().stop();
+        this.mob.getNavigation().moveTo(path, speed);
+        mob.getBrain().setActiveActivityIfPossible(Activity.CORE);
+        if (hardObjective) {
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    if (!livingEntity.isValid() ||
+                            mob.getNavigation().isDone() ||
+                            !path.canReach()) {
+                        cancel();
+                        if (livingEntity.isValid() && !path.canReach() && teleportOnFail) livingEntity.teleport(returnLocation);
+                        return;
+                    }
+                    mob.getNavigation().moveTo(path, speed);
+                }
+            }.runTaskTimer(NMSManager.pluginProvider, 0, 1);
+        }
     }
 
     @Override
     protected void stop(ServerLevel var0, LivingEntity var1, long var2) {
+        for (StackTraceElement element : Thread.currentThread().getStackTrace())
+            Bukkit.getLogger().info(element.toString());
+        path = null;
+        if (teleportOnFail && timedOut(maxDurationTicks)) livingEntity.teleport(returnLocation);
         WanderBackToPointEndEvent wanderBackToPointEndEvent = new WanderBackToPointEndEvent(hardObjective, livingEntity, this);
         Bukkit.getPluginManager().callEvent(wanderBackToPointEndEvent);
         updateCooldown();
+        mob.setAggressive(true);
     }
 
     @Override
     protected boolean canStillUse(ServerLevel var0, LivingEntity var1, long var2) {
-        if (!hardObjective && mob.getTarget() instanceof Player) return false;
-        return !mob.getNavigation().isDone();
+        mob.setTarget(null);
+        if (!hardObjective && mob.getTarget() instanceof Player)
+            return false;
+        return !path.isDone();
     }
-
-    private void setWalkAndLookTarget(LivingEntity livingEntity) {
-        Brain<?> brain = livingEntity.getBrain();
-        WalkTarget walkTarget = new WalkTarget(new Vec3(returnLocation.getX(), returnLocation.getY(), returnLocation.getZ()),
-                speed, stopReturnDistance);
-        brain.setMemory(MemoryModuleType.WALK_TARGET, walkTarget);
-    }
-
-    //AbstractWanderBackToPoint start
 
     @Override
     public double getMaximumDistanceFromPoint() {
@@ -215,8 +231,7 @@ public class WanderBackToPointBehavior extends Behavior<LivingEntity> implements
     @Override
     public void register() {
         if (startWithCooldown) updateCooldown();
-        mob.getBrain().addActivity(Activity.IDLE, priority, ImmutableList.of(this));
-        if (hardObjective) mob.getBrain().addActivity(Activity.FIGHT, priority, ImmutableList.of(this));
+        mob.getBrain().addActivity(Activity.CORE, priority, ImmutableList.of(this));
     }
 
     @Override
