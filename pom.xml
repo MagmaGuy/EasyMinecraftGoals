@@ -5,7 +5,7 @@
 
     <groupId>com.magmaguy</groupId>
     <artifactId>EasyMinecraftGoals-manager</artifactId>
-    <version>1.1.0</version>
+    <version>1.2.0</version>
 
     <!-- This is the project parent, do not create further artifacts -->
     <packaging>pom</packaging>

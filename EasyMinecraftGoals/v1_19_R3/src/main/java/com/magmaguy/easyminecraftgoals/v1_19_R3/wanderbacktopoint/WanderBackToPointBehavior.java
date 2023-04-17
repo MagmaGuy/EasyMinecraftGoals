@@ -39,7 +39,7 @@ public class WanderBackToPointBehavior extends Behavior<LivingEntity> implements
     private boolean teleportOnFail = false;
     private boolean startWithCooldown = false;
 
-    private Path path;
+    private Path path = null;
 
     public WanderBackToPointBehavior(org.bukkit.entity.LivingEntity livingEntity,
                                      Mob mob,
@@ -59,7 +59,7 @@ public class WanderBackToPointBehavior extends Behavior<LivingEntity> implements
     }
 
     @Override
-    protected boolean checkExtraStartConditions(ServerLevel var0, net.minecraft.world.entity.LivingEntity nmsLivingEntity) {
+    protected boolean checkExtraStartConditions(ServerLevel var0, LivingEntity nmsLivingEntity) {
         if (!hardObjective && mob.getTarget() instanceof Player) {
             updateCooldown();
             return false;
@@ -108,8 +108,6 @@ public class WanderBackToPointBehavior extends Behavior<LivingEntity> implements
 
     @Override
     protected void stop(ServerLevel var0, LivingEntity var1, long var2) {
-        for (StackTraceElement element : Thread.currentThread().getStackTrace())
-            Bukkit.getLogger().info(element.toString());
         path = null;
         if (teleportOnFail && timedOut(maxDurationTicks)) livingEntity.teleport(returnLocation);
         WanderBackToPointEndEvent wanderBackToPointEndEvent = new WanderBackToPointEndEvent(hardObjective, livingEntity, this);
@@ -121,6 +119,7 @@ public class WanderBackToPointBehavior extends Behavior<LivingEntity> implements
     @Override
     protected boolean canStillUse(ServerLevel var0, LivingEntity var1, long var2) {
         mob.setTarget(null);
+        if (path == null) return  false;
         if (!hardObjective && mob.getTarget() instanceof Player)
             return false;
         return !path.isDone();
