@@ -95,6 +95,7 @@ public class WanderBackToPointBehavior extends Behavior<LivingEntity> implements
                 public void run() {
                     if (!livingEntity.isValid() ||
                             mob.getNavigation().isDone() ||
+                            path == null ||
                             !path.canReach()) {
                         cancel();
                         if (livingEntity.isValid() && !path.canReach() && teleportOnFail) livingEntity.teleport(returnLocation);
