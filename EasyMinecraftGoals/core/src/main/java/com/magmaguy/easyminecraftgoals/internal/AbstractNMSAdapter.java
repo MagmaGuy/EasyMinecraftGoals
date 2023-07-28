@@ -3,16 +3,15 @@ package com.magmaguy.easyminecraftgoals.internal;
 import com.magmaguy.easyminecraftgoals.constants.OverridableWanderPriority;
 import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Mob;
 
 public interface AbstractNMSAdapter {
 
     /**
-     * @param mob
+     * @param livingEntity
      * @param speed
      * @param blockLocation
      */
-    void move(Mob mob, double speed, Location blockLocation);
+    boolean move(LivingEntity livingEntity, double speed, Location blockLocation);
 
     /**
      * Makes a mob wander back to a point when it reaches a certain distance from that point, acting as a leash.

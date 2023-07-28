@@ -5,13 +5,21 @@ import com.magmaguy.easyminecraftgoals.internal.AbstractNMSAdapter;
 import com.magmaguy.easyminecraftgoals.internal.AbstractWanderBackToPoint;
 import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Mob;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 public class NMSAdapter implements AbstractNMSAdapter {
+    /**
+     * Simply makes an entity move to a point.
+     *
+     * @param livingEntity   The entity to move
+     * @param speedModifier  The speed modifier. Set 1.0 for the base movement speed attribute.
+     * @param targetLocation The target location
+     * @return Whether the objective is reachable.
+     */
     @Override
-    public void move(Mob mob, double speed, Location blockLocation) {
+    public boolean move(LivingEntity livingEntity, double speedModifier, Location targetLocation) {
+        return false;
     }
 
     @Override

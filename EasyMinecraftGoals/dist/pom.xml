@@ -223,6 +223,12 @@
             <version>1.4.0</version>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>com.magmaguy</groupId>
+            <artifactId>EasyMinecraftGoals_v1_20_R2</artifactId>
+            <version>1.4.0</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 
     <!-- Maven publishing -->

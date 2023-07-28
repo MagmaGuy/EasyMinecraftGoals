@@ -1,5 +1,6 @@
 package com.magmaguy.easyminecraftgoals.V1_18_R0;
 
+import com.magmaguy.easyminecraftgoals.V1_18_R0.move.Move;
 import com.magmaguy.easyminecraftgoals.V1_18_R0.wanderbacktopoint.WanderBackToPointBehavior;
 import com.magmaguy.easyminecraftgoals.V1_18_R0.wanderbacktopoint.WanderBackToPointGoal;
 import com.magmaguy.easyminecraftgoals.constants.OverridableWanderPriority;
@@ -14,8 +15,17 @@ import org.bukkit.entity.Mob;
 
 public class NMSAdapter extends com.magmaguy.easyminecraftgoals.NMSAdapter implements AbstractNMSAdapter {
     @Override
-    public void move(Mob mob, double speed, Location location) {
-        //todo not done yet
+    public boolean move(LivingEntity livingEntity, double speedModifier, Location location) {
+        PathfinderMob pathfinderMob;
+        if (((CraftLivingEntity) livingEntity).getHandle() instanceof PathfinderMob pathfinderMob1)
+            pathfinderMob = pathfinderMob1;
+        else
+            pathfinderMob = null;
+        if (!(((CraftLivingEntity) livingEntity).getHandle() instanceof net.minecraft.world.entity.Mob mob)) {
+            Bukkit.getLogger().info("[EasyMinecraftPathfinding] Entity type " + livingEntity.getType() + " does not extend Mob and is therefore unable to have goals! It will not be able to pathfind.");
+            return false;
+        }
+        return Move.simpleMove(pathfinderMob, speedModifier, location);
     }
 
     @Override
