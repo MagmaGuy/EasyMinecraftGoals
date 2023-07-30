@@ -11,7 +11,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_17_R1.entity.CraftLivingEntity;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Mob;
 
 public class NMSAdapter extends com.magmaguy.easyminecraftgoals.NMSAdapter implements AbstractNMSAdapter {
     @Override
@@ -26,6 +25,24 @@ public class NMSAdapter extends com.magmaguy.easyminecraftgoals.NMSAdapter imple
             return false;
         }
         return Move.simpleMove(pathfinderMob, speedModifier, location);
+    }
+
+    @Override
+    public boolean forcedMove(LivingEntity livingEntity, double speedModifier, Location location) {
+        if (!(((CraftLivingEntity) livingEntity).getHandle() instanceof net.minecraft.world.entity.Mob mob)) {
+            Bukkit.getLogger().info("[EasyMinecraftPathfinding] Entity type " + livingEntity.getType() + " does not extend Mob and is therefore unable to have goals! It will not be able to pathfind.");
+            return false;
+        }
+        return Move.forcedMove(mob, speedModifier, location);
+    }
+
+    @Override
+    public void universalMove(LivingEntity livingEntity, double speedModifier, Location location) {
+        if (!(((CraftLivingEntity) livingEntity).getHandle() instanceof net.minecraft.world.entity.Mob mob)) {
+            Bukkit.getLogger().info("[EasyMinecraftPathfinding] Entity type " + livingEntity.getType() + " does not extend Mob and is therefore unable to have goals! It will not be able to pathfind.");
+            return;
+        }
+        Move.universalMove(mob, speedModifier, location);
     }
 
     @Override

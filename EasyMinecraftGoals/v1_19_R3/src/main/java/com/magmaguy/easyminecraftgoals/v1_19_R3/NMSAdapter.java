@@ -28,6 +28,24 @@ public class NMSAdapter extends com.magmaguy.easyminecraftgoals.NMSAdapter imple
     }
 
     @Override
+    public boolean forcedMove(LivingEntity livingEntity, double speedModifier, Location location) {
+        if (!(((CraftLivingEntity) livingEntity).getHandle() instanceof net.minecraft.world.entity.Mob mob)) {
+            Bukkit.getLogger().info("[EasyMinecraftPathfinding] Entity type " + livingEntity.getType() + " does not extend Mob and is therefore unable to have goals! It will not be able to pathfind.");
+            return false;
+        }
+        return Move.forcedMove(mob, speedModifier, location);
+    }
+
+    @Override
+    public void universalMove(LivingEntity livingEntity, double speedModifier, Location location) {
+        if (!(((CraftLivingEntity) livingEntity).getHandle() instanceof net.minecraft.world.entity.Mob mob)) {
+            Bukkit.getLogger().info("[EasyMinecraftPathfinding] Entity type " + livingEntity.getType() + " does not extend Mob and is therefore unable to have goals! It will not be able to pathfind.");
+            return;
+        }
+        Move.universalMove(mob, speedModifier, location);
+    }
+
+    @Override
     public AbstractWanderBackToPoint wanderBackToPoint(LivingEntity livingEntity,
                                                        Location blockLocation,
                                                        double maximumDistanceFromPoint,

@@ -23,6 +23,26 @@ public class NMSAdapter implements AbstractNMSAdapter {
     }
 
     @Override
+    public boolean forcedMove(LivingEntity livingEntity, double speedModifier, Location location) {
+        return false;
+    }
+
+    /**
+     * Pathfinding method which will move an entity to a point with a complete disregard for any pathfinding. This means
+     * that no pathfinding will be done by Minecraft - the entity can get stuck on blocks, won't be able to jump or really
+     * hardly any obstacle. Highly efficient, highly predictable.
+     *
+     * @param livingEntity  Entity to move
+     * @param speedModifier Speed modifier
+     * @param location      Location to move to
+     */
+    @Override
+    public void universalMove(LivingEntity livingEntity, double speedModifier, Location location) {
+
+    }
+
+
+    @Override
     public AbstractWanderBackToPoint wanderBackToPoint(LivingEntity livingEntity,
                                                        Location blockLocation,
                                                        double maximumDistanceFromPoint,
