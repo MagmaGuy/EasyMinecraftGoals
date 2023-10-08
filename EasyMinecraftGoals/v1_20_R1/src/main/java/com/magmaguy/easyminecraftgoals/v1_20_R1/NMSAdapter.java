@@ -1,15 +1,15 @@
-package com.magmaguy.easyminecraftgoals.v1_20_R2;
+package com.magmaguy.easyminecraftgoals.v1_20_R1;
 
 import com.magmaguy.easyminecraftgoals.constants.OverridableWanderPriority;
 import com.magmaguy.easyminecraftgoals.internal.AbstractNMSAdapter;
 import com.magmaguy.easyminecraftgoals.internal.AbstractWanderBackToPoint;
-import com.magmaguy.easyminecraftgoals.v1_20_R2.move.Move;
-import com.magmaguy.easyminecraftgoals.v1_20_R2.wanderbacktopoint.WanderBackToPointBehavior;
-import com.magmaguy.easyminecraftgoals.v1_20_R2.wanderbacktopoint.WanderBackToPointGoal;
+import com.magmaguy.easyminecraftgoals.v1_20_R1.move.Move;
+import com.magmaguy.easyminecraftgoals.v1_20_R1.wanderbacktopoint.WanderBackToPointBehavior;
+import com.magmaguy.easyminecraftgoals.v1_20_R1.wanderbacktopoint.WanderBackToPointGoal;
 import net.minecraft.world.entity.PathfinderMob;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_20_R2.entity.CraftLivingEntity;
+import org.bukkit.craftbukkit.v1_20_R1.entity.CraftLivingEntity;
 import org.bukkit.entity.LivingEntity;
 
 public class NMSAdapter extends com.magmaguy.easyminecraftgoals.NMSAdapter implements AbstractNMSAdapter {

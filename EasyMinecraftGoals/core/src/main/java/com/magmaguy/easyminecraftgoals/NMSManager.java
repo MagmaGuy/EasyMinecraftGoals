@@ -22,7 +22,7 @@ public class NMSManager {
             plugin.getLogger().info("Format: " + PACKAGE + version + ".NMSAdapter");
             String versionName;
             //1.20.0 is fundamentally the same as 1.20.1 so we use R2
-            if (Objects.equals(version, "v1_20_R1")) versionName = PACKAGE + "v1_20_R2" + ".NMSAdapter";
+            if (Objects.equals(version, "v1_20_R0")) versionName = PACKAGE + "v1_20_R1" + ".NMSAdapter";
             else versionName = PACKAGE + version + ".NMSAdapter";
             adapter = (NMSAdapter) Class.forName(versionName).getDeclaredConstructor().newInstance();
             plugin.getLogger().log(Level.INFO, "Supported server version detected: {0}", version);
