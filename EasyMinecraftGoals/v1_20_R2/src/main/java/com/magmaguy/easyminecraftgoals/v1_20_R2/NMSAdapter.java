@@ -3,16 +3,26 @@ package com.magmaguy.easyminecraftgoals.v1_20_R2;
 import com.magmaguy.easyminecraftgoals.constants.OverridableWanderPriority;
 import com.magmaguy.easyminecraftgoals.internal.AbstractNMSAdapter;
 import com.magmaguy.easyminecraftgoals.internal.AbstractWanderBackToPoint;
+import com.magmaguy.easyminecraftgoals.v1_20_R2.hitbox.Hitbox;
 import com.magmaguy.easyminecraftgoals.v1_20_R2.move.Move;
 import com.magmaguy.easyminecraftgoals.v1_20_R2.wanderbacktopoint.WanderBackToPointBehavior;
 import com.magmaguy.easyminecraftgoals.v1_20_R2.wanderbacktopoint.WanderBackToPointGoal;
 import net.minecraft.world.entity.PathfinderMob;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.craftbukkit.v1_20_R2.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_20_R2.entity.CraftLivingEntity;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 
 public class NMSAdapter extends com.magmaguy.easyminecraftgoals.NMSAdapter implements AbstractNMSAdapter {
+
+    @Override
+    public boolean setCustomHitbox(Entity entity, float width, float height, boolean fixed) {
+        if (entity == null) return false;
+        return Hitbox.setCustomHitbox(((CraftEntity) entity).getHandle(), width, height, fixed);
+    }
+
     @Override
     public boolean move(LivingEntity livingEntity, double speedModifier, Location location) {
         PathfinderMob pathfinderMob;

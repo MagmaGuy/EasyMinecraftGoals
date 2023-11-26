@@ -2,6 +2,7 @@ package com.magmaguy.easyminecraftgoals.internal;
 
 import com.magmaguy.easyminecraftgoals.constants.OverridableWanderPriority;
 import org.bukkit.Location;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 
 public interface AbstractNMSAdapter {
@@ -46,4 +47,6 @@ public interface AbstractNMSAdapter {
                                                 double maximumDistanceFromPoint,
                                                 int maxDurationTicks,
                                                 OverridableWanderPriority overridableWanderPriority);
+
+    boolean setCustomHitbox(Entity entity, float width, float height, boolean fixed);
 }

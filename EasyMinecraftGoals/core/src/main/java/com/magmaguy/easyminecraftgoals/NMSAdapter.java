@@ -4,6 +4,7 @@ import com.magmaguy.easyminecraftgoals.constants.OverridableWanderPriority;
 import com.magmaguy.easyminecraftgoals.internal.AbstractNMSAdapter;
 import com.magmaguy.easyminecraftgoals.internal.AbstractWanderBackToPoint;
 import org.bukkit.Location;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -19,11 +20,13 @@ public class NMSAdapter implements AbstractNMSAdapter {
      */
     @Override
     public boolean move(LivingEntity livingEntity, double speedModifier, Location targetLocation) {
+        //Gets overriden by the correct adapter
         return false;
     }
 
     @Override
     public boolean forcedMove(LivingEntity livingEntity, double speedModifier, Location location) {
+        //Gets overriden by the correct adapter
         return false;
     }
 
@@ -38,7 +41,7 @@ public class NMSAdapter implements AbstractNMSAdapter {
      */
     @Override
     public void universalMove(LivingEntity livingEntity, double speedModifier, Location location) {
-
+        //Gets overriden by the correct adapter
     }
 
 
@@ -50,6 +53,20 @@ public class NMSAdapter implements AbstractNMSAdapter {
                                                        OverridableWanderPriority overridableWanderPriority) {
         //Gets overriden by the correct adapter
         return null;
+    }
+
+    /**
+     * Sets a custom hitbox size for an entity
+     * @param entity The entity whose hitbox is about to get resized
+     * @param width Width of the hitbox. Sets the X and Z axis at the same time, that's a Minecraft limitation
+     * @param height The height of the hitbox, has to be lower than 64.
+     * @param fixed Whether the hitbox can scale
+     * @return
+     */
+    @Override
+    public boolean setCustomHitbox(Entity entity, float width, float height, boolean fixed) {
+        //Gets overriden by the correct adapter
+        return false;
     }
 
     /**
