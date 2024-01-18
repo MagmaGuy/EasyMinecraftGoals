@@ -103,5 +103,15 @@ public class NMSAdapter implements AbstractNMSAdapter {
                 overridableWanderPriority);
     }
 
+    @Override
+    public boolean canReach(LivingEntity livingEntity, Location location){
+        //Gets overriden by the correct adapter
+        return false;
+    }
+
+    public boolean test(Entity entity, float width, float height, boolean fixed) {
+        //Gets overriden by the correct adapter
+        return false;
+    }
 
 }

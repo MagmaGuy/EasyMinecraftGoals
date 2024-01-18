@@ -1,12 +1,12 @@
-package com.magmaguy.easyminecraftgoals.V1_18_R0;
+package com.magmaguy.easyminecraftgoals.v1_18_R0;
 
-import com.magmaguy.easyminecraftgoals.V1_18_R0.move.Move;
 import com.magmaguy.easyminecraftgoals.V1_18_R0.wanderbacktopoint.WanderBackToPointBehavior;
 import com.magmaguy.easyminecraftgoals.V1_18_R0.wanderbacktopoint.WanderBackToPointGoal;
 import com.magmaguy.easyminecraftgoals.constants.OverridableWanderPriority;
 import com.magmaguy.easyminecraftgoals.internal.AbstractNMSAdapter;
 import com.magmaguy.easyminecraftgoals.internal.AbstractWanderBackToPoint;
 import com.magmaguy.easyminecraftgoals.v1_18_R0.hitbox.Hitbox;
+import com.magmaguy.easyminecraftgoals.v1_18_R0.move.Move;
 import net.minecraft.world.entity.PathfinderMob;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -16,6 +16,21 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 
 public class NMSAdapter extends com.magmaguy.easyminecraftgoals.NMSAdapter implements AbstractNMSAdapter {
+
+    private PathfinderMob getPathfinderMob(Entity entity) {
+        if (((CraftEntity) entity).getHandle() instanceof PathfinderMob pathfinderMob1)
+            return pathfinderMob1;
+        else
+            return null;
+    }
+
+    @Override
+    public boolean canReach(LivingEntity livingEntity, Location destination) {
+        PathfinderMob pathfinderMob = getPathfinderMob(livingEntity);
+        if (pathfinderMob == null) return false;
+        return Move.canReach(pathfinderMob, destination);
+    }
+
     @Override
     public boolean setCustomHitbox(Entity entity, float width, float height, boolean fixed) {
         if (entity == null) return false;

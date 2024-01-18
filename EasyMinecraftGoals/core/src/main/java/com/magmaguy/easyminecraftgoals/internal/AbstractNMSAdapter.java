@@ -25,6 +25,14 @@ public interface AbstractNMSAdapter {
      */
     boolean forcedMove(LivingEntity livingEntity, double speedModifier, Location location);
 
+    /**
+     * Returns whether the given living entity can reach the given location using its default pathfinding
+     * @param livingEntity Living entity that will be checked
+     * @param destination Target location to be reached
+     * @return Whether the location can be reached
+     */
+    boolean canReach(LivingEntity livingEntity, Location destination);
+
     void universalMove(LivingEntity livingEntity, double speedModifier, Location location);
 
     /**

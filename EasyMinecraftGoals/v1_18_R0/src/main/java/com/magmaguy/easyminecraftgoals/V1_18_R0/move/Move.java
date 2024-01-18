@@ -1,4 +1,4 @@
-package com.magmaguy.easyminecraftgoals.V1_18_R0.move;
+package com.magmaguy.easyminecraftgoals.v1_18_R0.move;
 
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.Mob;
@@ -11,6 +11,11 @@ import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
 public class Move {
+    public static boolean canReach(PathfinderMob pathfinderMob, Location destination) {
+        if (pathfinderMob.getNavigation() == null) return true;
+        return pathfinderMob.getNavigation().createPath(destination.getX(), destination.getY(), destination.getZ(), 0).canReach();
+    }
+
     public static boolean simpleMove(PathfinderMob pathfinderMob, double speedModifier, Location destination) {
         Path path = pathfinderMob.getNavigation().createPath(destination.getX(), destination.getY(), destination.getZ(), 0);
         return pathfinderMob.getNavigation().moveTo(path, speedModifier);

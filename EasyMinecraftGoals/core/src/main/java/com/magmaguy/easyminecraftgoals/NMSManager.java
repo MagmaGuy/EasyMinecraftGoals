@@ -19,7 +19,7 @@ public class NMSManager {
         pluginProvider = plugin;
 
         try {
-            plugin.getLogger().info("Format: " + PACKAGE + version + ".NMSAdapter");
+            //plugin.getLogger().info("Format: " + PACKAGE + version + ".NMSAdapter");
             String versionName;
             //1.20.0 is fundamentally the same as 1.20.1 so we use R2
             if (Objects.equals(version, "v1_20_R0")) versionName = PACKAGE + "v1_20_R1" + ".NMSAdapter";

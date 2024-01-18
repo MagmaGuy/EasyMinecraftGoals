@@ -16,6 +16,21 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 
 public class NMSAdapter extends com.magmaguy.easyminecraftgoals.NMSAdapter implements AbstractNMSAdapter {
+
+    private PathfinderMob getPathfinderMob(Entity entity) {
+        if (((CraftEntity) entity).getHandle() instanceof PathfinderMob pathfinderMob1)
+            return pathfinderMob1;
+        else
+            return null;
+    }
+
+    @Override
+    public boolean canReach(LivingEntity livingEntity, Location destination) {
+        PathfinderMob pathfinderMob = getPathfinderMob(livingEntity);
+        if (pathfinderMob == null) return false;
+        return Move.canReach(pathfinderMob, destination);
+    }
+
     @Override
     public boolean setCustomHitbox(Entity entity, float width, float height, boolean fixed) {
         if (entity == null) return false;

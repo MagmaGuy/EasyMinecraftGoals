@@ -11,11 +11,11 @@ import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
 public class Move {
-
-    public static void setPosition(Entity entity, Location destination) {
-        entity.setPos(destination.getX(), destination.getY(), destination.getZ());
+    public static boolean canReach(PathfinderMob pathfinderMob, Location destination) {
+        if (pathfinderMob.getNavigation() == null) return true;
+        return pathfinderMob.getNavigation().createPath(destination.getX(), destination.getY(), destination.getZ(), 0).canReach();
     }
-    
+
     public static boolean simpleMove(PathfinderMob pathfinderMob, double speedModifier, Location destination) {
         Path path = pathfinderMob.getNavigation().createPath(destination.getX(), destination.getY(), destination.getZ(), 0);
         return pathfinderMob.getNavigation().moveTo(path, speedModifier);
