@@ -13,7 +13,9 @@ import org.bukkit.util.Vector;
 public class Move {
     public static boolean canReach(PathfinderMob pathfinderMob, Location destination) {
         if (pathfinderMob.getNavigation() == null) return true;
-        return pathfinderMob.getNavigation().createPath(destination.getX(), destination.getY(), destination.getZ(), 0).canReach();
+        Path path = pathfinderMob.getNavigation().createPath(destination.getX(), destination.getY(), destination.getZ(), 0);
+        if (path == null) return true;
+        return path.canReach();
     }
 
     public static boolean simpleMove(PathfinderMob pathfinderMob, double speedModifier, Location destination) {

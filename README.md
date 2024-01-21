@@ -41,18 +41,18 @@ Maven:
 ```xml
 <dependency>
     <groupId>com.magmaguy</groupId>
-    <artifactId>EasyMinecraftGoals</artifactId>
-    <version>1.0.0</version>
+    <artifactId>EasyMinecraftGoals-dist</artifactId>
+    <version>1.7.3-SNAPSHOT</version>
 </dependency>
 ```
 
 Gradle:
 ```kotlin
 repositories {
-    maven { url = 'https://s01.oss.sonatype.org/content/repositories/releases/' }
+    maven { url = 'https://s01.oss.sonatype.org/content/repositories/snapshots/' }
 }
 dependencies {
-    implementation group : 'com.magmaguy', name: 'EasyMinecraftGoals-dist', version: '1.7.0';
+    implementation group : 'com.magmaguy', name: 'EasyMinecraftGoals-dist', version: '1.7.3-SNAPSHOT';
 }
 ```
 
