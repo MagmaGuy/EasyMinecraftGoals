@@ -57,4 +57,7 @@ public interface AbstractNMSAdapter {
                                                 OverridableWanderPriority overridableWanderPriority);
 
     boolean setCustomHitbox(Entity entity, float width, float height, boolean fixed);
+
+    PacketModelEntity createPacketArmorStandEntity(Location location);
+    PacketModelEntity createPacketDisplayEntity(Location location);
 }

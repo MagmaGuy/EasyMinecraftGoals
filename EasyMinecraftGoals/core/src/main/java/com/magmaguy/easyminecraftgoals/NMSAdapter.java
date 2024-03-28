@@ -3,6 +3,7 @@ package com.magmaguy.easyminecraftgoals;
 import com.magmaguy.easyminecraftgoals.constants.OverridableWanderPriority;
 import com.magmaguy.easyminecraftgoals.internal.AbstractNMSAdapter;
 import com.magmaguy.easyminecraftgoals.internal.AbstractWanderBackToPoint;
+import com.magmaguy.easyminecraftgoals.internal.PacketModelEntity;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -69,6 +70,18 @@ public class NMSAdapter implements AbstractNMSAdapter {
         return false;
     }
 
+    @Override
+    public PacketModelEntity createPacketArmorStandEntity(Location location) {
+        //Gets overriden by the correct adapter
+        return null;
+    }
+
+    @Override
+    public PacketModelEntity createPacketDisplayEntity(Location location) {
+        //Gets overriden by the correct adapter
+        return null;
+    }
+
     /**
      * Makes a mob wander back to a point when it reaches a certain distance from that point, acting as a leash.
      * Please note that not all mobs in minecraft are able to pathfind - mobs like slimes can't. This leash can be
@@ -105,11 +118,6 @@ public class NMSAdapter implements AbstractNMSAdapter {
 
     @Override
     public boolean canReach(LivingEntity livingEntity, Location location){
-        //Gets overriden by the correct adapter
-        return false;
-    }
-
-    public boolean test(Entity entity, float width, float height, boolean fixed) {
         //Gets overriden by the correct adapter
         return false;
     }

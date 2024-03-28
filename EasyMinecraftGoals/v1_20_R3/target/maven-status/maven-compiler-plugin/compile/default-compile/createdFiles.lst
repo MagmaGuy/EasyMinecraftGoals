@@ -1,6 +1,9 @@
 com\magmaguy\easyminecraftgoals\v1_20_R3\move\Move.class
-com\magmaguy\easyminecraftgoals\v1_20_R3\wanderbacktopoint\WanderBackToPointBehavior$1.class
 com\magmaguy\easyminecraftgoals\v1_20_R3\hitbox\Hitbox.class
 com\magmaguy\easyminecraftgoals\v1_20_R3\wanderbacktopoint\WanderBackToPointGoal.class
 com\magmaguy\easyminecraftgoals\v1_20_R3\NMSAdapter.class
+com\magmaguy\easyminecraftgoals\v1_20_R3\packets\PacketArmorStandEntity.class
+com\magmaguy\easyminecraftgoals\v1_20_R3\packets\PacketDisplayEntity.class
+com\magmaguy\easyminecraftgoals\v1_20_R3\wanderbacktopoint\WanderBackToPointBehavior$1.class
+com\magmaguy\easyminecraftgoals\v1_20_R3\packets\AbstractPacketEntity.class
 com\magmaguy\easyminecraftgoals\v1_20_R3\wanderbacktopoint\WanderBackToPointBehavior.class

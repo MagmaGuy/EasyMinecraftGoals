@@ -5,6 +5,8 @@ import com.magmaguy.easyminecraftgoals.internal.AbstractNMSAdapter;
 import com.magmaguy.easyminecraftgoals.internal.AbstractWanderBackToPoint;
 import com.magmaguy.easyminecraftgoals.v1_19_R3.hitbox.Hitbox;
 import com.magmaguy.easyminecraftgoals.v1_19_R3.move.Move;
+import com.magmaguy.easyminecraftgoals.v1_19_R3.packets.PacketArmorStandEntity;
+import com.magmaguy.easyminecraftgoals.v1_19_R3.packets.PacketDisplayEntity;
 import com.magmaguy.easyminecraftgoals.v1_19_R3.wanderbacktopoint.WanderBackToPointBehavior;
 import com.magmaguy.easyminecraftgoals.v1_19_R3.wanderbacktopoint.WanderBackToPointGoal;
 import net.minecraft.world.entity.PathfinderMob;
@@ -13,7 +15,9 @@ import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_19_R3.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_19_R3.entity.CraftLivingEntity;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
 
 public class NMSAdapter extends com.magmaguy.easyminecraftgoals.NMSAdapter implements AbstractNMSAdapter {
 
@@ -22,6 +26,16 @@ public class NMSAdapter extends com.magmaguy.easyminecraftgoals.NMSAdapter imple
             return pathfinderMob1;
         else
             return null;
+    }
+
+    @Override
+    public PacketArmorStandEntity createPacketArmorStandEntity(Location location){
+        return new PacketArmorStandEntity(location);
+    }
+
+    @Override
+    public PacketDisplayEntity createPacketDisplayEntity(Location location){
+        return new PacketDisplayEntity(location);
     }
 
     @Override
