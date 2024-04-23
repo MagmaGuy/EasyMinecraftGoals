@@ -5,10 +5,10 @@
 
     <groupId>com.magmaguy</groupId>
     <artifactId>EasyMinecraftGoals-manager</artifactId>
-    <version>1.9.0-SNAPSHOT</version>
+    <version>1.10.0-SNAPSHOT</version>
     <properties>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
+        <maven.compiler.source>22</maven.compiler.source>
+        <maven.compiler.target>22</maven.compiler.target>
     </properties>
 
     <!-- This is the project parent, do not create further artifacts -->
@@ -21,6 +21,7 @@
         <module>EasyMinecraftGoals/v1_20_R1</module>
         <module>EasyMinecraftGoals/v1_20_R2</module>
         <module>EasyMinecraftGoals/v1_20_R3</module>
+        <module>EasyMinecraftGoals/v1_20_R4</module>
     </modules>
 
     <distributionManagement>
