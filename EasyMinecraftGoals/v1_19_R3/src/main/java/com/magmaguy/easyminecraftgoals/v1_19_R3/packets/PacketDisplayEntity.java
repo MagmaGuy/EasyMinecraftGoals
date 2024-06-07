@@ -2,7 +2,6 @@ package com.magmaguy.easyminecraftgoals.v1_19_R3.packets;
 
 import com.magmaguy.easyminecraftgoals.internal.PacketModelEntity;
 import com.mojang.math.Transformation;
-import net.minecraft.core.Rotations;
 import net.minecraft.world.entity.Display;
 import net.minecraft.world.entity.EntityType;
 import org.bukkit.Bukkit;
@@ -11,8 +10,6 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_19_R3.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.util.EulerAngle;
 import org.joml.Quaternionf;

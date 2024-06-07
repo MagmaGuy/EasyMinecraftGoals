@@ -15,11 +15,13 @@ public class NMSManager {
     private static boolean isEnabled = false;
 
     public static void initializeAdapter(Plugin plugin) {
-        String version = getServerVersion();
         pluginProvider = plugin;
+        plugin.getLogger().info(Bukkit.getServer().getClass().getPackage().getName());
+        String version = getServerVersion();
+        if (version == null) {return;}
 
         try {
-            //plugin.getLogger().info("Format: " + PACKAGE + version + ".NMSAdapter");
+            plugin.getLogger().info("Format: " + PACKAGE + version + ".NMSAdapter");
             String versionName;
             //1.20.0 is fundamentally the same as 1.20.1 so we use R2
             if (Objects.equals(version, "v1_20_R0")) versionName = PACKAGE + "v1_20_R1" + ".NMSAdapter";
@@ -40,6 +42,34 @@ public class NMSManager {
     }
 
     private static String getServerVersion() {
-        return Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
+        if (Bukkit.getServer().getClass().getPackage().getName().contains("_R"))
+            return Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
+        if (!Bukkit.getServer().getVersion().contains("-")) {
+            pluginProvider.getLogger().warning("Incompatible Minecraft version detected! [1] Package: " + Bukkit.getServer().getClass().getPackage().getName() + " version: " + Bukkit.getServer().getVersion() + " ! Report this to the developer.");
+            return null;
+        }
+
+        try {//Format: X.XX.XX-YYY-ZZZZZZZ where X is the actual version
+            String justVersion = Bukkit.getServer().getVersion().split("-")[0];
+            int major = Integer.parseInt(justVersion.split("\\.")[1]);
+            int minor = Integer.parseInt(justVersion.split("\\.")[2]);
+            return getInternalsFromRevision(major, minor);
+        } catch (Exception e){
+            pluginProvider.getLogger().warning("Incompatible Minecraft version detected! [2] Package: " + Bukkit.getServer().getClass().getPackage().getName() + " version: " + Bukkit.getServer().getVersion() + " ! Report this to the developer.");
+            return null;
+        }
+        //paper doing paper things
+    }
+
+    //Paper decided to change internal versioning so this needs to get updated from 1.20.6 onward with mapping the version to the correct module
+    private static String getInternalsFromRevision(int major, int minor){
+        String versionString = "v1_";
+        if (major == 20){
+            versionString += "20_";
+            if (minor == 6)
+                return versionString + "R4";
+        }
+        pluginProvider.getLogger().warning("Incompatible Minecraft version detected! [3] Package: " + Bukkit.getServer().getClass().getPackage().getName() + " version: " + Bukkit.getServer().getVersion() + " ! Report this to the developer.");
+        return null;
     }
 }

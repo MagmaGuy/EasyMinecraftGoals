@@ -2,7 +2,6 @@ package com.magmaguy.easyminecraftgoals.v1_19_R3.hitbox;
 
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityDimensions;
-import org.bukkit.Bukkit;
 
 import java.lang.reflect.Field;
 

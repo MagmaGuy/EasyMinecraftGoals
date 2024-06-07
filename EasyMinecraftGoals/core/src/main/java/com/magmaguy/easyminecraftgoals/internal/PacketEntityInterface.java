@@ -1,7 +1,6 @@
 package com.magmaguy.easyminecraftgoals.internal;
 
 import org.bukkit.Location;
-import org.bukkit.entity.Player;
 
 import java.util.UUID;
 

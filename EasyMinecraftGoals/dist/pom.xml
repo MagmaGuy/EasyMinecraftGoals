@@ -9,7 +9,7 @@
     <parent>
         <artifactId>EasyMinecraftGoals-manager</artifactId>
         <groupId>com.magmaguy</groupId>
-        <version>1.10.0-SNAPSHOT</version>
+        <version>1.11.1-SNAPSHOT</version>
     </parent>
 
     <properties>
@@ -170,31 +170,31 @@
         <dependency>
             <groupId>com.magmaguy</groupId>
             <artifactId>EasyMinecraftGoals_v1_19_R3</artifactId>
-            <version>1.10.0-SNAPSHOT</version>
+            <version>1.11.1-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.magmaguy</groupId>
             <artifactId>EasyMinecraftGoals_v1_20_R1</artifactId>
-            <version>1.10.0-SNAPSHOT</version>
+            <version>1.11.1-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.magmaguy</groupId>
             <artifactId>EasyMinecraftGoals_v1_20_R2</artifactId>
-            <version>1.10.0-SNAPSHOT</version>
+            <version>1.11.1-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.magmaguy</groupId>
             <artifactId>EasyMinecraftGoals_v1_20_R3</artifactId>
-            <version>1.10.0-SNAPSHOT</version>
+            <version>1.11.1-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.magmaguy</groupId>
             <artifactId>EasyMinecraftGoals_v1_20_R4</artifactId>
-            <version>1.10.0-SNAPSHOT</version>
+            <version>1.11.1-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>
