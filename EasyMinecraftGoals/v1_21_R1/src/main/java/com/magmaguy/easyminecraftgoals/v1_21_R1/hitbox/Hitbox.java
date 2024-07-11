@@ -12,19 +12,7 @@ public class Hitbox {
 
     public static boolean setCustomHitbox(Entity entity, float width, float height, boolean fixed) {
         EntityDimensions entityDimensions = new EntityDimensions(width, height, height, null, fixed);
-
-        double x = entity.getX();
-        double y = entity.getY();
-        double z = entity.getZ();
-
-        // Calculate the half dimensions
-        double halfWidth = entityDimensions.width() / 2.0;
-        double dHeight = entityDimensions.height();
-
-        AABB boundingBox = new AABB(
-                x - halfWidth, y, z - halfWidth,  // min corner
-                x + halfWidth, y + dHeight, z + halfWidth  // max corner
-        );
+        AABB boundingBox = entityDimensions.makeBoundingBox(entity.position());
 
         Class<?> entityClass = Entity.class;
         try {
@@ -38,7 +26,7 @@ public class Hitbox {
             e.printStackTrace();
             return false;
         }
-        entity.setBoundingBox(entityDimensions.makeBoundingBox(entity.position()));
+        entity.setBoundingBox(boundingBox);
         return true;
     }
 }
