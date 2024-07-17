@@ -29,7 +29,6 @@ public class Move {
         movementInTick = movementInTick.normalize().multiply(speedModifier * speed, speedModifier * speed, speedModifier * speed);
         mob.move(MoverType.SELF, movementInTick);
         rotateHead(mob, destination.toVector(), new Vector(mob.position().x, mob.position().y, mob.position().z));
-        //setDirection(destination.toVector().subtract(new Vector(mob.position().x, mob.position().y, mob.position().z)),pathfinderMob);
     }
 
 
@@ -56,24 +55,6 @@ public class Move {
         else
             entity.turn(-90D, 0D);
     }
-
-    /*
-    public static void setDirection(Vector direction, Entity entity) {
-        final double _2PI = 2 * Math.PI;
-        final double x = direction.getX();
-        final double z = direction.getZ();
-
-        if (x == 0 && z == 0) {
-            return;
-        }
-
-        double theta = Math.atan2(-x, z);
-        float yaw = (float) Math.toDegrees((theta + _2PI) % _2PI);
-
-        entity.setYRot(yaw);
-        entity.yRotO = yaw;
-    }
-     */
 
     public static boolean forcedMove(Mob mob, double speedModifier, Location destination) {
         //Lobotomize the mob

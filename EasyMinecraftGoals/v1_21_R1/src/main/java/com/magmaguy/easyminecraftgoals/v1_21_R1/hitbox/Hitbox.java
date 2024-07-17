@@ -13,7 +13,7 @@ public class Hitbox {
         EntityDimensions entityDimensions = new EntityDimensions(width, height, height, null, fixed);
         Class<?> entityClass = Entity.class;
         try {
-            Field field = entityClass.getDeclaredField("aF");
+            Field field = entityClass.getDeclaredField("bd");
             field.setAccessible(true);
             field.set(entity, entityDimensions);
         } catch (NoSuchFieldException e) {
