@@ -5,10 +5,10 @@
 
     <groupId>com.magmaguy</groupId>
     <artifactId>EasyMinecraftGoals-manager</artifactId>
-    <version>1.11.2-SNAPSHOT</version>
+    <version>1.11.3</version>
     <properties>
-        <maven.compiler.source>21</maven.compiler.source>
-        <maven.compiler.target>21</maven.compiler.target>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
     </properties>
 
     <!-- This is the project parent, do not create further artifacts -->
@@ -27,12 +27,14 @@
 
     <distributionManagement>
         <snapshotRepository>
-            <id>ossrh</id>
-            <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
+            <id>magmaguy-repo-snapshots</id>
+            <url>http://magmaguy.com:50001/releases</url>
         </snapshotRepository>
         <repository>
-            <id>ossrh</id>
-            <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+            <id>magmaguy-repo-snapshots</id>
+            <name>MagmaGuy's Repository</name>
+            <url>http://magmaguy.com:50001/snapshots</url>
         </repository>
     </distributionManagement>
+
 </project>
