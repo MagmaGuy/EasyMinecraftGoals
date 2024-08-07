@@ -10,21 +10,44 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_19_R3.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.util.EulerAngle;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.UUID;
 
 public class PacketDisplayEntity extends AbstractPacketEntity<Display.ItemDisplay> implements PacketModelEntity {
 
-    private org.bukkit.inventory.ItemStack leatherHorseArmor;
+    private ItemStack leatherHorseArmor;
     private net.minecraft.world.item.ItemStack nmsLeatherHorseArmor;
     private Display.ItemDisplay itemDisplay;
 
     public PacketDisplayEntity(Location location) {
         super(location);
+    }
+
+    private static Quaternionf eulerToQuaternion(double originalX, double originalY, double originalZ) {
+        double yaw = Math.toRadians(originalZ);
+        double pitch = Math.toRadians(originalY);
+        double roll = Math.toRadians(originalX);
+
+        double cy = Math.cos(yaw * 0.5);
+        double sy = Math.sin(yaw * 0.5);
+        double cp = Math.cos(pitch * 0.5);
+        double sp = Math.sin(pitch * 0.5);
+        double cr = Math.cos(roll * 0.5);
+        double sr = Math.sin(roll * 0.5);
+
+        double w = cr * cp * cy + sr * sp * sy;
+        double x = sr * cp * cy - cr * sp * sy;
+        double y = cr * sp * cy + sr * cp * sy;
+        double z = cr * cp * sy - sr * sp * cy;
+
+        return new Quaternionf(x, y, z, w);
     }
 
     @Override
@@ -35,9 +58,10 @@ public class PacketDisplayEntity extends AbstractPacketEntity<Display.ItemDispla
 
     public void initializeModel(Location location, int modelID) {
         itemDisplay = entity;
-//        itemDisplay.setInterpolationDelay(-1);
-//        itemDisplay.setInterpolationDuration(1);
-        leatherHorseArmor = new org.bukkit.inventory.ItemStack(Material.LEATHER_HORSE_ARMOR);
+        itemDisplay.setInterpolationDelay(-1);
+        itemDisplay.setInterpolationDuration(1);
+
+        leatherHorseArmor = new ItemStack(Material.LEATHER_HORSE_ARMOR);
         LeatherArmorMeta itemMeta = (LeatherArmorMeta) leatherHorseArmor.getItemMeta();
         itemMeta.setCustomModelData(modelID);
         itemMeta.setColor(Color.WHITE);
@@ -47,7 +71,7 @@ public class PacketDisplayEntity extends AbstractPacketEntity<Display.ItemDispla
     }
 
     @Override
-    public void setHorseLeatherArmorColor(Color color){
+    public void setHorseLeatherArmorColor(Color color) {
         LeatherArmorMeta leatherArmorMeta = (LeatherArmorMeta) leatherHorseArmor.getItemMeta();
         leatherArmorMeta.setColor(color);
         leatherHorseArmor.setItemMeta(leatherArmorMeta);
@@ -62,11 +86,6 @@ public class PacketDisplayEntity extends AbstractPacketEntity<Display.ItemDispla
                 Math.toDegrees(eulerAngle.getX()),
                 Math.toDegrees(eulerAngle.getY()),
                 Math.toDegrees(eulerAngle.getZ()));
-//        Quaternionf quaternionf = eulerToQuaternion(
-//                eulerAngle.getX(),
-//                eulerAngle.getY(),
-//                eulerAngle.getZ());
-//        Quaternionf test = eulerToQuaternion(0, 180, 0);
         rotate(quaternionf);
         sendPacket(createEntityDataPacket());
     }
@@ -132,41 +151,17 @@ public class PacketDisplayEntity extends AbstractPacketEntity<Display.ItemDispla
     }
 
     public Transformation getTransformation() {
-        com.mojang.math.Transformation nms = net.minecraft.world.entity.Display.createTransformation(this.entity.getEntityData());
+        Transformation nms = Display.createTransformation(this.entity.getEntityData());
         return new Transformation(nms.getTranslation(), nms.getLeftRotation(), nms.getScale(), nms.getRightRotation());
     }
 
     private void setTransformation(Transformation transformation) {
         entity.setTransformation(transformation);
-//        sendPacket(createEntityDataPacket());
     }
 
     private void rotate(Quaternionf rotation) {
         if (rotation == null) return;
         setLeftRotation(rotation);
-//        setRightRotation(rotation);
-
-//        sendPacket(createEntityDataPacket());
-    }
-
-    private static Quaternionf eulerToQuaternion(double originalX, double originalY, double originalZ) {
-        double yaw = Math.toRadians(originalZ);
-        double pitch = Math.toRadians(originalY);
-        double roll = Math.toRadians(originalX);
-
-        double cy = Math.cos(yaw * 0.5);
-        double sy = Math.sin(yaw * 0.5);
-        double cp = Math.cos(pitch * 0.5);
-        double sp = Math.sin(pitch * 0.5);
-        double cr = Math.cos(roll * 0.5);
-        double sr = Math.sin(roll * 0.5);
-
-        double w = cr * cp * cy + sr * sp * sy;
-        double x = sr * cp * cy - cr * sp * sy;
-        double y = cr * sp * cy + sr * cp * sy;
-        double z = cr * cp * sy - sr * sp * cy;
-
-        return new Quaternionf(x, y, z, w);
     }
 
 }

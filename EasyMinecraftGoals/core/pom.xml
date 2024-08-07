@@ -25,7 +25,7 @@
     <parent>
         <artifactId>EasyMinecraftGoals-manager</artifactId>
         <groupId>com.magmaguy</groupId>
-        <version>1.11.3</version>
+        <version>1.12.1</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
 

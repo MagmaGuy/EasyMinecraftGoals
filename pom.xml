@@ -5,7 +5,7 @@
 
     <groupId>com.magmaguy</groupId>
     <artifactId>EasyMinecraftGoals-manager</artifactId>
-    <version>1.11.3</version>
+    <version>1.12.1</version>
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
@@ -28,12 +28,12 @@
     <distributionManagement>
         <snapshotRepository>
             <id>magmaguy-repo-snapshots</id>
-            <url>http://magmaguy.com:50001/releases</url>
+            <url>https://repo.magmaguy.com/releases</url>
         </snapshotRepository>
         <repository>
             <id>magmaguy-repo-snapshots</id>
             <name>MagmaGuy's Repository</name>
-            <url>http://magmaguy.com:50001/snapshots</url>
+            <url>https://repo.magmaguy.com/snapshots</url>
         </repository>
     </distributionManagement>
 

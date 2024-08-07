@@ -16,6 +16,8 @@ import org.bukkit.util.EulerAngle;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.UUID;
 
 public class PacketDisplayEntity extends AbstractPacketEntity<Display.ItemDisplay> implements PacketModelEntity {
@@ -58,6 +60,27 @@ public class PacketDisplayEntity extends AbstractPacketEntity<Display.ItemDispla
         itemDisplay = entity;
         itemDisplay.setTransformationInterpolationDelay(-1);
         itemDisplay.setTransformationInterpolationDuration(1);
+
+        //This is for teleport interpolation
+        try {
+            Display display = itemDisplay;
+
+            // Get the private method
+            Method setPosRotInterpolationDuration = Display.class.getDeclaredMethod("d", int.class);
+
+            // Make the method accessible
+            setPosRotInterpolationDuration.setAccessible(true);
+
+            // Invoke the method with an argument of 1
+            setPosRotInterpolationDuration.invoke(display, 1);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            throw new RuntimeException(e);
+        } catch (NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        }
+
         leatherHorseArmor = new ItemStack(Material.LEATHER_HORSE_ARMOR);
         LeatherArmorMeta itemMeta = (LeatherArmorMeta) leatherHorseArmor.getItemMeta();
         itemMeta.setCustomModelData(modelID);
@@ -83,11 +106,6 @@ public class PacketDisplayEntity extends AbstractPacketEntity<Display.ItemDispla
                 Math.toDegrees(eulerAngle.getX()),
                 Math.toDegrees(eulerAngle.getY()),
                 Math.toDegrees(eulerAngle.getZ()));
-//        Quaternionf quaternionf = eulerToQuaternion(
-//                eulerAngle.getX(),
-//                eulerAngle.getY(),
-//                eulerAngle.getZ());
-//        Quaternionf test = eulerToQuaternion(0, 180, 0);
         rotate(quaternionf);
         sendPacket(createEntityDataPacket());
     }
@@ -159,15 +177,11 @@ public class PacketDisplayEntity extends AbstractPacketEntity<Display.ItemDispla
 
     private void setTransformation(Transformation transformation) {
         entity.setTransformation(transformation);
-//        sendPacket(createEntityDataPacket());
     }
 
     private void rotate(Quaternionf rotation) {
         if (rotation == null) return;
         setLeftRotation(rotation);
-//        setRightRotation(rotation);
-
-//        sendPacket(createEntityDataPacket());
     }
 
 }

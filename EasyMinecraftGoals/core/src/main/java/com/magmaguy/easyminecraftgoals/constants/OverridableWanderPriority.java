@@ -79,7 +79,10 @@ public enum OverridableWanderPriority {
     DOLPHIN(1,false),
     PANDA(1, false),
     TRADER_LLAMA(1,false),
-    WARDEN(1,true);
+    WARDEN(1,true),
+    BOGGED(1, false),
+    WITHER(1, false),
+    BREEZE(1,true);
 
     public final int priority;
     public final boolean brain;

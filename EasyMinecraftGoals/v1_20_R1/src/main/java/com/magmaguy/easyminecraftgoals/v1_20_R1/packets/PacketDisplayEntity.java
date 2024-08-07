@@ -16,6 +16,8 @@ import org.bukkit.util.EulerAngle;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.UUID;
 
 public class PacketDisplayEntity extends AbstractPacketEntity<Display.ItemDisplay> implements PacketModelEntity {
@@ -58,6 +60,7 @@ public class PacketDisplayEntity extends AbstractPacketEntity<Display.ItemDispla
         itemDisplay = entity;
         itemDisplay.setInterpolationDelay(-1);
         itemDisplay.setInterpolationDuration(1);
+
         leatherHorseArmor = new ItemStack(Material.LEATHER_HORSE_ARMOR);
         LeatherArmorMeta itemMeta = (LeatherArmorMeta) leatherHorseArmor.getItemMeta();
         itemMeta.setCustomModelData(modelID);
@@ -83,11 +86,6 @@ public class PacketDisplayEntity extends AbstractPacketEntity<Display.ItemDispla
                 Math.toDegrees(eulerAngle.getX()),
                 Math.toDegrees(eulerAngle.getY()),
                 Math.toDegrees(eulerAngle.getZ()));
-//        Quaternionf quaternionf = eulerToQuaternion(
-//                eulerAngle.getX(),
-//                eulerAngle.getY(),
-//                eulerAngle.getZ());
-//        Quaternionf test = eulerToQuaternion(0, 180, 0);
         rotate(quaternionf);
         sendPacket(createEntityDataPacket());
     }
@@ -159,15 +157,11 @@ public class PacketDisplayEntity extends AbstractPacketEntity<Display.ItemDispla
 
     private void setTransformation(Transformation transformation) {
         entity.setTransformation(transformation);
-//        sendPacket(createEntityDataPacket());
     }
 
     private void rotate(Quaternionf rotation) {
         if (rotation == null) return;
         setLeftRotation(rotation);
-//        setRightRotation(rotation);
-
-//        sendPacket(createEntityDataPacket());
     }
 
 }
