@@ -7,7 +7,7 @@
     <parent>
         <artifactId>EasyMinecraftGoals-manager</artifactId>
         <groupId>com.magmaguy</groupId>
-        <version>1.12.1</version>
+        <version>1.13.0</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
@@ -109,37 +109,37 @@
         <dependency>
             <groupId>com.magmaguy</groupId>
             <artifactId>EasyMinecraftGoals_v1_19_R3</artifactId>
-            <version>1.12.1</version>
+            <version>1.13.0</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.magmaguy</groupId>
             <artifactId>EasyMinecraftGoals_v1_20_R1</artifactId>
-            <version>1.12.1</version>
+            <version>1.13.0</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.magmaguy</groupId>
             <artifactId>EasyMinecraftGoals_v1_20_R2</artifactId>
-            <version>1.12.1</version>
+            <version>1.13.0</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.magmaguy</groupId>
             <artifactId>EasyMinecraftGoals_v1_20_R3</artifactId>
-            <version>1.12.1</version>
+            <version>1.13.0</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.magmaguy</groupId>
             <artifactId>EasyMinecraftGoals_v1_20_R4</artifactId>
-            <version>1.12.1</version>
+            <version>1.13.0</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.magmaguy</groupId>
             <artifactId>EasyMinecraftGoals_v1_21_R1</artifactId>
-            <version>1.12.1</version>
+            <version>1.13.0</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>

@@ -161,11 +161,15 @@ public abstract class AbstractPacketEntity<T extends Entity> implements PacketEn
     }
 
     public void teleport(Location location) {
+        entity.teleportTo(location.getX(), location.getY(), location.getZ());
+        sendTeleportPacket();
+    }
+
+    public void move(Location location) {
         Location oldPos = getLocation();
         entity.moveTo(location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
         updatePosition(oldPos);
     }
-
 
     protected void sendPacket(Player player, Packet<?>... nmsPackets) {
         ServerPlayer nmsPlayer = getNMSPlayer(player);

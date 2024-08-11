@@ -58,6 +58,8 @@ public interface AbstractNMSAdapter {
 
     boolean setCustomHitbox(Entity entity, float width, float height, boolean fixed);
 
+    float getBodyRotation(Entity entity);
+
     PacketModelEntity createPacketArmorStandEntity(Location location);
     PacketModelEntity createPacketDisplayEntity(Location location);
 }

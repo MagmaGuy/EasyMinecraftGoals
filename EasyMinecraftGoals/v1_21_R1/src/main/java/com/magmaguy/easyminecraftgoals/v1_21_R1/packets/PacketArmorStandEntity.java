@@ -67,7 +67,7 @@ public class PacketArmorStandEntity extends AbstractPacketEntity<ArmorStand> imp
 
     @Override
     public void sendLocationAndRotationPacket(Location location, EulerAngle eulerAngle) {
-        teleport(location);
+        move(location);
         rotate(eulerAngle);
     }
 

@@ -3,6 +3,7 @@ package com.magmaguy.easyminecraftgoals.v1_20_R3;
 import com.magmaguy.easyminecraftgoals.constants.OverridableWanderPriority;
 import com.magmaguy.easyminecraftgoals.internal.AbstractNMSAdapter;
 import com.magmaguy.easyminecraftgoals.internal.AbstractWanderBackToPoint;
+import com.magmaguy.easyminecraftgoals.v1_20_R3.entitydata.BodyRotation;
 import com.magmaguy.easyminecraftgoals.v1_20_R3.hitbox.Hitbox;
 import com.magmaguy.easyminecraftgoals.v1_20_R3.move.Move;
 import com.magmaguy.easyminecraftgoals.v1_20_R3.packets.PacketArmorStandEntity;
@@ -47,6 +48,11 @@ public class NMSAdapter extends com.magmaguy.easyminecraftgoals.NMSAdapter imple
     public boolean setCustomHitbox(Entity entity, float width, float height, boolean fixed) {
         if (entity == null) return false;
         return Hitbox.setCustomHitbox(((CraftEntity) entity).getHandle(), width, height, fixed);
+    }
+
+    @Override
+    public float getBodyRotation(Entity entity) {
+        return BodyRotation.getBodyRotation(((CraftEntity) entity).getHandle());
     }
 
     @Override

@@ -81,7 +81,7 @@ public class PacketDisplayEntity extends AbstractPacketEntity<Display.ItemDispla
 
     @Override
     public void sendLocationAndRotationPacket(Location location, EulerAngle eulerAngle) {
-        teleport(location);
+        move(location);
         Quaternionf quaternionf = eulerToQuaternion(
                 Math.toDegrees(eulerAngle.getX()),
                 Math.toDegrees(eulerAngle.getY()),

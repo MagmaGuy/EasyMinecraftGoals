@@ -8,6 +8,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_20_R4.CraftWorld;
@@ -53,7 +54,17 @@ public abstract class AbstractPacketEntity<T extends Entity> implements PacketEn
 
         viewers.add(player.getUniqueId());
 
-        sendPacket(player, new ClientboundAddEntityPacket(entity));
+        sendPacket(player, new ClientboundAddEntityPacket(
+                entity.getId(),
+                entity.getUUID(),
+                entity.getX(),
+                entity.getY(),
+                entity.getZ(),
+                0,
+                0,
+                entity.getType(),
+                0,
+                new Vec3(0,0,0), 0));
         sendPacket(player, createEntityDataPacket());
         addViewer(player.getUniqueId());
     }
@@ -150,11 +161,15 @@ public abstract class AbstractPacketEntity<T extends Entity> implements PacketEn
     }
 
     public void teleport(Location location) {
+        entity.teleportTo(location.getX(), location.getY(), location.getZ());
+        sendTeleportPacket();
+    }
+
+    public void move(Location location) {
         Location oldPos = getLocation();
         entity.moveTo(location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
         updatePosition(oldPos);
     }
-
 
     protected void sendPacket(Player player, Packet<?>... nmsPackets) {
         ServerPlayer nmsPlayer = getNMSPlayer(player);

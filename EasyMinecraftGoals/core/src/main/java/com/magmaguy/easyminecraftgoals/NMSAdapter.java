@@ -71,6 +71,12 @@ public class NMSAdapter implements AbstractNMSAdapter {
     }
 
     @Override
+    public float getBodyRotation(Entity entity) {
+        //Gets overriden by the correct adapter
+        return 0;
+    }
+
+    @Override
     public PacketModelEntity createPacketArmorStandEntity(Location location) {
         //Gets overriden by the correct adapter
         return null;

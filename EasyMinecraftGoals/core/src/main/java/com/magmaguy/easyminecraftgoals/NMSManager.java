@@ -87,10 +87,14 @@ public class NMSManager {
                 return versionString + "R4";
         } else if (major == 21) {
             versionString += "21_";
-            if (minor == 0)
+            if (minor == 0 || minor == 1)
                 return versionString + "R1";
         }
-        pluginProvider.getLogger().warning("Incompatible Minecraft version detected! [3] Package: " + Bukkit.getServer().getClass().getPackage().getName() + " version: " + Bukkit.getServer().getVersion() + " ! Report this to the developer.");
+        pluginProvider.getLogger().warning(
+                "Incompatible Minecraft version detected! [3] Package: " +
+                        Bukkit.getServer().getClass().getPackage().getName() +
+                        " version: " + Bukkit.getServer().getVersion() + " and attempted to get " + versionString
+                        + " ! Report this to the developer.");
         return null;
     }
 }
