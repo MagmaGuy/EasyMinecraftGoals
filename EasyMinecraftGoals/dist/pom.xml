@@ -3,13 +3,8 @@
     <modelVersion>4.0.0</modelVersion>
     <packaging>jar</packaging>
     <artifactId>EasyMinecraftGoals-dist</artifactId>
-
-    <parent>
-        <artifactId>EasyMinecraftGoals-manager</artifactId>
-        <groupId>com.magmaguy</groupId>
-        <version>1.13.0</version>
-        <relativePath>../../pom.xml</relativePath>
-    </parent>
+    <groupId>com.magmaguy</groupId>
+    <version>1.13.0</version>
 
     <properties>
         <maven.deploy.skip>false</maven.deploy.skip>
@@ -147,12 +142,12 @@
     <distributionManagement>
         <snapshotRepository>
             <id>magmaguy-repo-snapshots</id>
-            <url>https://repo.magmaguy.com/releases</url>
+            <url>https://repo.magmaguy.com/snapshots</url>
         </snapshotRepository>
         <repository>
             <id>magmaguy-repo-snapshots</id>
             <name>MagmaGuy's Repository</name>
-            <url>https://repo.magmaguy.com/snapshots</url>
+            <url>https://repo.magmaguy.com/releases</url>
         </repository>
     </distributionManagement>
 

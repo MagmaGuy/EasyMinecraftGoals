@@ -2,12 +2,10 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <parent>
-        <artifactId>EasyMinecraftGoals-manager</artifactId>
-        <groupId>com.magmaguy</groupId>
-        <version>1.13.0</version>
-    </parent>
+
     <modelVersion>4.0.0</modelVersion>
+    <groupId>com.magmaguy</groupId>
+    <version>1.13.1</version>
 
     <artifactId>EasyMinecraftGoals_v1_20_R1</artifactId>
 
@@ -65,11 +63,6 @@
             <version>1.20.1-R0.1-SNAPSHOT</version>
             <classifier>remapped-mojang</classifier>
             <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.magmaguy</groupId>
-            <artifactId>EasyMinecraftGoals-core</artifactId>
-            <version>${project.parent.version}</version>
         </dependency>
         <dependency>
             <groupId>com.magmaguy</groupId>

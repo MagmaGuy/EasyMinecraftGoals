@@ -5,6 +5,8 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>EasyMinecraftGoals-core</artifactId>
     <packaging>jar</packaging>
+    <groupId>com.magmaguy</groupId>
+    <version>1.13.1</version>
 
     <build>
         <pluginManagement>
@@ -21,13 +23,6 @@
             </plugins>
         </pluginManagement>
     </build>
-
-    <parent>
-        <artifactId>EasyMinecraftGoals-manager</artifactId>
-        <groupId>com.magmaguy</groupId>
-        <version>1.13.0</version>
-        <relativePath>../../pom.xml</relativePath>
-    </parent>
 
     <repositories>
         <!-- This adds the Spigot Maven repository to the build -->
