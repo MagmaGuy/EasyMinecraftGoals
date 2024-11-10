@@ -1,7 +1,6 @@
 package com.magmaguy.easyminecraftgoals;
 
 import com.magmaguy.easyminecraftgoals.constants.OverridableWanderPriority;
-import com.magmaguy.easyminecraftgoals.internal.AbstractNMSAdapter;
 import com.magmaguy.easyminecraftgoals.internal.AbstractWanderBackToPoint;
 import com.magmaguy.easyminecraftgoals.internal.PacketModelEntity;
 import org.bukkit.Location;
@@ -10,7 +9,7 @@ import org.bukkit.entity.LivingEntity;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-public class NMSAdapter implements AbstractNMSAdapter {
+public abstract class NMSAdapter {
     /**
      * Simply makes an entity move to a point.
      *
@@ -19,17 +18,9 @@ public class NMSAdapter implements AbstractNMSAdapter {
      * @param targetLocation The target location
      * @return Whether the objective is reachable.
      */
-    @Override
-    public boolean move(LivingEntity livingEntity, double speedModifier, Location targetLocation) {
-        //Gets overriden by the correct adapter
-        return false;
-    }
+    public abstract boolean move(LivingEntity livingEntity, double speedModifier, Location targetLocation);
 
-    @Override
-    public boolean forcedMove(LivingEntity livingEntity, double speedModifier, Location location) {
-        //Gets overriden by the correct adapter
-        return false;
-    }
+    public abstract boolean forcedMove(LivingEntity livingEntity, double speedModifier, Location location);
 
     /**
      * Pathfinding method which will move an entity to a point with a complete disregard for any pathfinding. This means
@@ -40,21 +31,13 @@ public class NMSAdapter implements AbstractNMSAdapter {
      * @param speedModifier Speed modifier
      * @param location      Location to move to
      */
-    @Override
-    public void universalMove(LivingEntity livingEntity, double speedModifier, Location location) {
-        //Gets overriden by the correct adapter
-    }
+    public abstract void universalMove(LivingEntity livingEntity, double speedModifier, Location location) ;
 
-
-    @Override
-    public AbstractWanderBackToPoint wanderBackToPoint(LivingEntity livingEntity,
+    public abstract AbstractWanderBackToPoint wanderBackToPoint(LivingEntity livingEntity,
                                                        Location blockLocation,
                                                        double maximumDistanceFromPoint,
                                                        int maxDurationTicks,
-                                                       OverridableWanderPriority overridableWanderPriority) {
-        //Gets overriden by the correct adapter
-        return null;
-    }
+                                                       OverridableWanderPriority overridableWanderPriority);
 
     /**
      * Sets a custom hitbox size for an entity
@@ -64,29 +47,15 @@ public class NMSAdapter implements AbstractNMSAdapter {
      * @param fixed Whether the hitbox can scale
      * @return
      */
-    @Override
-    public boolean setCustomHitbox(Entity entity, float width, float height, boolean fixed) {
-        //Gets overriden by the correct adapter
-        return false;
-    }
+    public abstract boolean setCustomHitbox(Entity entity, float width, float height, boolean fixed);
 
-    @Override
-    public float getBodyRotation(Entity entity) {
-        //Gets overriden by the correct adapter
-        return 0;
-    }
+    public abstract float getBodyRotation(Entity entity);
 
-    @Override
-    public PacketModelEntity createPacketArmorStandEntity(Location location) {
-        //Gets overriden by the correct adapter
-        return null;
-    }
+    public abstract PacketModelEntity createPacketArmorStandEntity(Location location);
 
-    @Override
-    public PacketModelEntity createPacketDisplayEntity(Location location) {
-        //Gets overriden by the correct adapter
-        return null;
-    }
+    public abstract PacketModelEntity createPacketDisplayEntity(Location location);
+
+    public abstract void doNotMove(LivingEntity livingEntity);
 
     /**
      * Makes a mob wander back to a point when it reaches a certain distance from that point, acting as a leash.
@@ -122,7 +91,6 @@ public class NMSAdapter implements AbstractNMSAdapter {
                 overridableWanderPriority);
     }
 
-    @Override
     public boolean canReach(LivingEntity livingEntity, Location location){
         //Gets overriden by the correct adapter
         return false;

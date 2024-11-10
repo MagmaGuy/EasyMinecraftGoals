@@ -23,6 +23,10 @@ public class Move {
         return pathfinderMob.getNavigation().moveTo(path, speedModifier);
     }
 
+    public static void doNotMove(PathfinderMob pathfinderMob) {
+        pathfinderMob.getNavigation().moveTo(pathfinderMob,0);
+    }
+
     public static void universalMove(Mob mob, double speedModifier, Location destination) {
         double speed = mob.getAttributeValue(Attributes.MOVEMENT_SPEED) * .75;
         Vec3 movementInTick = new Vec3(destination.getX(), destination.getY(), destination.getZ()).subtract(mob.position());

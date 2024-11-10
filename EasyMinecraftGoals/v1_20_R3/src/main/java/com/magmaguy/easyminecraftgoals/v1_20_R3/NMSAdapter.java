@@ -1,7 +1,6 @@
 package com.magmaguy.easyminecraftgoals.v1_20_R3;
 
 import com.magmaguy.easyminecraftgoals.constants.OverridableWanderPriority;
-import com.magmaguy.easyminecraftgoals.internal.AbstractNMSAdapter;
 import com.magmaguy.easyminecraftgoals.internal.AbstractWanderBackToPoint;
 import com.magmaguy.easyminecraftgoals.v1_20_R3.entitydata.BodyRotation;
 import com.magmaguy.easyminecraftgoals.v1_20_R3.hitbox.Hitbox;
@@ -18,7 +17,7 @@ import org.bukkit.craftbukkit.v1_20_R3.entity.CraftLivingEntity;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 
-public class NMSAdapter extends com.magmaguy.easyminecraftgoals.NMSAdapter implements AbstractNMSAdapter {
+public class NMSAdapter extends com.magmaguy.easyminecraftgoals.NMSAdapter {
 
     private PathfinderMob getPathfinderMob(Entity entity) {
         if (((CraftEntity) entity).getHandle() instanceof PathfinderMob pathfinderMob1)
@@ -67,6 +66,13 @@ public class NMSAdapter extends com.magmaguy.easyminecraftgoals.NMSAdapter imple
             return false;
         }
         return Move.simpleMove(pathfinderMob, speedModifier, location);
+    }
+
+    @Override
+    public void doNotMove(LivingEntity livingEntity) {
+        PathfinderMob pathfinderMob = getPathfinderMob(livingEntity);
+        if (pathfinderMob == null) return;
+        Move.doNotMove(pathfinderMob);
     }
 
     @Override
