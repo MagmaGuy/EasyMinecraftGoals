@@ -89,6 +89,10 @@ public class NMSManager {
             versionString += "21_";
             if (minor == 0 || minor == 1)
                 return versionString + "R1";
+            if (minor == 2 || minor == 3)
+                return versionString + "R2";
+            if (minor == 4)
+                return versionString + "R3";
         }
         pluginProvider.getLogger().warning(
                 "Incompatible Minecraft version detected! [3] Package: " +
