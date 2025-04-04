@@ -4,14 +4,18 @@ import com.magmaguy.easyminecraftgoals.constants.OverridableWanderPriority;
 import com.magmaguy.easyminecraftgoals.internal.AbstractWanderBackToPoint;
 import com.magmaguy.easyminecraftgoals.v1_21_R1.entitydata.BodyRotation;
 import com.magmaguy.easyminecraftgoals.v1_21_R1.hitbox.Hitbox;
+import com.magmaguy.easyminecraftgoals.v1_21_R1.massblockedit.MassEditBlocks;
 import com.magmaguy.easyminecraftgoals.v1_21_R1.move.Move;
 import com.magmaguy.easyminecraftgoals.v1_21_R1.packets.PacketArmorStandEntity;
 import com.magmaguy.easyminecraftgoals.v1_21_R1.packets.PacketDisplayEntity;
 import com.magmaguy.easyminecraftgoals.v1_21_R1.wanderbacktopoint.WanderBackToPointBehavior;
 import com.magmaguy.easyminecraftgoals.v1_21_R1.wanderbacktopoint.WanderBackToPointGoal;
 import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.level.block.state.BlockState;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.World;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.craftbukkit.v1_21_R1.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_21_R1.entity.CraftLivingEntity;
 import org.bukkit.entity.Entity;
@@ -123,5 +127,10 @@ public class NMSAdapter extends com.magmaguy.easyminecraftgoals.NMSAdapter {
                 maximumDistanceFromPoint,
                 overridableWanderPriority.priority,
                 maxDurationTicks);
+    }
+
+    @Override
+    public void setBlockInNativeDataPalette(World world, int x, int y, int z, BlockData blockData, boolean applyPhysics) {
+        MassEditBlocks.setBlockInNativeDataPalette(world, x, y, z, blockData, applyPhysics);
     }
 }

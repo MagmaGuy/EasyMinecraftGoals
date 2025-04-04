@@ -1,4 +1,4 @@
-package com.magmaguy.easyminecraftgoals.v1_20_R1.move;
+package com.magmaguy.easyminecraftgoals.v1_20_R1.Move;
 
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.Mob;

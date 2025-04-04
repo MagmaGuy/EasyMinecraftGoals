@@ -1,4 +1,5 @@
 com\magmaguy\easyminecraftgoals\v1_20_R3\move\Move.class
+com\magmaguy\easyminecraftgoals\v1_20_R3\massblockedit\MassEditBlocks.class
 com\magmaguy\easyminecraftgoals\v1_20_R3\hitbox\Hitbox.class
 com\magmaguy\easyminecraftgoals\v1_20_R3\wanderbacktopoint\WanderBackToPointGoal.class
 com\magmaguy\easyminecraftgoals\v1_20_R3\NMSAdapter.class

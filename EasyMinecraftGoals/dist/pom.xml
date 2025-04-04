@@ -4,7 +4,7 @@
     <packaging>jar</packaging>
     <artifactId>EasyMinecraftGoals-dist</artifactId>
     <groupId>com.magmaguy</groupId>
-    <version>1.16.0</version>
+    <version>1.19.0-SNAPSHOT</version>
 
     <properties>
         <maven.deploy.skip>false</maven.deploy.skip>
@@ -23,6 +23,24 @@
                 <directory>target</directory>
                 <finalName>EasyMinecraftGoals</finalName>
                 <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>flatten-maven-plugin</artifactId>
+                        <version>1.6.0</version>
+                        <executions>
+                            <execution>
+                                <id>flatten</id>
+                                <phase>process-resources</phase>
+                                <goals>
+                                    <goal>flatten</goal>
+                                </goals>
+                                <configuration>
+                                    <updatePomFile>true</updatePomFile>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-jar-plugin</artifactId>
@@ -104,49 +122,55 @@
         <dependency>
             <groupId>com.magmaguy</groupId>
             <artifactId>EasyMinecraftGoals_v1_19_R3</artifactId>
-            <version>1.16.0</version>
+            <version>1.19.0-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.magmaguy</groupId>
             <artifactId>EasyMinecraftGoals_v1_20_R1</artifactId>
-            <version>1.16.0</version>
+            <version>1.19.0-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.magmaguy</groupId>
             <artifactId>EasyMinecraftGoals_v1_20_R2</artifactId>
-            <version>1.16.0</version>
+            <version>1.19.0-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.magmaguy</groupId>
             <artifactId>EasyMinecraftGoals_v1_20_R3</artifactId>
-            <version>1.16.0</version>
+            <version>1.19.0-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.magmaguy</groupId>
             <artifactId>EasyMinecraftGoals_v1_20_R4</artifactId>
-            <version>1.16.0</version>
+            <version>1.19.0-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.magmaguy</groupId>
             <artifactId>EasyMinecraftGoals_v1_21_R1</artifactId>
-            <version>1.16.0</version>
+            <version>1.19.0-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.magmaguy</groupId>
             <artifactId>EasyMinecraftGoals_v1_21_R2</artifactId>
-            <version>1.16.0</version>
+            <version>1.19.0-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.magmaguy</groupId>
             <artifactId>EasyMinecraftGoals_v1_21_R3</artifactId>
-            <version>1.16.0</version>
+            <version>1.19.0-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.magmaguy</groupId>
+            <artifactId>EasyMinecraftGoals_v1_21_R4</artifactId>
+            <version>1.19.0-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>
@@ -157,10 +181,11 @@
             <url>https://repo.magmaguy.com/snapshots</url>
         </snapshotRepository>
         <repository>
-            <id>magmaguy-repo-snapshots</id>
+            <id>magmaguy-repo</id>
             <name>MagmaGuy's Repository</name>
             <url>https://repo.magmaguy.com/releases</url>
         </repository>
     </distributionManagement>
+
 
 </project>

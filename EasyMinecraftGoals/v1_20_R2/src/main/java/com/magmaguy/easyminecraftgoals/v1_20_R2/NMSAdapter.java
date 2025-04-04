@@ -4,6 +4,7 @@ import com.magmaguy.easyminecraftgoals.constants.OverridableWanderPriority;
 import com.magmaguy.easyminecraftgoals.internal.AbstractWanderBackToPoint;
 import com.magmaguy.easyminecraftgoals.v1_20_R2.entitydata.BodyRotation;
 import com.magmaguy.easyminecraftgoals.v1_20_R2.hitbox.Hitbox;
+import com.magmaguy.easyminecraftgoals.v1_20_R2.massblockedit.MassEditBlocks;
 import com.magmaguy.easyminecraftgoals.v1_20_R2.move.Move;
 import com.magmaguy.easyminecraftgoals.v1_20_R2.packets.PacketArmorStandEntity;
 import com.magmaguy.easyminecraftgoals.v1_20_R2.packets.PacketDisplayEntity;
@@ -12,6 +13,8 @@ import com.magmaguy.easyminecraftgoals.v1_20_R2.wanderbacktopoint.WanderBackToPo
 import net.minecraft.world.entity.PathfinderMob;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.World;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.craftbukkit.v1_20_R2.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_20_R2.entity.CraftLivingEntity;
 import org.bukkit.entity.Entity;
@@ -123,5 +126,10 @@ public class NMSAdapter extends com.magmaguy.easyminecraftgoals.NMSAdapter {
                 maximumDistanceFromPoint,
                 overridableWanderPriority.priority,
                 maxDurationTicks);
+    }
+
+    @Override
+    public void setBlockInNativeDataPalette(World world, int x, int y, int z, BlockData blockData, boolean applyPhysics) {
+        MassEditBlocks.setBlockInNativeDataPalette(world, x, y, z, blockData, applyPhysics);
     }
 }
