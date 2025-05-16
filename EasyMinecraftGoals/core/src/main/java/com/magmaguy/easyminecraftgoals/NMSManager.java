@@ -93,6 +93,8 @@ public class NMSManager {
                 return versionString + "R2";
             if (minor == 4)
                 return versionString + "R3";
+            if (minor == 5)
+                return versionString + "R4";
         }
         pluginProvider.getLogger().warning(
                 "Incompatible Minecraft version detected! [3] Package: " +

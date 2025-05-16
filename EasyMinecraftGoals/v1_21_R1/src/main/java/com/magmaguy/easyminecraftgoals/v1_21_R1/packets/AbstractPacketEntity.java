@@ -60,8 +60,8 @@ public abstract class AbstractPacketEntity<T extends Entity> implements PacketEn
                 entity.getX(),
                 entity.getY(),
                 entity.getZ(),
-                0,
-                0,
+                entity.getXRot(),
+                entity.getYRot(),
                 entity.getType(),
                 0,
                 new Vec3(0,0,0), 0));

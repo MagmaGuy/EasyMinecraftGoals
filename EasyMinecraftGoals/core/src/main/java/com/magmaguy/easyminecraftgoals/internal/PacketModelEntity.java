@@ -7,6 +7,8 @@ import org.bukkit.util.EulerAngle;
 public interface PacketModelEntity extends PacketEntityInterface {
     void sendLocationAndRotationPacket(Location location, EulerAngle eulerAngle);
 
+    void sendLocationAndRotationAndScalePacket(Location location, EulerAngle eulerAngle, float scale);
+
     default void initializeModel(Location location, int modelID) {
         throw new UnsupportedOperationException("Integer modelID not supported by this implementation.");
     }

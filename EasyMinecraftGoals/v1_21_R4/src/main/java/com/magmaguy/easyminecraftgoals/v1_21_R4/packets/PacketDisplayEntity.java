@@ -4,8 +4,11 @@ import com.magmaguy.easyminecraftgoals.internal.PacketModelEntity;
 import com.mojang.math.Transformation;
 import net.minecraft.world.entity.Display;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.ItemLike;
 import org.bukkit.*;
+import org.bukkit.block.data.type.GlassPane;
 import org.bukkit.craftbukkit.v1_21_R4.inventory.CraftItemStack;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
@@ -55,27 +58,22 @@ public class PacketDisplayEntity extends AbstractPacketEntity<Display.ItemDispla
 
     public void initializeModel(Location location, String modelID) {
         itemDisplay = entity;
-        itemDisplay.setTransformationInterpolationDelay(-1);
+
+        // Set interpolation explicitly with correct defaults
+        itemDisplay.setTransformationInterpolationDelay(0);  // Was -1, which may not work in R4
         itemDisplay.setTransformationInterpolationDuration(1);
 
-        //This is for teleport interpolation
+        // For teleport interpolation, this reflection call might be failing
         try {
             Display display = itemDisplay;
 
             // Get the private method
             Method setPosRotInterpolationDuration = Display.class.getDeclaredMethod("d", int.class);
 
-            // Make the method accessible
             setPosRotInterpolationDuration.setAccessible(true);
-
-            // Invoke the method with an argument of 1
             setPosRotInterpolationDuration.invoke(display, 1);
-        } catch (IllegalAccessException e) {
+        } catch (Exception e) {
             e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            throw new RuntimeException(e);
-        } catch (NoSuchMethodException e) {
-            throw new RuntimeException(e);
         }
 
         leatherHorseArmor = new ItemStack(Material.LEATHER_HORSE_ARMOR);
@@ -85,6 +83,9 @@ public class PacketDisplayEntity extends AbstractPacketEntity<Display.ItemDispla
         leatherHorseArmor.setItemMeta(itemMeta);
         nmsLeatherHorseArmor = CraftItemStack.asNMSCopy(leatherHorseArmor);
         itemDisplay.setItemStack(nmsLeatherHorseArmor);
+        itemDisplay.setWidth(0);
+        itemDisplay.setHeight(0);
+        itemDisplay.setViewRange(30);
     }
 
     @Override
@@ -106,6 +107,20 @@ public class PacketDisplayEntity extends AbstractPacketEntity<Display.ItemDispla
         rotate(quaternionf);
         sendPacket(createEntityDataPacket());
     }
+
+    @Override
+    public void sendLocationAndRotationAndScalePacket(Location location, EulerAngle eulerAngle, float scale) {
+        move(location);
+        Quaternionf quaternionf = eulerToQuaternion(
+                Math.toDegrees(eulerAngle.getX()),
+                Math.toDegrees(eulerAngle.getY()),
+                Math.toDegrees(eulerAngle.getZ()));
+        Transformation transformation = getTransformation();
+        transformation = new Transformation(transformation.getTranslation(), quaternionf, new Vector3f(scale,scale,scale), transformation.getRightRotation());
+        entity.setTransformation(transformation);
+        sendPacket(createEntityDataPacket());
+    }
+
 
     @Override
     public void displayTo(Player player) {

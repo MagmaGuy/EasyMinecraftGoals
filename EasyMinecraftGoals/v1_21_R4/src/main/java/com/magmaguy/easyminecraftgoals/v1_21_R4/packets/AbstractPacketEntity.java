@@ -59,8 +59,8 @@ public abstract class AbstractPacketEntity<T extends Entity> implements PacketEn
                 entity.getX(),
                 entity.getY(),
                 entity.getZ(),
-                0,
-                0,
+                entity.getXRot(),
+                entity.getYRot(),
                 entity.getType(),
                 0,
                 new Vec3(0,0,0), 0));
@@ -166,7 +166,9 @@ public abstract class AbstractPacketEntity<T extends Entity> implements PacketEn
 
     public void move(Location location) {
         Location oldPos = getLocation();
-        entity.move(MoverType.SELF, new Vec3(location.getX(), location.getY(), location.getZ()));
+        entity.setPos(location.getX(), location.getY(), location.getZ());
+        entity.setYRot(location.getYaw());
+        entity.setXRot(location.getPitch());
         updatePosition(oldPos);
     }
 

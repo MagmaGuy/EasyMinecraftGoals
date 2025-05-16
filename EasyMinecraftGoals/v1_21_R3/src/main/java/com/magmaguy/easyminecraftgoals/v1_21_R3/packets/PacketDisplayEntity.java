@@ -108,6 +108,20 @@ public class PacketDisplayEntity extends AbstractPacketEntity<Display.ItemDispla
     }
 
     @Override
+    public void sendLocationAndRotationAndScalePacket(Location location, EulerAngle eulerAngle, float scale) {
+        move(location);
+        Quaternionf quaternionf = eulerToQuaternion(
+                Math.toDegrees(eulerAngle.getX()),
+                Math.toDegrees(eulerAngle.getY()),
+                Math.toDegrees(eulerAngle.getZ()));
+        Transformation transformation = getTransformation();
+        transformation = new Transformation(transformation.getTranslation(), quaternionf, new Vector3f(scale,scale,scale), transformation.getRightRotation());
+        entity.setTransformation(transformation);
+        sendPacket(createEntityDataPacket());
+    }
+
+
+    @Override
     public void displayTo(Player player) {
         super.displayTo(player);
     }

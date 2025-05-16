@@ -9,10 +9,10 @@
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
-<!--        <revision>1.19.0-SNAPSHOT</revision>-->
+<!--        <revision>1.19.3</revision>-->
     </properties>
 
-    <version>1.19.0-SNAPSHOT</version>
+    <version>1.19.3</version>
 
     <!-- This is the project parent, do not create further artifacts -->
     <packaging>pom</packaging>

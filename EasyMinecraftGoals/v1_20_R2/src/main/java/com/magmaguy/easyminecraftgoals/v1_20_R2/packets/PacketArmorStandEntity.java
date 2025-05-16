@@ -72,6 +72,12 @@ public class PacketArmorStandEntity extends AbstractPacketEntity<ArmorStand> imp
     }
 
     @Override
+    public void sendLocationAndRotationAndScalePacket(Location location, EulerAngle eulerAngle, float scale) {
+        sendLocationAndRotationPacket(location, eulerAngle);
+    }
+
+
+    @Override
     public void displayTo(Player player) {
         super.displayTo(player);
         sendPacket(player, new ClientboundSetEquipmentPacket(entity.getId(), List.of(Pair.of(EquipmentSlot.HEAD, nmsLeatherHorseArmor))));

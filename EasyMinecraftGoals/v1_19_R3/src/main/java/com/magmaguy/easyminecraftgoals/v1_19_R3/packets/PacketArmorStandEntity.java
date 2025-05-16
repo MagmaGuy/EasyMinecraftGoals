@@ -2,6 +2,7 @@ package com.magmaguy.easyminecraftgoals.v1_19_R3.packets;
 
 import com.magmaguy.easyminecraftgoals.internal.PacketModelEntity;
 import com.mojang.datafixers.util.Pair;
+import com.mojang.math.Transformation;
 import net.minecraft.core.Rotations;
 import net.minecraft.network.protocol.game.ClientboundSetEquipmentPacket;
 import net.minecraft.world.entity.EntityType;
@@ -16,6 +17,8 @@ import org.bukkit.craftbukkit.v1_19_R3.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.util.EulerAngle;
+import org.joml.Quaternionf;
+import org.joml.Vector3f;
 
 import java.util.List;
 import java.util.UUID;
@@ -69,6 +72,11 @@ public class PacketArmorStandEntity extends AbstractPacketEntity<ArmorStand> imp
     public void sendLocationAndRotationPacket(Location location, EulerAngle eulerAngle) {
         move(location);
         rotate(eulerAngle);
+    }
+
+    @Override
+    public void sendLocationAndRotationAndScalePacket(Location location, EulerAngle eulerAngle, float scale) {
+        sendLocationAndRotationPacket(location, eulerAngle);
     }
 
     @Override
