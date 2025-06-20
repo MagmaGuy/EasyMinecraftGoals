@@ -25,4 +25,6 @@ public interface PacketEntityInterface {
 
     void removeViewer(UUID uuid);
 
+    boolean hasViewers();
+
 }

@@ -20,4 +20,6 @@ public interface PacketModelEntity extends PacketEntityInterface {
     void setScale(float scale);
 
     void setHorseLeatherArmorColor(Color color);
+
+    boolean hasViewers();
 }

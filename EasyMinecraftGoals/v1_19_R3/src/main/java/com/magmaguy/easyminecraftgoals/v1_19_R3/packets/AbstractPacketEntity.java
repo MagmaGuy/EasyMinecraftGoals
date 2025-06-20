@@ -26,6 +26,11 @@ public abstract class AbstractPacketEntity<T extends Entity> implements PacketEn
     private final List<Runnable> removeCallbacks = new LinkedList<>();
     protected boolean visible = true;
 
+    @Override
+    public boolean hasViewers() {
+        return !viewers.isEmpty();
+    }
+
     protected AbstractPacketEntity(Location location) {
         this.entity = createEntity(location);
         this.teleport(location);

@@ -6,7 +6,7 @@
     <artifactId>EasyMinecraftGoals-core</artifactId>
     <packaging>jar</packaging>
     <groupId>com.magmaguy</groupId>
-   <version>1.19.3</version>
+   <version>1.19.6-SNAPSHOT</version>
 
     <build>
         <pluginManagement>

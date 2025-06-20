@@ -4,11 +4,8 @@ import com.magmaguy.easyminecraftgoals.internal.PacketModelEntity;
 import com.mojang.math.Transformation;
 import net.minecraft.world.entity.Display;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.level.ItemLike;
 import org.bukkit.*;
-import org.bukkit.block.data.type.GlassPane;
 import org.bukkit.craftbukkit.v1_21_R4.inventory.CraftItemStack;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
@@ -16,7 +13,6 @@ import org.bukkit.util.EulerAngle;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.UUID;
 

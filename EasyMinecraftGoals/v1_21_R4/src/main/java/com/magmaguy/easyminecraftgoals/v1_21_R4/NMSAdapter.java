@@ -2,9 +2,9 @@ package com.magmaguy.easyminecraftgoals.v1_21_R4;
 
 import com.magmaguy.easyminecraftgoals.constants.OverridableWanderPriority;
 import com.magmaguy.easyminecraftgoals.internal.AbstractWanderBackToPoint;
+import com.magmaguy.easyminecraftgoals.v1_21_R4.entitydata.BodyRotation;
 import com.magmaguy.easyminecraftgoals.v1_21_R4.massblockedit.MassEditBlocks;
 import com.magmaguy.easyminecraftgoals.v1_21_R4.move.Move;
-import com.magmaguy.easyminecraftgoals.v1_21_R4.entitydata.BodyRotation;
 import com.magmaguy.easyminecraftgoals.v1_21_R4.hitbox.Hitbox;
 import com.magmaguy.easyminecraftgoals.v1_21_R4.packets.PacketArmorStandEntity;
 import com.magmaguy.easyminecraftgoals.v1_21_R4.packets.PacketDisplayEntity;

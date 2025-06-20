@@ -7,7 +7,6 @@ import net.minecraft.network.protocol.game.*;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.PositionMoveRotation;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
@@ -24,6 +23,11 @@ public abstract class AbstractPacketEntity<T extends Entity> implements PacketEn
     private final Set<UUID> viewers = Sets.newConcurrentHashSet();
     private final List<Runnable> removeCallbacks = new LinkedList<>();
     protected boolean visible = true;
+
+    @Override
+    public boolean hasViewers() {
+        return !viewers.isEmpty();
+    }
 
     protected AbstractPacketEntity(Location location) {
         this.entity = createEntity(location);

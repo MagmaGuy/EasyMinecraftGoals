@@ -1,0 +1,11 @@
+com\magmaguy\easyminecraftgoals\v1_21_R5\NMSAdapter.class
+com\magmaguy\easyminecraftgoals\v1_21_R5\massblockedit\MassEditBlocks.class
+com\magmaguy\easyminecraftgoals\v1_21_R5\wanderbacktopoint\WanderBackToPointBehavior$1.class
+com\magmaguy\easyminecraftgoals\v1_21_R5\move\Move.class
+com\magmaguy\easyminecraftgoals\v1_21_R5\hitbox\Hitbox.class
+com\magmaguy\easyminecraftgoals\v1_21_R5\packets\PacketDisplayEntity.class
+com\magmaguy\easyminecraftgoals\v1_21_R5\packets\PacketArmorStandEntity.class
+com\magmaguy\easyminecraftgoals\v1_21_R5\wanderbacktopoint\WanderBackToPointGoal.class
+com\magmaguy\easyminecraftgoals\v1_21_R5\entitydata\BodyRotation.class
+com\magmaguy\easyminecraftgoals\v1_21_R5\packets\AbstractPacketEntity.class
+com\magmaguy\easyminecraftgoals\v1_21_R5\wanderbacktopoint\WanderBackToPointBehavior.class
