@@ -1,0 +1,36 @@
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.magmaguy</groupId>
+    <artifactId>EasyMinecraftGoals-manager</artifactId>
+    <version>1.0.0</version>
+
+    <!-- This is the project parent, do not create further artifacts -->
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>EasyMinecraftGoals/dist</module>
+        <module>EasyMinecraftGoals/core</module>
+        <module>EasyMinecraftGoals/v1_17_R1</module>
+        <module>EasyMinecraftGoals/v1_18_R0</module>
+        <module>EasyMinecraftGoals/v1_18_R1</module>
+        <module>EasyMinecraftGoals/v1_18_R2</module>
+        <module>EasyMinecraftGoals/v1_19_R0</module>
+        <module>EasyMinecraftGoals/v1_19_R1</module>
+        <module>EasyMinecraftGoals/v1_19_R2</module>
+        <module>EasyMinecraftGoals/v1_19_R3</module>
+    </modules>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+            <id>ossrh</id>
+            <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+    </distributionManagement>
+</project>

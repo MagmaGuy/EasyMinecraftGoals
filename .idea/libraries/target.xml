@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="target">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/EasyMinecraftGoals/v1_20_R2/target/EasyMinecraftGoals_v1_20_R2-1.6.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/EasyMinecraftGoals/v1_20_R2/target/original-EasyMinecraftGoals_v1_20_R2-1.6.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/EasyMinecraftGoals/v1_20_R2/target/EasyMinecraftGoals_v1_20_R2-1.6.0-remapped.jar!/" />
+      <root url="jar://$PROJECT_DIR$/EasyMinecraftGoals/v1_20_R2/target/EasyMinecraftGoals_v1_20_R2-1.6.0-remapped-obf.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

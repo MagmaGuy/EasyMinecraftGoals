@@ -1,0 +1,8 @@
+
+{	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(°×ªÿÿÿÿÿ8ˆ¿±Û1
+\
+java:S1118":Add a private constructor to hide the implicit public one.(×­¥ïÿÿÿÿÿ8ª¿±Û1
+]	java:S125 "<This block of commented-out lines of code should be removed.(ë‰¦°úÿÿÿÿ8°¿±Û1
+]	java:S125="<This block of commented-out lines of code should be removed.(ÁğÛ³ûÿÿÿÿ8±¿±Û1
+¡
+java:S5803P"Remove this usage of "removeFreeWill", it is annotated with @VisibleForTesting and should not be accessed from production code.(¢Ò’¶ıÿÿÿÿ8ªéŸƒÜ1

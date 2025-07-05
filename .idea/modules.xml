@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/EasyMinecraftGoals/Core/EasyMinecraftGoals-core.iml" filepath="$PROJECT_DIR$/EasyMinecraftGoals/Core/EasyMinecraftGoals-core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/EasyMinecraftGoals/dist/EasyMinecraftGoals-dist.iml" filepath="$PROJECT_DIR$/EasyMinecraftGoals/dist/EasyMinecraftGoals-dist.iml" />
+      <module fileurl="file://$PROJECT_DIR$/EasyMinecraftGoals-manager.iml" filepath="$PROJECT_DIR$/EasyMinecraftGoals-manager.iml" />
+      <module fileurl="file://$PROJECT_DIR$/EasyMinecraftGoals/v1_19_R3/EasyMinecraftGoals_v1_19_R3.iml" filepath="$PROJECT_DIR$/EasyMinecraftGoals/v1_19_R3/EasyMinecraftGoals_v1_19_R3.iml" />
+      <module fileurl="file://$PROJECT_DIR$/EasyMinecraftGoals/v1_20_R1/EasyMinecraftGoals_v1_20_R1.iml" filepath="$PROJECT_DIR$/EasyMinecraftGoals/v1_20_R1/EasyMinecraftGoals_v1_20_R1.iml" />
+      <module fileurl="file://$PROJECT_DIR$/EasyMinecraftGoals/v1_20_R2/EasyMinecraftGoals_v1_20_R2.iml" filepath="$PROJECT_DIR$/EasyMinecraftGoals/v1_20_R2/EasyMinecraftGoals_v1_20_R2.iml" />
+      <module fileurl="file://$PROJECT_DIR$/EasyMinecraftGoals/v1_20_R3/EasyMinecraftGoals_v1_20_R3.iml" filepath="$PROJECT_DIR$/EasyMinecraftGoals/v1_20_R3/EasyMinecraftGoals_v1_20_R3.iml" />
+      <module fileurl="file://$PROJECT_DIR$/EasyMinecraftGoals/v1_20_R4/EasyMinecraftGoals_v1_20_R4.iml" filepath="$PROJECT_DIR$/EasyMinecraftGoals/v1_20_R4/EasyMinecraftGoals_v1_20_R4.iml" />
+      <module fileurl="file://$PROJECT_DIR$/EasyMinecraftGoals/v1_21_R1/EasyMinecraftGoals_v1_21_R1.iml" filepath="$PROJECT_DIR$/EasyMinecraftGoals/v1_21_R1/EasyMinecraftGoals_v1_21_R1.iml" />
+      <module fileurl="file://$PROJECT_DIR$/EasyMinecraftGoals/v1_21_R2/EasyMinecraftGoals_v1_21_R2.iml" filepath="$PROJECT_DIR$/EasyMinecraftGoals/v1_21_R2/EasyMinecraftGoals_v1_21_R2.iml" />
+      <module fileurl="file://$PROJECT_DIR$/EasyMinecraftGoals/v1_21_R3/EasyMinecraftGoals_v1_21_R3.iml" filepath="$PROJECT_DIR$/EasyMinecraftGoals/v1_21_R3/EasyMinecraftGoals_v1_21_R3.iml" />
+      <module fileurl="file://$PROJECT_DIR$/EasyMinecraftGoals/v1_21_R4/EasyMinecraftGoals_v1_21_R4.iml" filepath="$PROJECT_DIR$/EasyMinecraftGoals/v1_21_R4/EasyMinecraftGoals_v1_21_R4.iml" />
+      <module fileurl="file://$PROJECT_DIR$/EasyMinecraftGoals/v1_21_R5/EasyMinecraftGoals_v1_21_R5.iml" filepath="$PROJECT_DIR$/EasyMinecraftGoals/v1_21_R5/EasyMinecraftGoals_v1_21_R5.iml" />
+    </modules>
+  </component>
+</project>

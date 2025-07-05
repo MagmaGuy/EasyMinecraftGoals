@@ -1,0 +1,22 @@
+
+
+java:S1104"ZMake pluginProvider a static final constant or non-public and provide accessors if needed.(«°¢û8¥Ôİƒ2J$0ea4a4d2-fc8d-4477-b4ff-2e8427bf091e
+z
+java:S2629>"7Use the built-in formatting to construct this argument.(âûúÀ8€£Ş‚ƒ2J$bd0a5ed2-bbc7-4675-9ac2-1e0ef5ec8033
+}
+java:S1141F"5Extract this nested try block into a separate method.(¡»¢üùÿÿÿÿ8€£Ş‚ƒ2J$e59df059-ae8a-484c-8e1a-c043fecebd1d
+w
+java:S1444"4Make this "public static pluginProvider" field final(«°¢û8§Ôİƒ2J$83794a15-84d3-4407-a19d-c37b5c087696
+¤
+java:S1192>"aDefine a constant instead of duplicating this literal " ! Report this to the developer." 3 times.(âûúÀ8€£Ş‚ƒ2J$b0516e74-0d9b-490c-b4c2-b44adac49835
+
+java:S1192>"KDefine a constant instead of duplicating this literal " version: " 3 times.(âûúÀ8€£Ş‚ƒ2J$9a21afcc-ddf4-4bf9-8e3f-b128866c9d51
+‚
+java:S1118
+":Add a private constructor to hide the implicit public one.(ğÃš‡ÿÿÿÿÿ8ªÔİƒ2J$9eebfbaf-f2ec-4967-8285-4a728494ddbb
+ƒ	java:S125"<This block of commented-out lines of code should be removed.(¿·ş„øÿÿÿÿ8ÑÄæ‚ƒ2J$b1e8c527-9b20-4671-96db-917698704d99
+~	java:S125"<This block of commented-out lines of code should be removed.(ªÆ­„8ëòæ‚ƒ2J$355c7ff4-1c23-475e-9e9a-40d46fb82a7a
+ƒ	java:S125 "<This block of commented-out lines of code should be removed.(¥± –øÿÿÿÿ8û–ì‚ƒ2J$382e8e57-6e75-48d8-8523-d66a31d2ea59
+ƒ	java:S125-"<This block of commented-out lines of code should be removed.(Š˜†Œüÿÿÿÿ8†£Ş‚ƒ2J$95c9bff6-7a1b-422d-af0b-9df14b514274
+z
+java:S1135-"2Complete the task associated to this TODO comment.(Š˜†Œüÿÿÿÿ8†£Ş‚ƒ2J$720641f8-857c-4c21-b410-baed18a1a207

@@ -1,0 +1,8 @@
+
+•	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(ΑΫςΪJ$6fc89365-796e-4433-ba14-db4c12da7877
+{
+java:S1118":Add a private constructor to hide the implicit public one.(Χ­¥οÿÿÿÿÿJ$c505f2e8-b4f4-4cbc-81f2-4f7a56f0e5dc
+|	java:S125 "<This block of commented-out lines of code should be removed.(λ‰¦°ϊÿÿÿÿJ$5a83ef55-6644-4fa6-ae90-368600314903
+|	java:S125="<This block of commented-out lines of code should be removed.(ΑπΫ³ϋÿÿÿÿJ$6f1ebe86-b37e-4746-b3b7-252e9939a24c
+Η
+java:S5803P"Remove this usage of "removeFreeWill", it is annotated with @VisibleForTesting and should not be accessed from production code.(ΆÒ’¶ύÿÿÿÿ8‹Κ‘ÿ1J$89ec1cd3-4d4c-455a-916f-89a37b8d3088
