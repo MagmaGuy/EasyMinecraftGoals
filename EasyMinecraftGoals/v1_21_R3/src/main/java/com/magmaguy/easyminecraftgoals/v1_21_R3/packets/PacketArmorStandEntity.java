@@ -1,8 +1,10 @@
 package com.magmaguy.easyminecraftgoals.v1_21_R3.packets;
 
 import com.magmaguy.easyminecraftgoals.internal.PacketModelEntity;
+import com.magmaguy.easyminecraftgoals.internal.PacketTextEntity;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.Rotations;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundSetEquipmentPacket;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -17,7 +19,7 @@ import org.bukkit.util.EulerAngle;
 import java.util.List;
 import java.util.UUID;
 
-public class PacketArmorStandEntity extends AbstractPacketEntity<ArmorStand> implements PacketModelEntity {
+public class PacketArmorStandEntity extends AbstractPacketEntity<ArmorStand> implements PacketModelEntity, PacketTextEntity {
 
     private ItemStack nmsLeatherHorseArmor;
     private org.bukkit.inventory.ItemStack leatherHorseArmor;
@@ -49,6 +51,13 @@ public class PacketArmorStandEntity extends AbstractPacketEntity<ArmorStand> imp
     }
 
     @Override
+    public void initializeText(Location location) {
+        armorStand = entity;
+        armorStand.setInvisible(true);
+        armorStand.setMarker(true);
+    }
+
+    @Override
     public void setScale(float scale) {
         //Actually not possible for armor stands, sorry
     }
@@ -73,11 +82,13 @@ public class PacketArmorStandEntity extends AbstractPacketEntity<ArmorStand> imp
         sendLocationAndRotationPacket(location, eulerAngle);
     }
 
-    @Override
-    public void displayTo(Player player) {
-        super.displayTo(player);
+@Override
+public void displayTo(Player player) {
+    super.displayTo(player);
+    if (nmsLeatherHorseArmor != null) {
         sendPacket(player, new ClientboundSetEquipmentPacket(entity.getId(), List.of(Pair.of(EquipmentSlot.HEAD, nmsLeatherHorseArmor))));
     }
+}
 
     public void displayTo(UUID player) {
         displayTo(Bukkit.getPlayer(player));
@@ -92,6 +103,19 @@ public class PacketArmorStandEntity extends AbstractPacketEntity<ArmorStand> imp
     private void rotate(EulerAngle eulerAngle) {
         if (eulerAngle == null) return;
         entity.setHeadPose(new Rotations((float) Math.toDegrees(eulerAngle.getX()), (float) Math.toDegrees(eulerAngle.getY()), (float) Math.toDegrees(eulerAngle.getZ())));
+        sendPacket(createEntityDataPacket());
+    }
+
+    @Override
+    public void setText(String text) {
+        armorStand.setCustomNameVisible(true);
+        armorStand.setCustomName(Component.literal(text));
+        sendPacket(createEntityDataPacket());
+    }
+
+    @Override
+    public void setTextVisible(boolean visible) {
+        armorStand.setCustomNameVisible(visible);
         sendPacket(createEntityDataPacket());
     }
 

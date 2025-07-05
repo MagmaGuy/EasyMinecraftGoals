@@ -2,6 +2,7 @@ package com.magmaguy.easyminecraftgoals.v1_21_R1;
 
 import com.magmaguy.easyminecraftgoals.constants.OverridableWanderPriority;
 import com.magmaguy.easyminecraftgoals.internal.AbstractWanderBackToPoint;
+import com.magmaguy.easyminecraftgoals.internal.PacketTextEntity;
 import com.magmaguy.easyminecraftgoals.v1_21_R1.entitydata.BodyRotation;
 import com.magmaguy.easyminecraftgoals.v1_21_R1.hitbox.Hitbox;
 import com.magmaguy.easyminecraftgoals.v1_21_R1.massblockedit.MassEditBlocks;
@@ -38,6 +39,11 @@ public class NMSAdapter extends com.magmaguy.easyminecraftgoals.NMSAdapter {
     @Override
     public PacketDisplayEntity createPacketDisplayEntity(Location location){
         return new PacketDisplayEntity(location);
+    }
+
+    @Override
+    public PacketTextEntity createPacketTextArmorStandEntity(Location location){
+        return new PacketArmorStandEntity(location);
     }
 
     @Override

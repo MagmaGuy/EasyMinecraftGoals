@@ -1,6 +1,7 @@
 package com.magmaguy.easyminecraftgoals.v1_21_R5.packets;
 
 import com.magmaguy.easyminecraftgoals.internal.PacketModelEntity;
+import com.magmaguy.easyminecraftgoals.internal.PacketTextEntity;
 import com.mojang.math.Transformation;
 import net.minecraft.world.entity.Display;
 import net.minecraft.world.entity.EntityType;

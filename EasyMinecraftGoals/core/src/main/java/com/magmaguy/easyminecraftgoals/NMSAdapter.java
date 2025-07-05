@@ -3,6 +3,7 @@ package com.magmaguy.easyminecraftgoals;
 import com.magmaguy.easyminecraftgoals.constants.OverridableWanderPriority;
 import com.magmaguy.easyminecraftgoals.internal.AbstractWanderBackToPoint;
 import com.magmaguy.easyminecraftgoals.internal.PacketModelEntity;
+import com.magmaguy.easyminecraftgoals.internal.PacketTextEntity;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.data.BlockData;
@@ -57,6 +58,7 @@ public abstract class NMSAdapter {
 
     public abstract PacketModelEntity createPacketDisplayEntity(Location location);
 
+    public abstract PacketTextEntity createPacketTextArmorStandEntity(Location location);
     public abstract void doNotMove(LivingEntity livingEntity);
 
     /**
