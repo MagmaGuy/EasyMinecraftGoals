@@ -1,5 +1,6 @@
 package com.magmaguy.easyminecraftgoals.v1_20_R3.packets;
 
+import com.magmaguy.easyminecraftgoals.internal.AbstractPacketBundle;
 import com.magmaguy.easyminecraftgoals.internal.PacketModelEntity;
 import com.mojang.math.Transformation;
 import net.minecraft.world.entity.Display;
@@ -110,9 +111,16 @@ public class PacketDisplayEntity extends AbstractPacketEntity<Display.ItemDispla
         sendPacket(createEntityDataPacket());
     }
 
-    @Override
+        @Override
     public void sendLocationAndRotationAndScalePacket(Location location, EulerAngle eulerAngle, float scale) {
-        move(location);
+        generateLocationAndRotationAndScalePackets(new PacketBundle(), location, eulerAngle, scale).send();
+    }
+
+    @Override
+    public AbstractPacketBundle generateLocationAndRotationAndScalePackets(AbstractPacketBundle packetBundle, Location location, EulerAngle eulerAngle, float scale) {
+        //translation
+        packetBundle.addPacket(generateMovePacket(location), getViewersAsPlayers());
+        //rotation
         Quaternionf quaternionf = eulerToQuaternion(
                 Math.toDegrees(eulerAngle.getX()),
                 Math.toDegrees(eulerAngle.getY()),
@@ -120,7 +128,9 @@ public class PacketDisplayEntity extends AbstractPacketEntity<Display.ItemDispla
         Transformation transformation = getTransformation();
         transformation = new Transformation(transformation.getTranslation(), quaternionf, new Vector3f(scale,scale,scale), transformation.getRightRotation());
         entity.setTransformation(transformation);
-        sendPacket(createEntityDataPacket());
+        packetBundle.addPacket(createEntityDataPacket(), getViewersAsPlayers());
+
+        return packetBundle;
     }
 
     @Override

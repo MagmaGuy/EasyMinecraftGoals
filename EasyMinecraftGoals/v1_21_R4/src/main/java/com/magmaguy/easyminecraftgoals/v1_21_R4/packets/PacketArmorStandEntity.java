@@ -1,5 +1,6 @@
 package com.magmaguy.easyminecraftgoals.v1_21_R4.packets;
 
+import com.magmaguy.easyminecraftgoals.internal.AbstractPacketBundle;
 import com.magmaguy.easyminecraftgoals.internal.PacketModelEntity;
 import com.magmaguy.easyminecraftgoals.internal.PacketTextEntity;
 import com.mojang.datafixers.util.Pair;
@@ -80,6 +81,13 @@ public class PacketArmorStandEntity extends AbstractPacketEntity<ArmorStand> imp
     @Override
     public void sendLocationAndRotationAndScalePacket(Location location, EulerAngle eulerAngle, float scale) {
         sendLocationAndRotationPacket(location, eulerAngle);
+    }
+
+    @Override
+    public AbstractPacketBundle generateLocationAndRotationAndScalePackets(AbstractPacketBundle packetBundle, Location location, EulerAngle eulerAngle, float scale) {
+        packetBundle.addPacket(generateMovePacket(location), getViewersAsPlayers());
+        packetBundle.addPacket(createEntityDataPacket(), getViewersAsPlayers());
+        return packetBundle;
     }
 
 @Override

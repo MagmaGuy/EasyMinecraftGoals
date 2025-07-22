@@ -1,10 +1,12 @@
 package com.magmaguy.easyminecraftgoals.v1_19_R3;
 
+import com.magmaguy.easyminecraftgoals.internal.AbstractPacketBundle;
 import com.magmaguy.easyminecraftgoals.internal.PacketTextEntity;
 import com.magmaguy.easyminecraftgoals.v1_19_R3.entitydata.BodyRotation;
 import com.magmaguy.easyminecraftgoals.v1_19_R3.massblockedit.MassEditBlocks;
 import com.magmaguy.easyminecraftgoals.v1_19_R3.move.Move;
 import com.magmaguy.easyminecraftgoals.v1_19_R3.packets.PacketArmorStandEntity;
+import com.magmaguy.easyminecraftgoals.v1_19_R3.packets.PacketBundle;
 import com.magmaguy.easyminecraftgoals.v1_19_R3.packets.PacketDisplayEntity;
 import com.magmaguy.easyminecraftgoals.v1_19_R3.wanderbacktopoint.WanderBackToPointBehavior;
 import com.magmaguy.easyminecraftgoals.v1_19_R3.wanderbacktopoint.WanderBackToPointGoal;
@@ -137,5 +139,10 @@ public class NMSAdapter extends com.magmaguy.easyminecraftgoals.NMSAdapter{
                 maximumDistanceFromPoint,
                 overridableWanderPriority.priority,
                 maxDurationTicks);
+    }
+
+    @Override
+    public AbstractPacketBundle createPacketBundle(){
+        return new PacketBundle();
     }
 }

@@ -9,6 +9,8 @@ public interface PacketModelEntity extends PacketEntityInterface {
 
     void sendLocationAndRotationAndScalePacket(Location location, EulerAngle eulerAngle, float scale);
 
+    AbstractPacketBundle generateLocationAndRotationAndScalePackets(AbstractPacketBundle packetBundle, Location location, EulerAngle eulerAngle, float scale);
+
     default void initializeModel(Location location, int modelID) {
         throw new UnsupportedOperationException("Integer modelID not supported by this implementation.");
     }

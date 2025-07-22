@@ -27,4 +27,6 @@ public interface PacketEntityInterface {
 
     boolean hasViewers();
 
+    AbstractPacketBundle createPacketBundle();
+
 }

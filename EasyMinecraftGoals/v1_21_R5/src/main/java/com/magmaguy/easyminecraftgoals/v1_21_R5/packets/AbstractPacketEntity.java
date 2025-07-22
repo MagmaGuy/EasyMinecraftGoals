@@ -7,7 +7,6 @@ import net.minecraft.network.protocol.game.*;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.PositionMoveRotation;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
@@ -25,14 +24,25 @@ public abstract class AbstractPacketEntity<T extends Entity> implements PacketEn
     private final List<Runnable> removeCallbacks = new LinkedList<>();
     protected boolean visible = true;
 
+    protected AbstractPacketEntity(Location location) {
+        this.entity = createEntity(location);
+//        this.teleport(location); todo: might cause problems
+    }
+
+    public List<Player> getViewersAsPlayers() {
+        List<Player> players = new ArrayList<>();
+        for (UUID viewer : viewers) {
+            Player player = Bukkit.getPlayer(viewer);
+            if (player != null) {
+                players.add(player);
+            }
+        }
+        return players;
+    }
+
     @Override
     public boolean hasViewers() {
         return !viewers.isEmpty();
-    }
-
-    protected AbstractPacketEntity(Location location) {
-        this.entity = createEntity(location);
-        this.teleport(location);
     }
 
     protected abstract T createEntity(Location location);
@@ -49,99 +59,6 @@ public abstract class AbstractPacketEntity<T extends Entity> implements PacketEn
 
     public void addRemoveCallback(Runnable callback) {
         removeCallbacks.add(callback);
-    }
-
-    public void displayTo(Player player) {
-        if (viewers.contains(player.getUniqueId())) {
-            return;
-        }
-
-        viewers.add(player.getUniqueId());
-
-        sendPacket(player, new ClientboundAddEntityPacket(
-                entity.getId(),
-                entity.getUUID(),
-                entity.getX(),
-                entity.getY(),
-                entity.getZ(),
-                entity.getXRot(),
-                entity.getYRot(),
-                entity.getType(),
-                0,
-                new Vec3(0,0,0), 0));
-        sendPacket(player, createEntityDataPacket());
-        addViewer(player.getUniqueId());
-    }
-
-    public void hideFrom(UUID uuid) {
-        if (!viewers.contains(uuid)) {
-            return;
-        }
-
-        viewers.remove(uuid);
-        Player player = Bukkit.getPlayer(uuid);
-        if (player != null) sendPacket(player, new ClientboundRemoveEntitiesPacket(entity.getId()));
-        removeViewer(uuid);
-    }
-
-    public void remove() {
-        sendPacket(new ClientboundRemoveEntitiesPacket(entity.getId()));
-        removeCallbacks.forEach(Runnable::run);
-    }
-
-    public void setVisible(boolean visible) {
-        this.visible = visible;
-
-        if (visible) {
-            sendPacket(createEntityDataPacket());
-        } else {
-            sendPacket(new ClientboundRemoveEntitiesPacket(entity.getId()));
-        }
-    }
-
-    protected Packet<?> createEntityDataPacket() {
-        List<SynchedEntityData.DataValue<?>> dataValues = entity.getEntityData().getNonDefaultValues();
-
-        if (dataValues == null) {
-            return null;
-        }
-
-        return new ClientboundSetEntityDataPacket(entity.getId(), dataValues);
-    }
-
-    private void updatePosition(Location oldPos) {
-        if (viewers.isEmpty()) {
-            return;
-        }
-
-        Location newPos = getLocation();
-
-        if (oldPos.getWorld() != newPos.getWorld()) {
-            sendTeleportPacket();
-            return;
-        }
-
-        double deltaX = newPos.getX() - oldPos.getX();
-        double deltaY = newPos.getY() - oldPos.getY();
-        double deltaZ = newPos.getZ() - oldPos.getZ();
-
-        if (deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ > 16 * 16) {
-            sendTeleportPacket();
-            return;
-        }
-
-        sendPacket(new ClientboundMoveEntityPacket.PosRot(entity.getId(),
-                (short) (deltaX * 4096),
-                (short) (deltaY * 4096),
-                (short) (deltaZ * 4096),
-                (byte) (newPos.getYaw() * 256 / 360),
-                (byte) (newPos.getPitch() * 256 / 360),
-                true)
-        );
-    }
-
-    protected void sendTeleportPacket() {
-        sendPacket(new ClientboundTeleportEntityPacket(entity.getId(), new PositionMoveRotation(entity.position(), new Vec3(0,0,0), 0,0), new HashSet<>(), true));
     }
 
     protected Level getNMSLevel(Location location) {
@@ -164,19 +81,137 @@ public abstract class AbstractPacketEntity<T extends Entity> implements PacketEn
         return entity.getUUID();
     }
 
+    //Entity creation
+    protected Packet<?> createEntityDataPacket() {
+        List<SynchedEntityData.DataValue<?>> dataValues = entity.getEntityData().getNonDefaultValues();
+
+        if (dataValues == null) {
+            return null;
+        }
+
+        return new ClientboundSetEntityDataPacket(entity.getId(), dataValues);
+    }
+
+    public Packet<?> generateRemovePacket() {
+        return new ClientboundRemoveEntitiesPacket(entity.getId());
+    }
+
+    //Entity destruction
+    public void remove() {
+        sendPacket(generateRemovePacket());
+        removeCallbacks.forEach(Runnable::run);
+    }
+
+    //Visibility
+    public Packet<?> generateSetVisiblePacket(boolean visible) {
+        this.visible = visible;
+
+        if (visible) {
+            return createEntityDataPacket();
+        } else {
+            return new ClientboundRemoveEntitiesPacket(entity.getId());
+        }
+    }
+
+    public void setVisible(boolean visible) {
+        sendPacket(generateSetVisiblePacket(visible));
+    }
+
+    public Packet<?> generateHideFromPacket(UUID uuid) {
+        if (!viewers.contains(uuid)) {
+            return null;
+        }
+        removeViewer(uuid);
+        Player player = Bukkit.getPlayer(uuid);
+        if (player == null) return null;
+        return new ClientboundRemoveEntitiesPacket(entity.getId());
+    }
+
+    public void hideFrom(UUID uuid) {
+        sendPacket(generateHideFromPacket(uuid));
+    }
+
+    public List<Packet<?>> generateDisplayToPackets(Player player) {
+        List<Packet<?>> packets = new ArrayList<>();
+        if (viewers.contains(player.getUniqueId())) {
+            return packets;
+        }
+        addViewer(player.getUniqueId());
+
+        packets.add(new ClientboundAddEntityPacket(
+                entity.getId(),
+                entity.getUUID(),
+                entity.getX(),
+                entity.getY(),
+                entity.getZ(),
+                entity.getXRot(),
+                entity.getYRot(),
+                entity.getType(),
+                0,
+                new Vec3(0, 0, 0), 0));
+        packets.add(createEntityDataPacket());
+        return packets;
+    }
+
+    public void displayTo(Player player) {
+        generateDisplayToPackets(player).forEach(packet -> sendPacket(player, packet));
+    }
+
+    //Teleports
     public void teleport(Location location) {
         entity.teleportTo(location.getX(), location.getY(), location.getZ());
         sendTeleportPacket();
     }
 
-    public void move(Location location) {
+    protected void sendTeleportPacket() {
+        sendPacket(generateTeleportPacket());
+    }
+
+    protected Packet<?> generateTeleportPacket() {
+        return new ClientboundTeleportEntityPacket(entity.getId(), new PositionMoveRotation(entity.position(), new Vec3(0, 0, 0), 0, 0), new HashSet<>(), true);
+    }
+
+    //Move
+    public Packet generateMovePacket(Location location) {
         Location oldPos = getLocation();
         entity.setPos(location.getX(), location.getY(), location.getZ());
         entity.setYRot(location.getYaw());
         entity.setXRot(location.getPitch());
-        updatePosition(oldPos);
+
+        Packet<?> movePacket = null;
+
+        if (viewers.isEmpty()) {
+            return movePacket;
+        }
+
+        Location newPos = getLocation();
+
+        if (oldPos.getWorld() != newPos.getWorld()) {
+            return generateTeleportPacket();
+        }
+
+        double deltaX = newPos.getX() - oldPos.getX();
+        double deltaY = newPos.getY() - oldPos.getY();
+        double deltaZ = newPos.getZ() - oldPos.getZ();
+
+        if (deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ > 16 * 16) {
+            return generateTeleportPacket();
+        }
+
+        return new ClientboundMoveEntityPacket.PosRot(entity.getId(),
+                (short) (deltaX * 4096),
+                (short) (deltaY * 4096),
+                (short) (deltaZ * 4096),
+                (byte) (newPos.getYaw() * 256 / 360),
+                (byte) (newPos.getPitch() * 256 / 360),
+                true);
     }
 
+    public void move(Location location) {
+        sendPacket(generateMovePacket(location));
+    }
+
+    //Packet sending
     protected void sendPacket(Player player, Packet<?>... nmsPackets) {
         ServerPlayer nmsPlayer = getNMSPlayer(player);
 
@@ -201,6 +236,12 @@ public abstract class AbstractPacketEntity<T extends Entity> implements PacketEn
 
             sendPacket(player, nmsPacket);
         }
+    }
+
+    //Create packet bundle
+    @Override
+    public PacketBundle createPacketBundle() {
+        return new PacketBundle();
     }
 
     protected ServerPlayer getNMSPlayer(Player bukkitPlayer) {

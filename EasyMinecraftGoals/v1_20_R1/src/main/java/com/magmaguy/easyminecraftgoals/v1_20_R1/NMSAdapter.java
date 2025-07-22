@@ -1,10 +1,12 @@
 package com.magmaguy.easyminecraftgoals.v1_20_R1;
 
+import com.magmaguy.easyminecraftgoals.internal.AbstractPacketBundle;
 import com.magmaguy.easyminecraftgoals.internal.PacketTextEntity;
 import com.magmaguy.easyminecraftgoals.v1_20_R1.Move.Move;
 import com.magmaguy.easyminecraftgoals.v1_20_R1.entitydata.BodyRotation;
 import com.magmaguy.easyminecraftgoals.v1_20_R1.massblockedit.MassEditBlocks;
 import com.magmaguy.easyminecraftgoals.v1_20_R1.packets.PacketArmorStandEntity;
+import com.magmaguy.easyminecraftgoals.v1_20_R1.packets.PacketBundle;
 import com.magmaguy.easyminecraftgoals.v1_20_R1.wanderbacktopoint.WanderBackToPointBehavior;
 import com.magmaguy.easyminecraftgoals.v1_20_R1.wanderbacktopoint.WanderBackToPointGoal;
 import com.magmaguy.easyminecraftgoals.constants.OverridableWanderPriority;
@@ -137,5 +139,10 @@ public class NMSAdapter extends com.magmaguy.easyminecraftgoals.NMSAdapter {
     @Override
     public void setBlockInNativeDataPalette(World world, int x, int y, int z, BlockData blockData, boolean applyPhysics) {
         MassEditBlocks.setBlockInNativeDataPalette(world, x, y, z, blockData, applyPhysics);
+    }
+
+    @Override
+    public AbstractPacketBundle createPacketBundle(){
+        return new PacketBundle();
     }
 }

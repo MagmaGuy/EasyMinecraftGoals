@@ -1,5 +1,6 @@
 package com.magmaguy.easyminecraftgoals.v1_21_R5.packets;
 
+import com.magmaguy.easyminecraftgoals.internal.AbstractPacketBundle;
 import com.magmaguy.easyminecraftgoals.internal.PacketModelEntity;
 import com.magmaguy.easyminecraftgoals.internal.PacketTextEntity;
 import com.mojang.datafixers.util.Pair;
@@ -82,13 +83,20 @@ public class PacketArmorStandEntity extends AbstractPacketEntity<ArmorStand> imp
         sendLocationAndRotationPacket(location, eulerAngle);
     }
 
-@Override
-public void displayTo(Player player) {
-    super.displayTo(player);
-    if (nmsLeatherHorseArmor != null) {
-        sendPacket(player, new ClientboundSetEquipmentPacket(entity.getId(), List.of(Pair.of(EquipmentSlot.HEAD, nmsLeatherHorseArmor))));
+    @Override
+    public AbstractPacketBundle generateLocationAndRotationAndScalePackets(AbstractPacketBundle packetBundle, Location location, EulerAngle eulerAngle, float scale) {
+        packetBundle.addPacket(generateMovePacket(location), getViewersAsPlayers());
+        packetBundle.addPacket(createEntityDataPacket(), getViewersAsPlayers());
+        return packetBundle;
     }
-}
+
+    @Override
+    public void displayTo(Player player) {
+        super.displayTo(player);
+        if (nmsLeatherHorseArmor != null) {
+            sendPacket(player, new ClientboundSetEquipmentPacket(entity.getId(), List.of(Pair.of(EquipmentSlot.HEAD, nmsLeatherHorseArmor))));
+        }
+    }
 
     public void displayTo(UUID player) {
         displayTo(Bukkit.getPlayer(player));

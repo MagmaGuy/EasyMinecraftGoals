@@ -12,7 +12,7 @@
 <!--        <revision>1.19.4-SNAPSHOT</revision>-->
     </properties>
 
-    <version>1.19.7-SNAPSHOT</version>
+    <version>1.19.9</version>
 
     <!-- This is the project parent, do not create further artifacts -->
     <packaging>pom</packaging>
@@ -31,17 +31,4 @@
         <module>EasyMinecraftGoals/v1_21_R4</module>
         <module>EasyMinecraftGoals/v1_21_R5</module>
     </modules>
-
-    <distributionManagement>
-        <snapshotRepository>
-            <id>magmaguy-repo-snapshots</id>
-            <url>https://repo.magmaguy.com/snapshots</url>
-        </snapshotRepository>
-        <repository>
-            <id>magmaguy-repo-snapshots</id>
-            <name>MagmaGuy's Repository</name>
-            <url>https://repo.magmaguy.com/releases</url>
-        </repository>
-    </distributionManagement>
-
 </project>
