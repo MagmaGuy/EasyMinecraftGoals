@@ -5,7 +5,7 @@
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.magmaguy</groupId>
-   <version>1.19.9</version>
+   <version>1.19.10</version>
     <artifactId>EasyMinecraftGoals_v1_20_R4</artifactId>
 
     <properties>
@@ -66,7 +66,7 @@
         <dependency>
             <groupId>com.magmaguy</groupId>
             <artifactId>EasyMinecraftGoals-core</artifactId>
-            <version>1.19.9</version>
+            <version>1.19.10</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>

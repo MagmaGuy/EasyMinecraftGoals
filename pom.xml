@@ -12,7 +12,7 @@
 <!--        <revision>1.19.4-SNAPSHOT</revision>-->
     </properties>
 
-    <version>1.19.9</version>
+    <version>1.19.10</version>
 
     <!-- This is the project parent, do not create further artifacts -->
     <packaging>pom</packaging>
