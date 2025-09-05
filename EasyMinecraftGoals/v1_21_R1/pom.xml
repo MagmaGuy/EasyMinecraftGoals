@@ -5,8 +5,15 @@
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.magmaguy</groupId>
-   <version>1.19.10</version>
+   <version>1.19.11</version>
     <artifactId>EasyMinecraftGoals_v1_21_R1</artifactId>
+
+    <parent>
+        <groupId>com.magmaguy</groupId>
+        <artifactId>EasyMinecraftGoals-manager</artifactId>
+        <version>1.19.11</version>
+        <relativePath>../../pom.xml</relativePath> <!-- adjust path as needed -->
+    </parent>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
@@ -66,7 +73,7 @@
         <dependency>
             <groupId>com.magmaguy</groupId>
             <artifactId>EasyMinecraftGoals-core</artifactId>
-            <version>1.19.10</version>
+            <version>1.19.11</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>

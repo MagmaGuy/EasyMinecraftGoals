@@ -3,6 +3,7 @@ com\magmaguy\easyminecraftgoals\utils\Utils.class
 com\magmaguy\easyminecraftgoals\constants\OverridableWanderPriority.class
 com\magmaguy\easyminecraftgoals\internal\PacketTextEntity.class
 com\magmaguy\easyminecraftgoals\events\WanderBackToPointStartEvent.class
+com\magmaguy\easyminecraftgoals\internal\AbstractPacketBundle.class
 com\magmaguy\easyminecraftgoals\internal\PacketEntityInterface.class
 com\magmaguy\easyminecraftgoals\internal\AbstractWanderBackToPoint.class
 com\magmaguy\easyminecraftgoals\NMSManager.class

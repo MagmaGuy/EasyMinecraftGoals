@@ -7,6 +7,7 @@ import com.mojang.math.Transformation;
 import net.minecraft.world.entity.Display;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.phys.Vec3;
 import org.bukkit.*;
 import org.bukkit.block.data.type.GlassPane;
 import org.bukkit.craftbukkit.v1_21_R5.inventory.CraftItemStack;
@@ -62,8 +63,8 @@ public class PacketDisplayEntity extends AbstractPacketEntity<Display.ItemDispla
         itemDisplay = entity;
 
         // Set interpolation explicitly with correct defaults
-        itemDisplay.setTransformationInterpolationDelay(0);  // Was -1, which may not work in R4
-        itemDisplay.setTransformationInterpolationDuration(1);
+        itemDisplay.setTransformationInterpolationDelay(-1);  // Was -1, which may not work in R4
+        itemDisplay.setTransformationInterpolationDuration(0);
 
         // For teleport interpolation, this reflection call might be failing
         try {
@@ -107,7 +108,7 @@ public class PacketDisplayEntity extends AbstractPacketEntity<Display.ItemDispla
                 Math.toDegrees(eulerAngle.getY()),
                 Math.toDegrees(eulerAngle.getZ()));
         rotate(quaternionf);
-        sendPacket(createEntityDataPacket());
+        sendPacketToAll(createEntityDataPacket());  // Changed from sendPacket to sendPacketToAll
     }
 
     @Override
@@ -115,17 +116,34 @@ public class PacketDisplayEntity extends AbstractPacketEntity<Display.ItemDispla
         generateLocationAndRotationAndScalePackets(new PacketBundle(), location, eulerAngle, scale).send();
     }
 
+
     @Override
-    public AbstractPacketBundle generateLocationAndRotationAndScalePackets(AbstractPacketBundle packetBundle, Location location, EulerAngle eulerAngle, float scale) {
-        //translation
-        packetBundle.addPacket(generateMovePacket(location), getViewersAsPlayers());
-        //rotation
+    public AbstractPacketBundle generateLocationAndRotationAndScalePackets(
+            AbstractPacketBundle packetBundle, Location location, EulerAngle eulerAngle, float scale) {
+
+        // Since we're now always using teleport packets (absolute positioning),
+        // increase the threshold to avoid unnecessary packets for tiny movements
+        Location currentLoc = getLocation();
+        double distSq = currentLoc.distanceSquared(location);
+
+        if (distSq > 0.01) {  // Increased from 0.001 to 0.01 (0.1 block movement)
+            packetBundle.addPacket(generateMovePacket(location), getViewersAsPlayers());
+        }
+
+        // Always update transformation for rotation/scale
         Quaternionf quaternionf = eulerToQuaternion(
                 Math.toDegrees(eulerAngle.getX()),
                 Math.toDegrees(eulerAngle.getY()),
                 Math.toDegrees(eulerAngle.getZ()));
+
         Transformation transformation = getTransformation();
-        transformation = new Transformation(transformation.getTranslation(), quaternionf, new Vector3f(scale,scale,scale), transformation.getRightRotation());
+        transformation = new Transformation(
+                new Vector3f(0, 0, 0),  // Don't use translation in transformation!
+                quaternionf,
+                new Vector3f(scale, scale, scale),
+                transformation.getRightRotation()
+        );
+
         entity.setTransformation(transformation);
         packetBundle.addPacket(createEntityDataPacket(), getViewersAsPlayers());
 

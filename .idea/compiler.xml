@@ -6,17 +6,17 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="EasyMinecraftGoals-dist" />
         <module name="EasyMinecraftGoals_v1_20_R3" />
         <module name="EasyMinecraftGoals_v1_21_R4" />
         <module name="EasyMinecraftGoals_v1_20_R4" />
         <module name="EasyMinecraftGoals_v1_21_R5" />
         <module name="EasyMinecraftGoals_v1_21_R1" />
         <module name="EasyMinecraftGoals_v1_20_R1" />
-        <module name="EasyMinecraftGoals-core" />
         <module name="EasyMinecraftGoals_v1_21_R2" />
         <module name="EasyMinecraftGoals_v1_20_R2" />
         <module name="EasyMinecraftGoals_v1_21_R3" />
+        <module name="EasyMinecraftGoals-dist" />
+        <module name="EasyMinecraftGoals-core" />
         <module name="EasyMinecraftGoals_v1_19_R3" />
       </profile>
     </annotationProcessing>
@@ -34,6 +34,7 @@
       <module name="EasyMinecraftGoals_v1_19_R1" target="17" />
       <module name="EasyMinecraftGoals_v1_19_R2" target="17" />
       <module name="EasyMinecraftGoals_v1_20_R5" target="17" />
+      <module name="EasyMinecraftGoals_v1_21_R6" target="17" />
       <module name="EasyMinecraftPathfinding" target="1.5" />
       <module name="EasyMinecraftPathfinding (1)" target="1.5" />
       <module name="EasyMinecraftPathFinding-core" target="1.5" />
@@ -49,6 +50,7 @@
       <module name="v1_19_R1" target="17" />
       <module name="v1_19_R2" target="17" />
       <module name="v1_19_R3" target="17" />
+      <module name="v1_21_R6" target="17" />
     </bytecodeTargetLevel>
   </component>
 </project>
