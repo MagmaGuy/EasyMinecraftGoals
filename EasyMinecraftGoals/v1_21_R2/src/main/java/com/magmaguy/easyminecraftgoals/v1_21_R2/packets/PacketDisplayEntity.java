@@ -54,36 +54,38 @@ public class PacketDisplayEntity extends AbstractPacketEntity<Display.ItemDispla
         return new Display.ItemDisplay(EntityType.ITEM_DISPLAY, getNMSLevel(location));
     }
 
-    public void initializeModel(Location location, String modelID) {
+    public void initializeModel(Location location, int modelID) {
         itemDisplay = entity;
+        itemDisplay.setTransformationInterpolationDelay(-1);
+        itemDisplay.setTransformationInterpolationDuration(1);
 
-        // Set interpolation explicitly with correct defaults
-        itemDisplay.setTransformationInterpolationDelay(-1);  // Was -1, which may not work in R4
-        itemDisplay.setTransformationInterpolationDuration(0);
-
-        // For teleport interpolation, this reflection call might be failing
+        //This is for teleport interpolation
         try {
             Display display = itemDisplay;
 
             // Get the private method
             Method setPosRotInterpolationDuration = Display.class.getDeclaredMethod("d", int.class);
 
+            // Make the method accessible
             setPosRotInterpolationDuration.setAccessible(true);
+
+            // Invoke the method with an argument of 1
             setPosRotInterpolationDuration.invoke(display, 1);
-        } catch (Exception e) {
+        } catch (IllegalAccessException e) {
             e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            throw new RuntimeException(e);
+        } catch (NoSuchMethodException e) {
+            throw new RuntimeException(e);
         }
 
         leatherHorseArmor = new ItemStack(Material.LEATHER_HORSE_ARMOR);
         LeatherArmorMeta itemMeta = (LeatherArmorMeta) leatherHorseArmor.getItemMeta();
-        itemMeta.setItemModel(NamespacedKey.fromString(modelID));
+        itemMeta.setCustomModelData(modelID);
         itemMeta.setColor(Color.WHITE);
         leatherHorseArmor.setItemMeta(itemMeta);
         nmsLeatherHorseArmor = CraftItemStack.asNMSCopy(leatherHorseArmor);
         itemDisplay.setItemStack(nmsLeatherHorseArmor);
-        itemDisplay.setWidth(0);
-        itemDisplay.setHeight(0);
-        itemDisplay.setViewRange(30);
     }
 
     @Override
