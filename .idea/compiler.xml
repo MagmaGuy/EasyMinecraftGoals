@@ -6,6 +6,7 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="EasyMinecraftGoals-dist" />
         <module name="EasyMinecraftGoals_v1_20_R3" />
         <module name="EasyMinecraftGoals_v1_21_R4" />
         <module name="EasyMinecraftGoals_v1_20_R4" />
@@ -13,10 +14,9 @@
         <module name="EasyMinecraftGoals_v1_21_R1" />
         <module name="EasyMinecraftGoals_v1_20_R1" />
         <module name="EasyMinecraftGoals_v1_21_R2" />
+        <module name="EasyMinecraftGoals-core" />
         <module name="EasyMinecraftGoals_v1_20_R2" />
         <module name="EasyMinecraftGoals_v1_21_R3" />
-        <module name="EasyMinecraftGoals-dist" />
-        <module name="EasyMinecraftGoals-core" />
         <module name="EasyMinecraftGoals_v1_19_R3" />
       </profile>
     </annotationProcessing>
