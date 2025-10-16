@@ -12,6 +12,7 @@ import java.util.*;
 
 public class PacketBundle implements AbstractPacketBundle {
     private final List<PacketBundleEntry> entries = new ArrayList<>();
+    private static final int MAX_PACKETS_PER_BUNDLE = 3000;
 
     public PacketBundle() {
     }
@@ -42,13 +43,24 @@ public class PacketBundle implements AbstractPacketBundle {
             }
         }
 
-        // Send bundles to each player
+        // Send bundles to each player, splitting into chunks of 3000 if needed
         playerPackets.forEach((player, packets) -> {
-            if (!packets.isEmpty() && player != null && player.isOnline()) {
-                ClientboundBundlePacket bundle = new ClientboundBundlePacket(new HashSet<>(packets));
+            if (packets.isEmpty() || player == null || !player.isOnline()) return;
+
+            // Split into chunks of MAX_PACKETS_PER_BUNDLE
+            for (int i = 0; i < packets.size(); i += MAX_PACKETS_PER_BUNDLE) {
+                int end = Math.min(i + MAX_PACKETS_PER_BUNDLE, packets.size());
+                List<Packet<ClientGamePacketListener>> chunk = packets.subList(i, end);
+
+                ClientboundBundlePacket bundle = new ClientboundBundlePacket(new HashSet<>(chunk));
                 sendPacketBundle(player, bundle);
             }
         });
+
+        int bundleCount = playerPackets.values().stream()
+                .mapToInt(packets -> (packets.size() + MAX_PACKETS_PER_BUNDLE - 1) / MAX_PACKETS_PER_BUNDLE)
+                .sum();
+
     }
 
     private boolean isClientGamePacket(Packet<?> packet) {
