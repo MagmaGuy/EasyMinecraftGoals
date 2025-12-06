@@ -113,18 +113,30 @@ public class PacketDisplayEntity extends AbstractPacketEntity<Display.ItemDispla
         generateLocationAndRotationAndScalePackets(new PacketBundle(), location, eulerAngle, scale).send();
     }
 
+    @Override
+    public void sendLocationAndRotationAndScalePacket(Location location, EulerAngle eulerAngle, float scaleX, float scaleY, float scaleZ) {
+        generateLocationAndRotationAndScalePackets(new PacketBundle(), location, eulerAngle, scaleX, scaleY, scaleZ).send();
+    }
 
     @Override
     public AbstractPacketBundle generateLocationAndRotationAndScalePackets(
             AbstractPacketBundle packetBundle, Location location, EulerAngle eulerAngle, float scale) {
+        return generateLocationAndRotationAndScalePackets(packetBundle, location, eulerAngle, scale, scale, scale);
+    }
 
-        // Since we're now always using teleport packets (absolute positioning),
-        // increase the threshold to avoid unnecessary packets for tiny movements
-        Location currentLoc = getLocation();
-        double distSq = currentLoc.distanceSquared(location);
+    @Override
+    public AbstractPacketBundle generateLocationAndRotationAndScalePackets(
+            AbstractPacketBundle packetBundle, Location location, EulerAngle eulerAngle, float scaleX, float scaleY, float scaleZ) {
 
-        if (distSq > 0.01) {  // Increased from 0.001 to 0.01 (0.1 block movement)
+        if (!getLocation().getWorld().equals(location.getWorld()))
             packetBundle.addPacket(generateMovePacket(location), getViewersAsPlayers());
+        else {
+            Location currentLoc = getLocation();
+            double distSq = currentLoc.distanceSquared(location);
+
+            if (distSq > 0.01) {
+                packetBundle.addPacket(generateMovePacket(location), getViewersAsPlayers());
+            }
         }
 
         // Always update transformation for rotation/scale
@@ -137,7 +149,7 @@ public class PacketDisplayEntity extends AbstractPacketEntity<Display.ItemDispla
         transformation = new Transformation(
                 new Vector3f(0, 0, 0),  // Don't use translation in transformation!
                 quaternionf,
-                new Vector3f(scale, scale, scale),
+                new Vector3f(scaleX, scaleY, scaleZ),
                 transformation.getRightRotation()
         );
 

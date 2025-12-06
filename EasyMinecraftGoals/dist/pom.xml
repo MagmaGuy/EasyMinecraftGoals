@@ -4,7 +4,7 @@
     <packaging>jar</packaging>
     <artifactId>EasyMinecraftGoals-dist</artifactId>
     <groupId>com.magmaguy</groupId>
-    <version>1.19.14</version>
+    <version>1.19.17</version>
 
     <properties>
         <maven.deploy.skip>false</maven.deploy.skip>
@@ -122,67 +122,67 @@
         <dependency>
             <groupId>com.magmaguy</groupId>
             <artifactId>EasyMinecraftGoals_v1_19_R3</artifactId>
-            <version>1.19.14</version>
+            <version>1.19.17</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.magmaguy</groupId>
             <artifactId>EasyMinecraftGoals_v1_20_R1</artifactId>
-            <version>1.19.14</version>
+            <version>1.19.17</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.magmaguy</groupId>
             <artifactId>EasyMinecraftGoals_v1_20_R2</artifactId>
-            <version>1.19.14</version>
+            <version>1.19.17</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.magmaguy</groupId>
             <artifactId>EasyMinecraftGoals_v1_20_R3</artifactId>
-            <version>1.19.14</version>
+            <version>1.19.17</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.magmaguy</groupId>
             <artifactId>EasyMinecraftGoals_v1_20_R4</artifactId>
-            <version>1.19.14</version>
+            <version>1.19.17</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.magmaguy</groupId>
             <artifactId>EasyMinecraftGoals_v1_21_R1</artifactId>
-            <version>1.19.14</version>
+            <version>1.19.17</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.magmaguy</groupId>
             <artifactId>EasyMinecraftGoals_v1_21_R2</artifactId>
-            <version>1.19.14</version>
+            <version>1.19.17</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.magmaguy</groupId>
             <artifactId>EasyMinecraftGoals_v1_21_R3</artifactId>
-            <version>1.19.14</version>
+            <version>1.19.17</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.magmaguy</groupId>
             <artifactId>EasyMinecraftGoals_v1_21_R4</artifactId>
-            <version>1.19.14</version>
+            <version>1.19.17</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.magmaguy</groupId>
             <artifactId>EasyMinecraftGoals_v1_21_R5</artifactId>
-            <version>1.19.14</version>
+            <version>1.19.17</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.magmaguy</groupId>
             <artifactId>EasyMinecraftGoals_v1_21_R6</artifactId>
-            <version>1.19.14</version>
+            <version>1.19.17</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>

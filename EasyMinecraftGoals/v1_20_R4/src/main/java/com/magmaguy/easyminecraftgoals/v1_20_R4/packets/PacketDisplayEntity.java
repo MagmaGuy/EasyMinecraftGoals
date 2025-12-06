@@ -111,13 +111,23 @@ public class PacketDisplayEntity extends AbstractPacketEntity<Display.ItemDispla
         sendPacket(createEntityDataPacket());
     }
 
-        @Override
+    @Override
     public void sendLocationAndRotationAndScalePacket(Location location, EulerAngle eulerAngle, float scale) {
         generateLocationAndRotationAndScalePackets(new PacketBundle(), location, eulerAngle, scale).send();
     }
 
     @Override
+    public void sendLocationAndRotationAndScalePacket(Location location, EulerAngle eulerAngle, float scaleX, float scaleY, float scaleZ) {
+        generateLocationAndRotationAndScalePackets(new PacketBundle(), location, eulerAngle, scaleX, scaleY, scaleZ).send();
+    }
+
+    @Override
     public AbstractPacketBundle generateLocationAndRotationAndScalePackets(AbstractPacketBundle packetBundle, Location location, EulerAngle eulerAngle, float scale) {
+        return generateLocationAndRotationAndScalePackets(packetBundle, location, eulerAngle, scale, scale, scale);
+    }
+
+    @Override
+    public AbstractPacketBundle generateLocationAndRotationAndScalePackets(AbstractPacketBundle packetBundle, Location location, EulerAngle eulerAngle, float scaleX, float scaleY, float scaleZ) {
         //translation
         packetBundle.addPacket(generateMovePacket(location), getViewersAsPlayers());
         //rotation
@@ -126,7 +136,7 @@ public class PacketDisplayEntity extends AbstractPacketEntity<Display.ItemDispla
                 Math.toDegrees(eulerAngle.getY()),
                 Math.toDegrees(eulerAngle.getZ()));
         Transformation transformation = getTransformation();
-        transformation = new Transformation(transformation.getTranslation(), quaternionf, new Vector3f(scale,scale,scale), transformation.getRightRotation());
+        transformation = new Transformation(transformation.getTranslation(), quaternionf, new Vector3f(scaleX, scaleY, scaleZ), transformation.getRightRotation());
         entity.setTransformation(transformation);
         packetBundle.addPacket(createEntityDataPacket(), getViewersAsPlayers());
 

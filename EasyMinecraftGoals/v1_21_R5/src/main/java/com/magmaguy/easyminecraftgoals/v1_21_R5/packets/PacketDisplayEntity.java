@@ -2,31 +2,31 @@ package com.magmaguy.easyminecraftgoals.v1_21_R5.packets;
 
 import com.magmaguy.easyminecraftgoals.internal.AbstractPacketBundle;
 import com.magmaguy.easyminecraftgoals.internal.PacketModelEntity;
-import com.magmaguy.easyminecraftgoals.internal.PacketTextEntity;
 import com.mojang.math.Transformation;
 import net.minecraft.world.entity.Display;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.level.ItemLike;
-import net.minecraft.world.phys.Vec3;
-import org.bukkit.*;
-import org.bukkit.block.data.type.GlassPane;
+import org.bukkit.Bukkit;
+import org.bukkit.Color;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.craftbukkit.v1_21_R5.inventory.CraftItemStack;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.LeatherArmorMeta;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.components.CustomModelDataComponent;
 import org.bukkit.util.EulerAngle;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.List;
 import java.util.UUID;
 
 public class PacketDisplayEntity extends AbstractPacketEntity<Display.ItemDisplay> implements PacketModelEntity {
 
-    private ItemStack leatherHorseArmor;
-    private net.minecraft.world.item.ItemStack nmsLeatherHorseArmor;
+    private ItemStack carrierItem;
+    private net.minecraft.world.item.ItemStack nmsCarrierItem;
     private Display.ItemDisplay itemDisplay;
 
     public PacketDisplayEntity(Location location) {
@@ -55,49 +55,74 @@ public class PacketDisplayEntity extends AbstractPacketEntity<Display.ItemDispla
 
     @Override
     protected Display.ItemDisplay createEntity(Location location) {
-        //This doesn't create a real entity until it gets added to the world, which for packet entity purposes is never
+        // This doesn't create a real entity until it gets added to the world, which for packet entity purposes is never
         return new Display.ItemDisplay(EntityType.ITEM_DISPLAY, getNMSLevel(location));
     }
 
+    /**
+     * Initializes the client-side item model and wires up tinting via CustomModelData colors.
+     * Your items JSON should include:
+     *   "tints": [ { "type": "minecraft:custom_model_data", "index": 0, "default": 16777215 } ]
+     * and the bone model's faces should have "tintindex": 0.
+     */
     public void initializeModel(Location location, String modelID) {
         itemDisplay = entity;
 
-        // Set interpolation explicitly with correct defaults
-        itemDisplay.setTransformationInterpolationDelay(-1);  // Was -1, which may not work in R4
+        // Interpolation defaults (safe on R5)
+        itemDisplay.setTransformationInterpolationDelay(-1);
         itemDisplay.setTransformationInterpolationDuration(0);
 
-        // For teleport interpolation, this reflection call might be failing
+        // Set teleport interpolation duration via the obf method (as you had)
         try {
             Display display = itemDisplay;
-
-            // Get the private method
             Method setPosRotInterpolationDuration = Display.class.getDeclaredMethod("d", int.class);
-
             setPosRotInterpolationDuration.setAccessible(true);
             setPosRotInterpolationDuration.invoke(display, 1);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        leatherHorseArmor = new ItemStack(Material.LEATHER_HORSE_ARMOR);
-        LeatherArmorMeta itemMeta = (LeatherArmorMeta) leatherHorseArmor.getItemMeta();
-        itemMeta.setItemModel(NamespacedKey.fromString(modelID));
-        itemMeta.setColor(Color.WHITE);
-        leatherHorseArmor.setItemMeta(itemMeta);
-        nmsLeatherHorseArmor = CraftItemStack.asNMSCopy(leatherHorseArmor);
-        itemDisplay.setItemStack(nmsLeatherHorseArmor);
+        // Carrier item (any item works; LEATHER_HORSE_ARMOR kept for continuity)
+        carrierItem = new ItemStack(Material.LEATHER_HORSE_ARMOR);
+
+        // Set the explicit item model ID (Paper API)
+        ItemMeta meta = carrierItem.getItemMeta();
+        meta.setItemModel(NamespacedKey.fromString(modelID));
+
+        // Initialize CustomModelData component with a default white tint (index 0)
+        CustomModelDataComponent cmd = meta.getCustomModelDataComponent();
+        cmd.setColors(List.of(Color.WHITE)); // index 0 -> tintindex: 0 on your model
+        meta.setCustomModelDataComponent(cmd);
+
+        carrierItem.setItemMeta(meta);
+
+        // Hand to the display
+        nmsCarrierItem = CraftItemStack.asNMSCopy(carrierItem);
+        itemDisplay.setItemStack(nmsCarrierItem);
         itemDisplay.setWidth(0);
         itemDisplay.setHeight(0);
         itemDisplay.setViewRange(30);
     }
 
+    /**
+     * Updates the tint color by writing to CustomModelData.colors[0].
+     * This is what the client reads for "minecraft:custom_model_data" tints.
+     */
     @Override
     public void setHorseLeatherArmorColor(Color color) {
-        LeatherArmorMeta leatherArmorMeta = (LeatherArmorMeta) leatherHorseArmor.getItemMeta();
-        leatherArmorMeta.setColor(color);
-        leatherHorseArmor.setItemMeta(leatherArmorMeta);
-        nmsLeatherHorseArmor = CraftItemStack.asNMSCopy(leatherHorseArmor);
-        itemDisplay.setItemStack(nmsLeatherHorseArmor);
+        if (carrierItem == null) return;
+
+        ItemMeta meta = carrierItem.getItemMeta();
+        CustomModelDataComponent cmd = meta.getCustomModelDataComponent();
+
+        // If the pack ever uses multiple tint slots, add more entries here in index order.
+        cmd.setColors(List.of(color));
+
+        meta.setCustomModelDataComponent(cmd);
+        carrierItem.setItemMeta(meta);
+
+        nmsCarrierItem = CraftItemStack.asNMSCopy(carrierItem);
+        itemDisplay.setItemStack(nmsCarrierItem);
     }
 
     @Override
@@ -108,7 +133,7 @@ public class PacketDisplayEntity extends AbstractPacketEntity<Display.ItemDispla
                 Math.toDegrees(eulerAngle.getY()),
                 Math.toDegrees(eulerAngle.getZ()));
         rotate(quaternionf);
-        sendPacketToAll(createEntityDataPacket());  // Changed from sendPacket to sendPacketToAll
+        sendPacketToAll(createEntityDataPacket());
     }
 
     @Override
@@ -116,17 +141,25 @@ public class PacketDisplayEntity extends AbstractPacketEntity<Display.ItemDispla
         generateLocationAndRotationAndScalePackets(new PacketBundle(), location, eulerAngle, scale).send();
     }
 
+    @Override
+    public void sendLocationAndRotationAndScalePacket(Location location, EulerAngle eulerAngle, float scaleX, float scaleY, float scaleZ) {
+        generateLocationAndRotationAndScalePackets(new PacketBundle(), location, eulerAngle, scaleX, scaleY, scaleZ).send();
+    }
 
     @Override
     public AbstractPacketBundle generateLocationAndRotationAndScalePackets(
             AbstractPacketBundle packetBundle, Location location, EulerAngle eulerAngle, float scale) {
+        return generateLocationAndRotationAndScalePackets(packetBundle, location, eulerAngle, scale, scale, scale);
+    }
 
-        // Since we're now always using teleport packets (absolute positioning),
-        // increase the threshold to avoid unnecessary packets for tiny movements
-        Location currentLoc = getLocation();
-        double distSq = currentLoc.distanceSquared(location);
+    @Override
+    public AbstractPacketBundle generateLocationAndRotationAndScalePackets(
+            AbstractPacketBundle packetBundle, Location location, EulerAngle eulerAngle, float scaleX, float scaleY, float scaleZ) {
 
-        if (distSq > 0.01) {  // Increased from 0.001 to 0.01 (0.1 block movement)
+        if (!getLocation().getWorld().equals(location.getWorld())) {
+            packetBundle.addPacket(generateMovePacket(location), getViewersAsPlayers());
+        } else {
+            // Always move — keeps things in sync for display entities
             packetBundle.addPacket(generateMovePacket(location), getViewersAsPlayers());
         }
 
@@ -138,9 +171,9 @@ public class PacketDisplayEntity extends AbstractPacketEntity<Display.ItemDispla
 
         Transformation transformation = getTransformation();
         transformation = new Transformation(
-                new Vector3f(0, 0, 0),  // Don't use translation in transformation!
+                new Vector3f(0, 0, 0),  // keep translation out of the transformation
                 quaternionf,
-                new Vector3f(scale, scale, scale),
+                new Vector3f(scaleX, scaleY, scaleZ),
                 transformation.getRightRotation()
         );
 
@@ -176,7 +209,11 @@ public class PacketDisplayEntity extends AbstractPacketEntity<Display.ItemDispla
 
     public void setScale(Vector3f scale) {
         Transformation transformation = getTransformation();
-        Transformation newTransformation = new Transformation(transformation.getTranslation(), transformation.getLeftRotation(), scale, transformation.getRightRotation());
+        Transformation newTransformation = new Transformation(
+                transformation.getTranslation(),
+                transformation.getLeftRotation(),
+                scale,
+                transformation.getRightRotation());
         setTransformation(newTransformation);
     }
 
@@ -186,7 +223,11 @@ public class PacketDisplayEntity extends AbstractPacketEntity<Display.ItemDispla
 
     public void setTranslation(Vector3f translation) {
         Transformation transformation = getTransformation();
-        Transformation newTransformation = new Transformation(translation, transformation.getLeftRotation(), transformation.getScale(), transformation.getRightRotation());
+        Transformation newTransformation = new Transformation(
+                translation,
+                transformation.getLeftRotation(),
+                transformation.getScale(),
+                transformation.getRightRotation());
         setTransformation(newTransformation);
     }
 
@@ -196,7 +237,11 @@ public class PacketDisplayEntity extends AbstractPacketEntity<Display.ItemDispla
 
     public void setLeftRotation(Quaternionf rotation) {
         Transformation transformation = getTransformation();
-        Transformation newTransformation = new Transformation(transformation.getTranslation(), rotation, transformation.getScale(), transformation.getRightRotation());
+        Transformation newTransformation = new Transformation(
+                transformation.getTranslation(),
+                rotation,
+                transformation.getScale(),
+                transformation.getRightRotation());
         setTransformation(newTransformation);
     }
 
@@ -206,7 +251,11 @@ public class PacketDisplayEntity extends AbstractPacketEntity<Display.ItemDispla
 
     public void setRightRotation(Quaternionf rotation) {
         Transformation transformation = getTransformation();
-        Transformation newTransformation = new Transformation(transformation.getTranslation(), transformation.getLeftRotation(), transformation.getScale(), rotation);
+        Transformation newTransformation = new Transformation(
+                transformation.getTranslation(),
+                transformation.getLeftRotation(),
+                transformation.getScale(),
+                rotation);
         setTransformation(newTransformation);
     }
 
@@ -223,5 +272,4 @@ public class PacketDisplayEntity extends AbstractPacketEntity<Display.ItemDispla
         if (rotation == null) return;
         setLeftRotation(rotation);
     }
-
 }

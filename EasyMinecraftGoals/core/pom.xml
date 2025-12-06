@@ -6,12 +6,12 @@
     <artifactId>EasyMinecraftGoals-core</artifactId>
     <packaging>jar</packaging>
     <groupId>com.magmaguy</groupId>
-   <version>1.19.14</version>
+   <version>1.19.17</version>
 
     <parent>
         <groupId>com.magmaguy</groupId>
         <artifactId>EasyMinecraftGoals-manager</artifactId>
-        <version>1.19.14</version>
+        <version>1.19.17</version>
         <relativePath>../../pom.xml</relativePath> <!-- adjust path as needed -->
     </parent>
 
