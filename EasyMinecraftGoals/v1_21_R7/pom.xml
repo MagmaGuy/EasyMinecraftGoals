@@ -24,6 +24,34 @@
 
     <build>
         <plugins>
+            <!-- Shade common module and relocate to v1_21_R7 package -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.5.1</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <relocations>
+                                <relocation>
+                                    <pattern>com.magmaguy.easyminecraftgoals.v1_21_R7_common</pattern>
+                                    <shadedPattern>com.magmaguy.easyminecraftgoals.v1_21_R7</shadedPattern>
+                                </relocation>
+                            </relocations>
+                            <artifactSet>
+                                <includes>
+                                    <include>com.magmaguy:EasyMinecraftGoals_v1_21_R7_common</include>
+                                </includes>
+                            </artifactSet>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- Remap for Spigot -->
             <plugin>
                 <groupId>net.md-5</groupId>
                 <artifactId>specialsource-maven-plugin</artifactId>
@@ -74,6 +102,13 @@
         <dependency>
             <groupId>com.magmaguy</groupId>
             <artifactId>EasyMinecraftGoals-core</artifactId>
+            <version>1.19.19</version>
+            <scope>provided</scope>
+        </dependency>
+        <!-- Common module to be shaded and relocated -->
+        <dependency>
+            <groupId>com.magmaguy</groupId>
+            <artifactId>EasyMinecraftGoals_v1_21_R7_common</artifactId>
             <version>1.19.19</version>
             <scope>compile</scope>
         </dependency>
