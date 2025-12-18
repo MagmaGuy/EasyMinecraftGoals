@@ -5,13 +5,13 @@
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.magmaguy</groupId>
-   <version>1.19.17</version>
+   <version>1.19.19</version>
     <artifactId>EasyMinecraftGoals_v1_19_R3</artifactId>
 
     <parent>
         <groupId>com.magmaguy</groupId>
         <artifactId>EasyMinecraftGoals-manager</artifactId>
-        <version>1.19.17</version>
+        <version>1.19.19</version>
         <relativePath>../../pom.xml</relativePath> <!-- adjust path as needed -->
     </parent>
 
@@ -73,7 +73,7 @@
         <dependency>
             <groupId>com.magmaguy</groupId>
             <artifactId>EasyMinecraftGoals-core</artifactId>
-            <version>1.19.17</version>
+            <version>1.19.19</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>
