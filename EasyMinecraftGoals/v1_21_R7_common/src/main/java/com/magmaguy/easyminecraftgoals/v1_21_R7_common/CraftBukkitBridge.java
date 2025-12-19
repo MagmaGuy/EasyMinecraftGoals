@@ -135,6 +135,65 @@ public class CraftBukkitBridge {
     }
 
     /**
+     * Gets the Bukkit World from an NMS Level.
+     * Uses reflection to avoid the versioned CraftWorld return type issue.
+     */
+    public static World getBukkitWorld(net.minecraft.world.level.Level level) {
+        try {
+            // Call getWorld() via reflection to avoid compile-time binding to CraftWorld
+            Method getWorld = level.getClass().getMethod("getWorld");
+            return (World) getWorld.invoke(level);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to get Bukkit World from Level", e);
+        }
+    }
+
+    /**
+     * Gets the Bukkit Entity from an NMS Entity.
+     * Uses reflection to avoid the versioned CraftEntity return type issue.
+     */
+    public static org.bukkit.entity.Entity getBukkitEntity(Entity nmsEntity) {
+        try {
+            // Call getBukkitEntity() via reflection to avoid compile-time binding to CraftEntity
+            Method getBukkitEntity = nmsEntity.getClass().getMethod("getBukkitEntity");
+            return (org.bukkit.entity.Entity) getBukkitEntity.invoke(nmsEntity);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to get Bukkit Entity from NMS Entity", e);
+        }
+    }
+
+    // Cached method for Display teleport duration
+    private static Method displayTeleportDurationMethod = null;
+
+    /**
+     * Sets the teleport/position interpolation duration on a Display entity.
+     * Uses reflection with fallback since the method is private and string literals aren't remapped.
+     * Mojang mapping: setPosRotInterpolationDuration
+     */
+    public static void setDisplayTeleportDuration(net.minecraft.world.entity.Display display, int duration) {
+        try {
+            if (displayTeleportDurationMethod == null) {
+                displayTeleportDurationMethod = findDisplayTeleportDurationMethod();
+            }
+            displayTeleportDurationMethod.invoke(display, duration);
+        } catch (Exception e) {
+            // Non-critical - just log and continue
+            e.printStackTrace();
+        }
+    }
+
+    private static Method findDisplayTeleportDurationMethod() throws NoSuchMethodException {
+        Class<?> displayClass = net.minecraft.world.entity.Display.class;
+
+        // Paper uses Mojang mappings, Spigot uses obfuscated
+        String methodName = IS_PAPER ? "setPosRotInterpolationDuration" : "d";
+
+        Method method = displayClass.getDeclaredMethod(methodName, int.class);
+        method.setAccessible(true);
+        return method;
+    }
+
+    /**
      * Gets the field name for entity dimensions.
      * Paper uses Mojang mappings ("dimensions"), Spigot uses obfuscated ("bz").
      * Note: After specialsource remapping, Spigot code will use the correct obfuscated name.

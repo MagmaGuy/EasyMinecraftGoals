@@ -32,7 +32,7 @@
         <module>EasyMinecraftGoals/v1_21_R5</module>
         <module>EasyMinecraftGoals/v1_21_R6</module>
         <module>EasyMinecraftGoals/v1_21_R7_common</module>
-        <module>EasyMinecraftGoals/v1_21_R7</module>
+        <module>EasyMinecraftGoals/v1_21_R7_spigot</module>
         <module>EasyMinecraftGoals/v1_21_R7_paper</module>
     </modules>
 

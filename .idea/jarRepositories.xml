@@ -37,6 +37,16 @@
       <option name="url" value="http://localhost:8081/repository/maven-public/" />
     </remote-repository>
     <remote-repository>
+      <option name="id" value="minecraft-libraries" />
+      <option name="name" value="minecraft-libraries" />
+      <option name="url" value="https://libraries.minecraft.net/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="papermc" />
+      <option name="name" value="papermc" />
+      <option name="url" value="https://repo.papermc.io/repository/maven-public/" />
+    </remote-repository>
+    <remote-repository>
       <option name="id" value="central" />
       <option name="name" value="Central Repository" />
       <option name="url" value="http://localhost:8081/repository/maven-public/" />

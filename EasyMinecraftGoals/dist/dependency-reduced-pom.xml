@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.magmaguy</groupId>
   <artifactId>EasyMinecraftGoals-dist</artifactId>
-  <version>1.19.17</version>
+  <version>1.19.19</version>
   <dependencies>
     <dependency>
       <groupId>org.spigotmc</groupId>

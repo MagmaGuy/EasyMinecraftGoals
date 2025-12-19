@@ -17,7 +17,6 @@ import org.joml.Quaternionfc;
 import org.joml.Vector3f;
 import org.joml.Vector3fc;
 
-import java.lang.reflect.Method;
 import java.util.List;
 import java.util.UUID;
 
@@ -71,24 +70,9 @@ public class PacketDisplayEntity extends AbstractPacketEntity<Display.ItemDispla
         itemDisplay.setTransformationInterpolationDelay(-1);
         itemDisplay.setTransformationInterpolationDuration(0);
 
-        // Set teleport interpolation duration - Paper uses Mojang mappings
-        try {
-            Display display = itemDisplay;
-            // Try Mojang-mapped method name first
-            Method setPosRotInterpolationDuration = Display.class.getDeclaredMethod("setTeleportDuration", int.class);
-            setPosRotInterpolationDuration.setAccessible(true);
-            setPosRotInterpolationDuration.invoke(display, 1);
-        } catch (Exception e) {
-            // Fallback - try other possible method names
-            try {
-                Display display = itemDisplay;
-                Method setPosRotInterpolationDuration = Display.class.getDeclaredMethod("setPosRotInterpolationDuration", int.class);
-                setPosRotInterpolationDuration.setAccessible(true);
-                setPosRotInterpolationDuration.invoke(display, 1);
-            } catch (Exception e2) {
-                e2.printStackTrace();
-            }
-        }
+        // Set teleport interpolation duration
+        // Using CraftBukkitBridge so the method call gets properly remapped by specialsource for Spigot
+        CraftBukkitBridge.setDisplayTeleportDuration(itemDisplay, 1);
 
         // Carrier item (any item works; LEATHER_HORSE_ARMOR kept for continuity)
         carrierItem = new ItemStack(Material.LEATHER_HORSE_ARMOR);

@@ -14,7 +14,7 @@
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
-    <artifactId>EasyMinecraftGoals_v1_21_R7</artifactId>
+    <artifactId>EasyMinecraftGoals_v1_21_R7_spigot</artifactId>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
@@ -24,7 +24,7 @@
 
     <build>
         <plugins>
-            <!-- Shade common module and relocate to v1_21_R7 package -->
+            <!-- Shade common module and relocate to v1_21_R7_spigot package -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
@@ -39,7 +39,7 @@
                             <relocations>
                                 <relocation>
                                     <pattern>com.magmaguy.easyminecraftgoals.v1_21_R7_common</pattern>
-                                    <shadedPattern>com.magmaguy.easyminecraftgoals.v1_21_R7</shadedPattern>
+                                    <shadedPattern>com.magmaguy.easyminecraftgoals.v1_21_R7_spigot</shadedPattern>
                                 </relocation>
                             </relocations>
                             <artifactSet>

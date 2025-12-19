@@ -16,9 +16,12 @@
         <module name="EasyMinecraftGoals_v1_21_R2" />
         <module name="EasyMinecraftGoals_v1_20_R2" />
         <module name="EasyMinecraftGoals_v1_21_R3" />
+        <module name="EasyMinecraftGoals_v1_21_R7_common" />
         <module name="EasyMinecraftGoals-dist" />
+        <module name="EasyMinecraftGoals_v1_21_R7_paper" />
         <module name="EasyMinecraftGoals-core" />
         <module name="EasyMinecraftGoals_v1_19_R3" />
+        <module name="EasyMinecraftGoals_v1_21_R7_spigot" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -35,6 +38,7 @@
       <module name="EasyMinecraftGoals_v1_19_R1" target="17" />
       <module name="EasyMinecraftGoals_v1_19_R2" target="17" />
       <module name="EasyMinecraftGoals_v1_20_R5" target="17" />
+      <module name="EasyMinecraftGoals_v1_21_R7" target="17" />
       <module name="EasyMinecraftPathfinding" target="1.5" />
       <module name="EasyMinecraftPathfinding (1)" target="1.5" />
       <module name="EasyMinecraftPathFinding-core" target="1.5" />

@@ -69,12 +69,13 @@ public abstract class AbstractPacketEntity<T extends Entity> implements PacketEn
         return entity;
     }
 
+    @SuppressWarnings("unchecked")
     public <B extends org.bukkit.entity.Entity> B getBukkitEntity() {
-        return (B) entity.getBukkitEntity();
+        return (B) CraftBukkitBridge.getBukkitEntity(entity);
     }
 
     public Location getLocation() {
-        return new Location(entity.level().getWorld(), entity.getX(), entity.getY(), entity.getZ(), entity.getYRot(), entity.getXRot());
+        return new Location(CraftBukkitBridge.getBukkitWorld(entity.level()), entity.getX(), entity.getY(), entity.getZ(), entity.getYRot(), entity.getXRot());
     }
 
     public UUID getUniqueId() {

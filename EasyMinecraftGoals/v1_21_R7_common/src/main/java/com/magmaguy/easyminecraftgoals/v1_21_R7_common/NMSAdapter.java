@@ -1,106 +1,151 @@
 package com.magmaguy.easyminecraftgoals.v1_21_R7_common;
 
-import com.magmaguy.easyminecraftgoals.v1_21_R7_common.massblockedit.MassEditBlocks;
-import com.magmaguy.easyminecraftgoals.v1_21_R7_common.move.Move;
+import com.magmaguy.easyminecraftgoals.constants.OverridableWanderPriority;
+import com.magmaguy.easyminecraftgoals.internal.AbstractPacketBundle;
+import com.magmaguy.easyminecraftgoals.internal.AbstractWanderBackToPoint;
+import com.magmaguy.easyminecraftgoals.internal.PacketModelEntity;
+import com.magmaguy.easyminecraftgoals.internal.PacketTextEntity;
 import com.magmaguy.easyminecraftgoals.v1_21_R7_common.entitydata.BodyRotation;
 import com.magmaguy.easyminecraftgoals.v1_21_R7_common.hitbox.Hitbox;
+import com.magmaguy.easyminecraftgoals.v1_21_R7_common.massblockedit.MassEditBlocks;
+import com.magmaguy.easyminecraftgoals.v1_21_R7_common.move.Move;
 import com.magmaguy.easyminecraftgoals.v1_21_R7_common.packets.PacketArmorStandEntity;
 import com.magmaguy.easyminecraftgoals.v1_21_R7_common.packets.PacketBundle;
 import com.magmaguy.easyminecraftgoals.v1_21_R7_common.packets.PacketDisplayEntity;
 import com.magmaguy.easyminecraftgoals.v1_21_R7_common.wanderbacktopoint.WanderBackToPointBehavior;
 import com.magmaguy.easyminecraftgoals.v1_21_R7_common.wanderbacktopoint.WanderBackToPointGoal;
-import com.magmaguy.easyminecraftgoals.internal.AbstractPacketBundle;
-import com.magmaguy.easyminecraftgoals.internal.AbstractWanderBackToPoint;
-import com.magmaguy.easyminecraftgoals.internal.PacketModelEntity;
-import com.magmaguy.easyminecraftgoals.internal.PacketTextEntity;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.PathfinderMob;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.data.BlockData;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 
-public class NMSAdapter implements com.magmaguy.easyminecraftgoals.NMSAdapter {
+public class NMSAdapter extends com.magmaguy.easyminecraftgoals.NMSAdapter {
 
-    @Override
-    public boolean setCustomHitbox(org.bukkit.entity.Entity entity, float width, float height, boolean fixed) {
-        Entity nmsEntity = CraftBukkitBridge.getNMSEntity(entity);
-        return Hitbox.setCustomHitbox(nmsEntity, width, height, fixed);
+    private PathfinderMob getPathfinderMob(Entity entity) {
+        net.minecraft.world.entity.Entity nmsEntity = CraftBukkitBridge.getNMSEntity(entity);
+        if (nmsEntity instanceof PathfinderMob pathfinderMob)
+            return pathfinderMob;
+        else
+            return null;
     }
 
     @Override
-    public float getBodyRotation(org.bukkit.entity.Entity entity) {
-        Entity nmsEntity = CraftBukkitBridge.getNMSEntity(entity);
-        return BodyRotation.getBodyRotation(nmsEntity);
+    public PacketModelEntity createPacketArmorStandEntity(Location location) {
+        return new PacketArmorStandEntity(location);
     }
 
     @Override
-    public boolean pathfinderMoveToLocation(LivingEntity livingEntity, double speedModifier, Location destination) {
-        PathfinderMob pathfinderMob = (PathfinderMob) CraftBukkitBridge.getNMSLivingEntity(livingEntity);
-        return Move.simpleMove(pathfinderMob, speedModifier, destination);
+    public PacketModelEntity createPacketDisplayEntity(Location location) {
+        return new PacketDisplayEntity(location);
     }
 
     @Override
-    public void pathfinderStopMoving(LivingEntity livingEntity) {
-        PathfinderMob pathfinderMob = (PathfinderMob) CraftBukkitBridge.getNMSLivingEntity(livingEntity);
-        Move.doNotMove(pathfinderMob);
+    public PacketTextEntity createPacketTextArmorStandEntity(Location location) {
+        return new PacketArmorStandEntity(location);
     }
 
     @Override
-    public boolean pathfinderCanReach(LivingEntity livingEntity, Location destination) {
-        PathfinderMob pathfinderMob = (PathfinderMob) CraftBukkitBridge.getNMSLivingEntity(livingEntity);
+    public boolean canReach(LivingEntity livingEntity, Location destination) {
+        PathfinderMob pathfinderMob = getPathfinderMob(livingEntity);
+        if (pathfinderMob == null) return false;
         return Move.canReach(pathfinderMob, destination);
     }
 
     @Override
-    public void universalMoveToLocation(LivingEntity livingEntity, double speedModifier, Location destination) {
-        Mob mob = (Mob) CraftBukkitBridge.getNMSLivingEntity(livingEntity);
-        Move.universalMove(mob, speedModifier, destination);
+    public boolean setCustomHitbox(Entity entity, float width, float height, boolean fixed) {
+        if (entity == null) return false;
+        net.minecraft.world.entity.Entity nmsEntity = CraftBukkitBridge.getNMSEntity(entity);
+        return Hitbox.setCustomHitbox(nmsEntity, width, height, fixed);
     }
 
     @Override
-    public boolean forcedMoveToLocation(LivingEntity livingEntity, double speedModifier, Location destination) {
-        Mob mob = (Mob) CraftBukkitBridge.getNMSLivingEntity(livingEntity);
-        return Move.forcedMove(mob, speedModifier, destination);
+    public float getBodyRotation(Entity entity) {
+        net.minecraft.world.entity.Entity nmsEntity = CraftBukkitBridge.getNMSEntity(entity);
+        return BodyRotation.getBodyRotation(nmsEntity);
     }
 
     @Override
-    public AbstractWanderBackToPoint getWanderBackToPoint(LivingEntity livingEntity, Location location, double maximumDistanceFromPoint, int priority, int maxDurationTicks, boolean useBrain) {
+    public boolean move(LivingEntity livingEntity, double speedModifier, Location location) {
         net.minecraft.world.entity.LivingEntity nmsLivingEntity = CraftBukkitBridge.getNMSLivingEntity(livingEntity);
-        if (useBrain)
-            return new WanderBackToPointBehavior(livingEntity, (Mob) nmsLivingEntity, location, maximumDistanceFromPoint, priority, maxDurationTicks);
-        else {
-            Mob mob = (Mob) nmsLivingEntity;
-            PathfinderMob pathfinderMob = mob instanceof PathfinderMob ? (PathfinderMob) mob : null;
-            return new WanderBackToPointGoal(mob, livingEntity, pathfinderMob, location, maximumDistanceFromPoint, priority, maxDurationTicks);
+        PathfinderMob pathfinderMob;
+        if (nmsLivingEntity instanceof PathfinderMob pm)
+            pathfinderMob = pm;
+        else
+            pathfinderMob = null;
+        if (!(nmsLivingEntity instanceof Mob)) {
+            Bukkit.getLogger().info("[EasyMinecraftPathfinding] Entity type " + livingEntity.getType() + " does not extend Mob and is therefore unable to have goals! It will not be able to pathfind.");
+            return false;
         }
+        return Move.simpleMove(pathfinderMob, speedModifier, location);
+    }
+
+    @Override
+    public void doNotMove(LivingEntity livingEntity) {
+        PathfinderMob pathfinderMob = getPathfinderMob(livingEntity);
+        if (pathfinderMob == null) return;
+        Move.doNotMove(pathfinderMob);
+    }
+
+    @Override
+    public boolean forcedMove(LivingEntity livingEntity, double speedModifier, Location location) {
+        net.minecraft.world.entity.LivingEntity nmsLivingEntity = CraftBukkitBridge.getNMSLivingEntity(livingEntity);
+        if (!(nmsLivingEntity instanceof Mob mob)) {
+            Bukkit.getLogger().info("[EasyMinecraftPathfinding] Entity type " + livingEntity.getType() + " does not extend Mob and is therefore unable to have goals! It will not be able to pathfind.");
+            return false;
+        }
+        return Move.forcedMove(mob, speedModifier, location);
+    }
+
+    @Override
+    public void universalMove(LivingEntity livingEntity, double speedModifier, Location location) {
+        net.minecraft.world.entity.LivingEntity nmsLivingEntity = CraftBukkitBridge.getNMSLivingEntity(livingEntity);
+        if (!(nmsLivingEntity instanceof Mob mob)) {
+            Bukkit.getLogger().info("[EasyMinecraftPathfinding] Entity type " + livingEntity.getType() + " does not extend Mob and is therefore unable to have goals! It will not be able to pathfind.");
+            return;
+        }
+        Move.universalMove(mob, speedModifier, location);
+    }
+
+    @Override
+    public AbstractWanderBackToPoint wanderBackToPoint(LivingEntity livingEntity,
+                                                       Location blockLocation,
+                                                       double maximumDistanceFromPoint,
+                                                       int maxDurationTicks,
+                                                       OverridableWanderPriority overridableWanderPriority) {
+        net.minecraft.world.entity.LivingEntity nmsLivingEntity = CraftBukkitBridge.getNMSLivingEntity(livingEntity);
+        PathfinderMob pathfinderMob;
+        if (nmsLivingEntity instanceof PathfinderMob pm)
+            pathfinderMob = pm;
+        else
+            pathfinderMob = null;
+        if (!(nmsLivingEntity instanceof Mob mob)) {
+            Bukkit.getLogger().info("[EasyMinecraftPathfinding] Entity type " + livingEntity.getType() + " does not extend Mob and is therefore unable to have goals! It will not be able to pathfind.");
+            return null;
+        }
+        if (overridableWanderPriority.brain) return new WanderBackToPointBehavior(
+                livingEntity,
+                mob,
+                blockLocation,
+                maximumDistanceFromPoint,
+                overridableWanderPriority.priority,
+                maxDurationTicks);
+        else return new WanderBackToPointGoal(
+                mob,
+                livingEntity,
+                pathfinderMob,
+                blockLocation,
+                maximumDistanceFromPoint,
+                overridableWanderPriority.priority,
+                maxDurationTicks);
     }
 
     @Override
     public void setBlockInNativeDataPalette(World world, int x, int y, int z, BlockData blockData, boolean applyPhysics) {
         MassEditBlocks.setBlockInNativeDataPalette(world, x, y, z, blockData, applyPhysics);
-    }
-
-    @Override
-    public PacketModelEntity generatePacketArmorStandEntity(Location location, String modelID) {
-        PacketArmorStandEntity packetArmorStandEntity = new PacketArmorStandEntity(location);
-        packetArmorStandEntity.initializeModel(location, modelID);
-        return packetArmorStandEntity;
-    }
-
-    @Override
-    public PacketModelEntity generatePacketDisplayEntity(Location location, String modelID) {
-        PacketDisplayEntity packetDisplayEntity = new PacketDisplayEntity(location);
-        packetDisplayEntity.initializeModel(location, modelID);
-        return packetDisplayEntity;
-    }
-
-    @Override
-    public PacketTextEntity generatePacketTextEntity(Location location) {
-        PacketArmorStandEntity packetArmorStandEntity = new PacketArmorStandEntity(location);
-        packetArmorStandEntity.initializeText(location);
-        return packetArmorStandEntity;
     }
 
     @Override

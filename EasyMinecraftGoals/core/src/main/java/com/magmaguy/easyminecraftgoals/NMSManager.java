@@ -28,8 +28,11 @@ public class NMSManager {
             String versionName;
             //1.20.0 is fundamentally the same as 1.20.1 so we use R2
             if (Objects.equals(version, "v1_20_R0")) versionName = PACKAGE + "v1_20_R1" + ".NMSAdapter";
-            // For R7+, Paper hard forked and requires a separate adapter
-            else if (Objects.equals(version, "v1_21_R7") && isPaper()) versionName = PACKAGE + "v1_21_R7_paper" + ".NMSAdapter";
+            // For R7+, Paper hard forked and requires separate adapters
+            else if (Objects.equals(version, "v1_21_R7")) {
+                if (isPaper()) versionName = PACKAGE + "v1_21_R7_paper" + ".NMSAdapter";
+                else versionName = PACKAGE + "v1_21_R7_spigot" + ".NMSAdapter";
+            }
             else versionName = PACKAGE + version + ".NMSAdapter";
 //            plugin.getLogger().info("Loading class: " + versionName);
             adapter = (NMSAdapter) Class.forName(versionName).getDeclaredConstructor().newInstance();

@@ -41,27 +41,41 @@
     </repositories>
 
     <build>
-        <plugins>
-            <!-- Use paper-nms for compilation (Mojang mappings) -->
-            <plugin>
-                <groupId>ca.bkaw</groupId>
-                <artifactId>paper-nms-maven-plugin</artifactId>
-                <version>1.4.10</version>
-                <executions>
-                    <execution>
-                        <id>init-paper-nms</id>
-                        <phase>initialize</phase>
-                        <goals>
-                            <goal>init</goal>
-                        </goals>
-                        <configuration>
-                            <paperVersion>1.21.11</paperVersion>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
+        <!-- No default plugins - paper-nms init runs via profile when needed -->
     </build>
+
+    <profiles>
+        <!-- Profile that auto-activates when paper-nms artifact is missing -->
+        <profile>
+            <id>init-paper-nms</id>
+            <activation>
+                <file>
+                    <missing>${user.home}/.m2/repository/ca/bkaw/paper-nms/1.21.11-SNAPSHOT/paper-nms-1.21.11-SNAPSHOT.pom</missing>
+                </file>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>ca.bkaw</groupId>
+                        <artifactId>paper-nms-maven-plugin</artifactId>
+                        <version>1.4.10</version>
+                        <executions>
+                            <execution>
+                                <id>init-paper-nms</id>
+                                <phase>initialize</phase>
+                                <goals>
+                                    <goal>init</goal>
+                                </goals>
+                                <configuration>
+                                    <paperVersion>1.21.11</paperVersion>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
     <dependencies>
         <!-- Paper NMS for compilation (Mojang mappings) -->

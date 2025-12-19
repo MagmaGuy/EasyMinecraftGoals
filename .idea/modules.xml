@@ -16,6 +16,9 @@
       <module fileurl="file://$PROJECT_DIR$/EasyMinecraftGoals/v1_21_R4/EasyMinecraftGoals_v1_21_R4.iml" filepath="$PROJECT_DIR$/EasyMinecraftGoals/v1_21_R4/EasyMinecraftGoals_v1_21_R4.iml" />
       <module fileurl="file://$PROJECT_DIR$/EasyMinecraftGoals/v1_21_R5/EasyMinecraftGoals_v1_21_R5.iml" filepath="$PROJECT_DIR$/EasyMinecraftGoals/v1_21_R5/EasyMinecraftGoals_v1_21_R5.iml" />
       <module fileurl="file://$PROJECT_DIR$/EasyMinecraftGoals/v1_21_R6/EasyMinecraftGoals_v1_21_R6.iml" filepath="$PROJECT_DIR$/EasyMinecraftGoals/v1_21_R6/EasyMinecraftGoals_v1_21_R6.iml" />
+      <module fileurl="file://$PROJECT_DIR$/EasyMinecraftGoals/v1_21_R7_common/EasyMinecraftGoals_v1_21_R7_common.iml" filepath="$PROJECT_DIR$/EasyMinecraftGoals/v1_21_R7_common/EasyMinecraftGoals_v1_21_R7_common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/EasyMinecraftGoals/v1_21_R7_paper/EasyMinecraftGoals_v1_21_R7_paper.iml" filepath="$PROJECT_DIR$/EasyMinecraftGoals/v1_21_R7_paper/EasyMinecraftGoals_v1_21_R7_paper.iml" />
+      <module fileurl="file://$PROJECT_DIR$/EasyMinecraftGoals/v1_21_R7_spigot/EasyMinecraftGoals_v1_21_R7_spigot.iml" filepath="$PROJECT_DIR$/EasyMinecraftGoals/v1_21_R7_spigot/EasyMinecraftGoals_v1_21_R7_spigot.iml" />
     </modules>
   </component>
 </project>
