@@ -3,9 +3,13 @@ package com.magmaguy.easyminecraftgoals;
 import com.magmaguy.easyminecraftgoals.constants.OverridableWanderPriority;
 import com.magmaguy.easyminecraftgoals.internal.AbstractPacketBundle;
 import com.magmaguy.easyminecraftgoals.internal.AbstractWanderBackToPoint;
+import com.magmaguy.easyminecraftgoals.internal.FakeText;
+import com.magmaguy.easyminecraftgoals.internal.FakeTextSettings;
+import com.magmaguy.easyminecraftgoals.internal.PacketEntityInterface;
 import com.magmaguy.easyminecraftgoals.internal.PacketModelEntity;
 import com.magmaguy.easyminecraftgoals.internal.PacketTextEntity;
 import org.bukkit.Location;
+import org.bukkit.entity.EntityType;
 import org.bukkit.World;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Entity;
@@ -105,5 +109,120 @@ public abstract class NMSAdapter {
     public abstract void setBlockInNativeDataPalette(World world, int x, int y, int z, BlockData blockData, boolean applyPhysics);
 
     public abstract AbstractPacketBundle createPacketBundle();
+
+    /**
+     * Creates a generic packet entity of the specified type.
+     * The entity exists only in packets - not added to the world.
+     * Use getBukkitEntity() to modify properties, then syncMetadata() to update viewers.
+     *
+     * @param entityType The Bukkit entity type to create
+     * @param location   The spawn location
+     * @return A packet entity that can be shown to players
+     */
+    public PacketEntityInterface createPacketEntity(EntityType entityType, Location location) {
+        throw new UnsupportedOperationException("createPacketEntity is only supported in Minecraft 1.21.11+");
+    }
+
+    /**
+     * Creates a FakeText that automatically uses TextDisplay for Java Edition players
+     * and ArmorStand for Bedrock Edition players.
+     *
+     * @param location The spawn location
+     * @param settings The text display settings
+     * @return A FakeText instance
+     */
+    public abstract FakeText createFakeText(Location location, FakeTextSettings settings);
+
+    /**
+     * Creates a builder for FakeText with customizable styling options.
+     *
+     * @return A new FakeText.Builder
+     */
+    public FakeText.Builder fakeTextBuilder() {
+        return new FakeTextBuilderImpl(this);
+    }
+
+    /**
+     * Default implementation of FakeText.Builder.
+     */
+    private static class FakeTextBuilderImpl implements FakeText.Builder {
+        private final NMSAdapter adapter;
+        private final FakeTextSettings settings = new FakeTextSettings();
+
+        FakeTextBuilderImpl(NMSAdapter adapter) {
+            this.adapter = adapter;
+        }
+
+        @Override
+        public FakeText.Builder text(String text) {
+            settings.setText(text);
+            return this;
+        }
+
+        @Override
+        public FakeText.Builder backgroundColor(org.bukkit.Color color) {
+            settings.setBackgroundColor(color);
+            return this;
+        }
+
+        @Override
+        public FakeText.Builder backgroundColor(int argb) {
+            settings.setBackgroundArgb(argb);
+            return this;
+        }
+
+        @Override
+        public FakeText.Builder textOpacity(byte opacity) {
+            settings.setTextOpacity(opacity);
+            return this;
+        }
+
+        @Override
+        public FakeText.Builder billboard(org.bukkit.entity.Display.Billboard billboard) {
+            settings.setBillboard(billboard);
+            return this;
+        }
+
+        @Override
+        public FakeText.Builder alignment(FakeText.TextAlignment alignment) {
+            settings.setAlignment(alignment);
+            return this;
+        }
+
+        @Override
+        public FakeText.Builder shadow(boolean shadow) {
+            settings.setShadow(shadow);
+            return this;
+        }
+
+        @Override
+        public FakeText.Builder seeThrough(boolean seeThrough) {
+            settings.setSeeThrough(seeThrough);
+            return this;
+        }
+
+        @Override
+        public FakeText.Builder lineWidth(int width) {
+            settings.setLineWidth(width);
+            return this;
+        }
+
+        @Override
+        public FakeText.Builder viewRange(float range) {
+            settings.setViewRange(range);
+            return this;
+        }
+
+        @Override
+        public FakeText.Builder scale(float scale) {
+            settings.setScale(scale);
+            return this;
+        }
+
+        @Override
+        public FakeText build(Location location) {
+            return adapter.createFakeText(location, settings);
+        }
+    }
 
 }

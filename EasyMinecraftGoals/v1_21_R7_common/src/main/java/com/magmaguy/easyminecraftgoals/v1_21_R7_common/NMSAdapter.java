@@ -3,15 +3,20 @@ package com.magmaguy.easyminecraftgoals.v1_21_R7_common;
 import com.magmaguy.easyminecraftgoals.constants.OverridableWanderPriority;
 import com.magmaguy.easyminecraftgoals.internal.AbstractPacketBundle;
 import com.magmaguy.easyminecraftgoals.internal.AbstractWanderBackToPoint;
+import com.magmaguy.easyminecraftgoals.internal.FakeText;
+import com.magmaguy.easyminecraftgoals.internal.FakeTextSettings;
+import com.magmaguy.easyminecraftgoals.internal.PacketEntityInterface;
 import com.magmaguy.easyminecraftgoals.internal.PacketModelEntity;
 import com.magmaguy.easyminecraftgoals.internal.PacketTextEntity;
 import com.magmaguy.easyminecraftgoals.v1_21_R7_common.entitydata.BodyRotation;
 import com.magmaguy.easyminecraftgoals.v1_21_R7_common.hitbox.Hitbox;
 import com.magmaguy.easyminecraftgoals.v1_21_R7_common.massblockedit.MassEditBlocks;
 import com.magmaguy.easyminecraftgoals.v1_21_R7_common.move.Move;
+import com.magmaguy.easyminecraftgoals.v1_21_R7_common.packets.FakeTextImpl;
 import com.magmaguy.easyminecraftgoals.v1_21_R7_common.packets.PacketArmorStandEntity;
 import com.magmaguy.easyminecraftgoals.v1_21_R7_common.packets.PacketBundle;
 import com.magmaguy.easyminecraftgoals.v1_21_R7_common.packets.PacketDisplayEntity;
+import com.magmaguy.easyminecraftgoals.v1_21_R7_common.packets.PacketGenericEntity;
 import com.magmaguy.easyminecraftgoals.v1_21_R7_common.wanderbacktopoint.WanderBackToPointBehavior;
 import com.magmaguy.easyminecraftgoals.v1_21_R7_common.wanderbacktopoint.WanderBackToPointGoal;
 import net.minecraft.world.entity.Mob;
@@ -21,6 +26,7 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 
 public class NMSAdapter extends com.magmaguy.easyminecraftgoals.NMSAdapter {
@@ -151,5 +157,15 @@ public class NMSAdapter extends com.magmaguy.easyminecraftgoals.NMSAdapter {
     @Override
     public AbstractPacketBundle createPacketBundle() {
         return new PacketBundle();
+    }
+
+    @Override
+    public PacketEntityInterface createPacketEntity(EntityType entityType, Location location) {
+        return new PacketGenericEntity(entityType, location);
+    }
+
+    @Override
+    public FakeText createFakeText(Location location, FakeTextSettings settings) {
+        return new FakeTextImpl(location, settings);
     }
 }

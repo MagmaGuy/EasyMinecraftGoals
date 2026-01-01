@@ -3,14 +3,20 @@ package com.magmaguy.easyminecraftgoals.v1_21_R4;
 import com.magmaguy.easyminecraftgoals.constants.OverridableWanderPriority;
 import com.magmaguy.easyminecraftgoals.internal.AbstractPacketBundle;
 import com.magmaguy.easyminecraftgoals.internal.AbstractWanderBackToPoint;
+import com.magmaguy.easyminecraftgoals.internal.FakeText;
+import com.magmaguy.easyminecraftgoals.internal.FakeTextSettings;
 import com.magmaguy.easyminecraftgoals.internal.PacketTextEntity;
+import com.magmaguy.easyminecraftgoals.v1_21_R4.packets.FakeTextImpl;
 import com.magmaguy.easyminecraftgoals.v1_21_R4.entitydata.BodyRotation;
 import com.magmaguy.easyminecraftgoals.v1_21_R4.massblockedit.MassEditBlocks;
 import com.magmaguy.easyminecraftgoals.v1_21_R4.move.Move;
 import com.magmaguy.easyminecraftgoals.v1_21_R4.hitbox.Hitbox;
+import com.magmaguy.easyminecraftgoals.internal.PacketEntityInterface;
 import com.magmaguy.easyminecraftgoals.v1_21_R4.packets.PacketArmorStandEntity;
 import com.magmaguy.easyminecraftgoals.v1_21_R4.packets.PacketBundle;
 import com.magmaguy.easyminecraftgoals.v1_21_R4.packets.PacketDisplayEntity;
+import com.magmaguy.easyminecraftgoals.v1_21_R4.packets.PacketGenericEntity;
+import org.bukkit.entity.EntityType;
 import com.magmaguy.easyminecraftgoals.v1_21_R4.wanderbacktopoint.WanderBackToPointBehavior;
 import com.magmaguy.easyminecraftgoals.v1_21_R4.wanderbacktopoint.WanderBackToPointGoal;
 import net.minecraft.world.entity.PathfinderMob;
@@ -144,5 +150,15 @@ public class NMSAdapter extends com.magmaguy.easyminecraftgoals.NMSAdapter {
     @Override
     public AbstractPacketBundle createPacketBundle(){
         return new PacketBundle();
+    }
+
+    @Override
+    public PacketEntityInterface createPacketEntity(EntityType entityType, Location location) {
+        return new PacketGenericEntity(entityType, location);
+    }
+
+    @Override
+    public FakeText createFakeText(Location location, FakeTextSettings settings) {
+        return new FakeTextImpl(location, settings);
     }
 }
