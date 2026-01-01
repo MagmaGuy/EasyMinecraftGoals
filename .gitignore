@@ -1,16 +1,20 @@
-/EasyMinecraftGoals/dist/settings.xml
-/EasyMinecraftGoals/dist/target/
-/EasyMinecraftGoals/core/target/
-/EasyMinecraftGoals/v1_19_R3/target/
-/EasyMinecraftGoals/v1_20_R1/target/
-/EasyMinecraftGoals/v1_20_R2/target/
-/EasyMinecraftGoals/v1_20_R3/target/
-/EasyMinecraftGoals/v1_20_R4/target/
-/EasyMinecraftGoals/v1_21_R1/target/
-/EasyMinecraftGoals/v1_21_R2/target/
-/EasyMinecraftGoals/v1_21_R3/target/
-/EasyMinecraftGoals/v1_21_R4/target/
-/EasyMinecraftGoals/v1_21_R5/target/
-/EasyMinecraftGoals/v1_21_R6/target/
-/EasyMinecraftGoals/v1_21_R7/target/
+# Gradle
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+
+# IDE
+.idea/
+*.iml
+
+# Build outputs
+EasyMinecraftGoals/dist/output/
+
+# Paper NMS
 .paper-nms
+
+# OS files
+nul
+
+# Claude Code
+.claude/

@@ -202,4 +202,50 @@ public class CraftBukkitBridge {
         // This will be "dimensions" in source, but specialsource will remap it for Spigot
         return "dimensions";
     }
+
+    // Cached method for creating entities
+    private static Method craftWorldCreateEntityMethod = null;
+
+    /**
+     * Creates an NMS Entity from a Bukkit EntityType.
+     * Uses CraftWorld.createEntity() via reflection to handle the NMS creation.
+     *
+     * @param bukkitType The Bukkit entity type
+     * @param level      The server level
+     * @param location   The spawn location
+     * @return The created NMS entity, or null if creation fails
+     */
+    public static Entity createNMSEntity(org.bukkit.entity.EntityType bukkitType, ServerLevel level, Location location) {
+        try {
+            // Use CraftWorld.createEntity via reflection
+            if (craftWorldCreateEntityMethod == null) {
+                craftWorldCreateEntityMethod = craftWorldClass.getMethod("createEntity",
+                        Location.class, Class.class);
+            }
+
+            // Get the entity class from the Bukkit EntityType
+            Class<? extends org.bukkit.entity.Entity> entityClass = bukkitType.getEntityClass();
+            if (entityClass == null) {
+                throw new RuntimeException("No entity class for type: " + bukkitType);
+            }
+
+            // Create the Bukkit entity using CraftWorld
+            org.bukkit.entity.Entity bukkitEntity = (org.bukkit.entity.Entity)
+                    craftWorldCreateEntityMethod.invoke(location.getWorld(), location, entityClass);
+
+            // Get the NMS entity from the Bukkit entity
+            Entity nmsEntity = getNMSEntity(bukkitEntity);
+
+            // Set position and rotation
+            if (nmsEntity != null) {
+                nmsEntity.setPos(location.getX(), location.getY(), location.getZ());
+                if (location.getYaw() != 0) nmsEntity.setYRot(location.getYaw());
+                if (location.getPitch() != 0) nmsEntity.setXRot(location.getPitch());
+            }
+
+            return nmsEntity;
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to create NMS entity for type: " + bukkitType, e);
+        }
+    }
 }

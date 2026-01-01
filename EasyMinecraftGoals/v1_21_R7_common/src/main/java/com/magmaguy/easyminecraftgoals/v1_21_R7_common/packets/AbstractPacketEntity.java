@@ -70,8 +70,14 @@ public abstract class AbstractPacketEntity<T extends Entity> implements PacketEn
     }
 
     @SuppressWarnings("unchecked")
+    @Override
     public <B extends org.bukkit.entity.Entity> B getBukkitEntity() {
         return (B) CraftBukkitBridge.getBukkitEntity(entity);
+    }
+
+    @Override
+    public void syncMetadata() {
+        sendPacketToAll(createEntityDataPacket());
     }
 
     public Location getLocation() {
@@ -160,6 +166,12 @@ public abstract class AbstractPacketEntity<T extends Entity> implements PacketEn
                         new Vec3(0, 0, 0), 0),
                 createEntityDataPacket()
         );
+    }
+
+    @Override
+    public void displayTo(UUID uuid) {
+        Player player = Bukkit.getPlayer(uuid);
+        if (player != null) displayTo(player);
     }
 
     //Teleports - affects all viewers

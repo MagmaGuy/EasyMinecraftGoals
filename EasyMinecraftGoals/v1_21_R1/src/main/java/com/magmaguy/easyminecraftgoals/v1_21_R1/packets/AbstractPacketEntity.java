@@ -69,8 +69,21 @@ public abstract class AbstractPacketEntity<T extends Entity> implements PacketEn
         return entity;
     }
 
+    @SuppressWarnings("unchecked")
+    @Override
     public <B extends org.bukkit.entity.Entity> B getBukkitEntity() {
         return (B) entity.getBukkitEntity();
+    }
+
+    @Override
+    public void syncMetadata() {
+        sendPacketToAll(createEntityDataPacket());
+    }
+
+    @Override
+    public void displayTo(UUID uuid) {
+        Player player = Bukkit.getPlayer(uuid);
+        if (player != null) displayTo(player);
     }
 
     public Location getLocation() {
