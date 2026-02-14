@@ -23,6 +23,7 @@ public abstract class AbstractPacketEntity<T extends Entity> implements PacketEn
     private final List<Runnable> removeCallbacks = new LinkedList<>();
     protected boolean visible = true;
     private final int EntityID;
+    private int currentVehicleId = -1;
 
     protected AbstractPacketEntity(Location location) {
         this.entity = createEntity(location);
@@ -217,6 +218,56 @@ public abstract class AbstractPacketEntity<T extends Entity> implements PacketEn
 
     public void move(Location location) {
         sendPacketToAll(generateMovePacket(location));
+    }
+
+    @Override
+    public int getEntityId() {
+        return EntityID;
+    }
+
+    @Override
+    public void mountTo(int vehicleEntityId) {
+        this.currentVehicleId = vehicleEntityId;
+        sendPacketToAll(generateMountPacket(vehicleEntityId, EntityID));
+    }
+
+    @Override
+    public void dismount() {
+        if (currentVehicleId != -1) {
+            // Send empty passengers packet to the previous vehicle
+            sendPacketToAll(generateMountPacket(currentVehicleId)); // No passengers = dismount
+            currentVehicleId = -1;
+        }
+    }
+
+    protected Packet<?> generateMountPacket(int vehicleEntityId, int... passengerIds) {
+        // Create packet using our entity (it has no passengers so fields will be wrong)
+        // Then use reflection to fix the vehicle ID and passenger array
+        try {
+            ClientboundSetPassengersPacket packet = new ClientboundSetPassengersPacket(entity);
+
+            // The packet has two fields: vehicle (int) and passengers (IntList)
+            // Field names may vary by mapping - try common names
+            for (java.lang.reflect.Field field : ClientboundSetPassengersPacket.class.getDeclaredFields()) {
+                field.setAccessible(true);
+                if (field.getType() == int.class) {
+                    // This is the vehicle ID field
+                    field.setInt(packet, vehicleEntityId);
+                } else if (field.getType().getName().contains("IntList") || field.getType() == int[].class) {
+                    // This is the passengers field
+                    if (field.getType() == int[].class) {
+                        field.set(packet, passengerIds);
+                    } else {
+                        // It's an IntList
+                        field.set(packet, it.unimi.dsi.fastutil.ints.IntList.of(passengerIds));
+                    }
+                }
+            }
+
+            return packet;
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to create mount packet", e);
+        }
     }
 
     // ==== Packet sending methods - RENAMED AND CLARIFIED ====

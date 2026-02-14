@@ -1,5 +1,6 @@
 package com.magmaguy.easyminecraftgoals;
 
+import com.magmaguy.easyminecraftgoals.internal.PacketEntityTracker;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
@@ -38,6 +39,12 @@ public class NMSManager {
             adapter = (NMSAdapter) Class.forName(versionName).getDeclaredConstructor().newInstance();
             plugin.getLogger().log(Level.INFO, "Supported server version detected: {0}", version);
             isEnabled = true;
+
+            // Initialize the packet entity tracker for automatic visibility management
+            PacketEntityTracker.getInstance().initialize(plugin);
+
+            // Initialize the packet interaction listener for handling clicks on packet entities
+            adapter.initializePacketInteractionListener(plugin);
         } catch (ClassNotFoundException e) {
             plugin.getLogger().log(Level.SEVERE, "Class not found: {0}", e.getMessage());
         } catch (ReflectiveOperationException e) {
@@ -63,6 +70,18 @@ public class NMSManager {
 
     public static NMSAdapter getAdapter() {
         return adapter;
+    }
+
+    /**
+     * Shuts down NMS components. Should be called when the plugin using EasyMinecraftGoals is disabled.
+     */
+    public static void shutdown() {
+        if (adapter != null) {
+            adapter.shutdownPacketInteractionListener();
+        }
+        PacketEntityTracker.getInstance().shutdown();
+        isEnabled = false;
+        adapter = null;
     }
 
     private static String getServerVersion() {

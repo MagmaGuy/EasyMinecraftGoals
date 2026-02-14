@@ -21,6 +21,9 @@ public class FakeTextSettings {
     private int lineWidth = 200;
     private float viewRange = 1.0f;
     private float scale = 1.0f;
+    private float translationX = 0f;
+    private float translationY = 0f;
+    private float translationZ = 0f;
 
     public FakeTextSettings() {
     }
@@ -39,6 +42,9 @@ public class FakeTextSettings {
         this.lineWidth = other.lineWidth;
         this.viewRange = other.viewRange;
         this.scale = other.scale;
+        this.translationX = other.translationX;
+        this.translationY = other.translationY;
+        this.translationZ = other.translationZ;
     }
 
     public String getText() {
@@ -144,5 +150,28 @@ public class FakeTextSettings {
     public FakeTextSettings setScale(float scale) {
         this.scale = scale;
         return this;
+    }
+
+    public float getTranslationX() {
+        return translationX;
+    }
+
+    public float getTranslationY() {
+        return translationY;
+    }
+
+    public float getTranslationZ() {
+        return translationZ;
+    }
+
+    public FakeTextSettings setTranslation(float x, float y, float z) {
+        this.translationX = x;
+        this.translationY = y;
+        this.translationZ = z;
+        return this;
+    }
+
+    public boolean hasTranslation() {
+        return translationX != 0f || translationY != 0f || translationZ != 0f;
     }
 }

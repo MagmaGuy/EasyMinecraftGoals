@@ -3,6 +3,8 @@ package com.magmaguy.easyminecraftgoals.v1_21_R7_common.packets;
 import com.magmaguy.easyminecraftgoals.internal.FakeText;
 import com.magmaguy.easyminecraftgoals.internal.FakeTextSettings;
 import com.magmaguy.easyminecraftgoals.internal.PacketEntityInterface;
+import com.magmaguy.easyminecraftgoals.internal.PacketEntityTracker;
+import com.magmaguy.easyminecraftgoals.internal.TrackedPacketEntity;
 import com.magmaguy.easyminecraftgoals.thirdparty.BedrockChecker;
 import com.magmaguy.easyminecraftgoals.v1_21_R7_common.CraftBukkitBridge;
 import net.minecraft.network.chat.Component;
@@ -12,6 +14,8 @@ import net.minecraft.world.entity.decoration.ArmorStand;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
+import org.bukkit.World;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.TextDisplay;
 
@@ -21,13 +25,15 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * FakeText implementation that uses TextDisplay for Java Edition players
  * and ArmorStand for Bedrock Edition players.
+ * Implements TrackedPacketEntity for automatic visibility management.
  */
-public class FakeTextImpl implements FakeText {
+public class FakeTextImpl implements FakeText, TrackedPacketEntity {
 
     private final FakeTextSettings settings;
     private Location location;
     private String currentText;
     private boolean visible = true;
+    private final UUID uniqueId = UUID.randomUUID();
 
     // Track per-player entities - UUID -> packet entity
     private final Map<UUID, PacketEntityInterface> playerEntities = new ConcurrentHashMap<>();
@@ -35,6 +41,10 @@ public class FakeTextImpl implements FakeText {
     private final Set<UUID> bedrockPlayers = ConcurrentHashMap.newKeySet();
 
     private final List<Runnable> removeCallbacks = new ArrayList<>();
+    private int currentVehicleId = -1;
+    private Entity vehicleEntity = null;
+    private boolean autoTracked = false;
+    private boolean valid = true;
 
     public FakeTextImpl(Location location, FakeTextSettings settings) {
         this.location = location.clone();
@@ -51,10 +61,11 @@ public class FakeTextImpl implements FakeText {
             PacketEntityInterface entity = entry.getValue();
 
             if (bedrockPlayers.contains(uuid)) {
-                // ArmorStand - set custom name
-                ArmorStand armorStand = entity.getBukkitEntity();
+                // ArmorStand - set custom name (need NMS entity, not Bukkit)
+                @SuppressWarnings("unchecked")
+                ArmorStand armorStand = ((AbstractPacketEntity<ArmorStand>) entity).getNMSEntity();
                 armorStand.setCustomNameVisible(true);
-                armorStand.setCustomName(Component.literal(text));
+                armorStand.setCustomName(CraftBukkitBridge.fromLegacyText(text));
             } else {
                 // TextDisplay - set text directly
                 TextDisplay textDisplay = entity.getBukkitEntity();
@@ -100,6 +111,11 @@ public class FakeTextImpl implements FakeText {
 
         playerEntities.put(uuid, entity);
         entity.displayTo(uuid);
+
+        // If we're mounted to something, mount this new entity too
+        if (currentVehicleId != -1) {
+            entity.mountTo(currentVehicleId);
+        }
     }
 
     @Override
@@ -151,6 +167,218 @@ public class FakeTextImpl implements FakeText {
     @Override
     public boolean hasViewers() {
         return !playerEntities.isEmpty();
+    }
+
+    @Override
+    public void setTextOpacity(byte opacity) {
+        for (Map.Entry<UUID, PacketEntityInterface> entry : playerEntities.entrySet()) {
+            UUID uuid = entry.getKey();
+            if (bedrockPlayers.contains(uuid)) continue; // ArmorStand doesn't support opacity
+
+            PacketEntityInterface entity = entry.getValue();
+            TextDisplay textDisplay = entity.getBukkitEntity();
+            textDisplay.setTextOpacity(opacity);
+            entity.syncMetadata();
+        }
+    }
+
+    @Override
+    public void setScale(float scale) {
+        for (Map.Entry<UUID, PacketEntityInterface> entry : playerEntities.entrySet()) {
+            UUID uuid = entry.getKey();
+            if (bedrockPlayers.contains(uuid)) continue; // ArmorStand doesn't support scale
+
+            PacketEntityInterface entity = entry.getValue();
+            TextDisplay textDisplay = entity.getBukkitEntity();
+            org.bukkit.util.Transformation transform = textDisplay.getTransformation();
+            textDisplay.setTransformation(new org.bukkit.util.Transformation(
+                    transform.getTranslation(),
+                    transform.getLeftRotation(),
+                    new org.joml.Vector3f(scale, scale, scale),
+                    transform.getRightRotation()
+            ));
+            entity.syncMetadata();
+        }
+    }
+
+    @Override
+    public void setBackgroundColor(Color color) {
+        for (Map.Entry<UUID, PacketEntityInterface> entry : playerEntities.entrySet()) {
+            UUID uuid = entry.getKey();
+            if (bedrockPlayers.contains(uuid)) continue; // ArmorStand doesn't support background
+
+            PacketEntityInterface entity = entry.getValue();
+            TextDisplay textDisplay = entity.getBukkitEntity();
+            textDisplay.setBackgroundColor(color);
+            entity.syncMetadata();
+        }
+    }
+
+    @Override
+    public void setBackgroundColor(int argb) {
+        setBackgroundColor(Color.fromARGB(argb));
+    }
+
+    @Override
+    public void setShadowed(boolean shadow) {
+        for (Map.Entry<UUID, PacketEntityInterface> entry : playerEntities.entrySet()) {
+            UUID uuid = entry.getKey();
+            if (bedrockPlayers.contains(uuid)) continue; // ArmorStand doesn't support shadow
+
+            PacketEntityInterface entity = entry.getValue();
+            TextDisplay textDisplay = entity.getBukkitEntity();
+            textDisplay.setShadowed(shadow);
+            entity.syncMetadata();
+        }
+    }
+
+    @Override
+    public void setSeeThrough(boolean seeThrough) {
+        for (Map.Entry<UUID, PacketEntityInterface> entry : playerEntities.entrySet()) {
+            UUID uuid = entry.getKey();
+            if (bedrockPlayers.contains(uuid)) continue; // ArmorStand doesn't support seeThrough
+
+            PacketEntityInterface entity = entry.getValue();
+            TextDisplay textDisplay = entity.getBukkitEntity();
+            textDisplay.setSeeThrough(seeThrough);
+            entity.syncMetadata();
+        }
+    }
+
+    @Override
+    public void setBillboard(org.bukkit.entity.Display.Billboard billboard) {
+        for (Map.Entry<UUID, PacketEntityInterface> entry : playerEntities.entrySet()) {
+            UUID uuid = entry.getKey();
+            if (bedrockPlayers.contains(uuid)) continue; // ArmorStand doesn't support billboard
+
+            PacketEntityInterface entity = entry.getValue();
+            TextDisplay textDisplay = entity.getBukkitEntity();
+            textDisplay.setBillboard(billboard);
+            entity.syncMetadata();
+        }
+    }
+
+    @Override
+    public void mountTo(org.bukkit.entity.Entity vehicle) {
+        if (vehicle == null) return;
+        this.currentVehicleId = vehicle.getEntityId();
+        // Mount all existing per-player entities to this vehicle
+        for (PacketEntityInterface entity : playerEntities.values()) {
+            entity.mountTo(currentVehicleId);
+        }
+    }
+
+    @Override
+    public void dismount() {
+        if (currentVehicleId != -1) {
+            for (PacketEntityInterface entity : playerEntities.values()) {
+                entity.dismount();
+            }
+            currentVehicleId = -1;
+            vehicleEntity = null;
+        }
+    }
+
+    @Override
+    public void attachTo(Entity vehicle) {
+        if (vehicle == null) return;
+
+        this.vehicleEntity = vehicle;
+        this.currentVehicleId = vehicle.getEntityId();
+        this.autoTracked = true;
+        this.valid = true;
+
+        // Register with the global tracker
+        PacketEntityTracker.getInstance().register(this);
+    }
+
+    @Override
+    public void detach() {
+        if (autoTracked) {
+            // Unregister from the global tracker
+            PacketEntityTracker.getInstance().unregister(this);
+
+            // Hide from all current viewers
+            for (UUID viewerUUID : new HashSet<>(playerEntities.keySet())) {
+                Player player = Bukkit.getPlayer(viewerUUID);
+                if (player != null) {
+                    hideFrom(player);
+                }
+            }
+
+            dismount();
+            autoTracked = false;
+            valid = false;
+        }
+    }
+
+    @Override
+    public Entity getVehicle() {
+        return vehicleEntity;
+    }
+
+    @Override
+    public boolean isAutoTracked() {
+        return autoTracked;
+    }
+
+    // ===== TrackedPacketEntity implementation =====
+
+    @Override
+    public Location getTrackingLocation() {
+        if (vehicleEntity != null && vehicleEntity.isValid()) {
+            return vehicleEntity.getLocation();
+        }
+        return location;
+    }
+
+    @Override
+    public World getWorld() {
+        if (vehicleEntity != null && vehicleEntity.isValid()) {
+            return vehicleEntity.getWorld();
+        }
+        return location != null ? location.getWorld() : null;
+    }
+
+    @Override
+    public void showToPlayer(Player player) {
+        displayTo(player);
+    }
+
+    @Override
+    public void hideFromPlayer(Player player) {
+        hideFrom(player);
+    }
+
+    @Override
+    public boolean isVisibleTo(Player player) {
+        return player != null && playerEntities.containsKey(player.getUniqueId());
+    }
+
+    @Override
+    public Set<UUID> getCurrentViewers() {
+        return new HashSet<>(playerEntities.keySet());
+    }
+
+    @Override
+    public boolean isValid() {
+        return valid && (vehicleEntity == null || vehicleEntity.isValid());
+    }
+
+    @Override
+    public UUID getUniqueId() {
+        return uniqueId;
+    }
+
+    @Override
+    public void remount() {
+        if (vehicleEntity != null && vehicleEntity.isValid()) {
+            currentVehicleId = vehicleEntity.getEntityId();
+            // Remount all existing per-player entities
+            for (PacketEntityInterface entity : playerEntities.values()) {
+                entity.mountTo(currentVehicleId);
+            }
+        }
     }
 
     /**
@@ -206,13 +434,19 @@ public class FakeTextImpl implements FakeText {
             default -> textDisplay.setAlignment(TextDisplay.TextAlignment.CENTER);
         }
 
-        // Scale - applied via transformation
-        if (settings.getScale() != 1.0f) {
+        // Scale and translation - applied via transformation
+        if (settings.getScale() != 1.0f || settings.hasTranslation()) {
             org.bukkit.util.Transformation transform = textDisplay.getTransformation();
+            org.joml.Vector3f translation = settings.hasTranslation()
+                    ? new org.joml.Vector3f(settings.getTranslationX(), settings.getTranslationY(), settings.getTranslationZ())
+                    : transform.getTranslation();
+            org.joml.Vector3f scale = settings.getScale() != 1.0f
+                    ? new org.joml.Vector3f(settings.getScale(), settings.getScale(), settings.getScale())
+                    : transform.getScale();
             textDisplay.setTransformation(new org.bukkit.util.Transformation(
-                    transform.getTranslation(),
+                    translation,
                     transform.getLeftRotation(),
-                    new org.joml.Vector3f(settings.getScale(), settings.getScale(), settings.getScale()),
+                    scale,
                     transform.getRightRotation()
             ));
         }
@@ -233,7 +467,7 @@ public class FakeTextImpl implements FakeText {
         armorStand.setInvisible(true);
         armorStand.setMarker(true);
         armorStand.setCustomNameVisible(true);
-        armorStand.setCustomName(Component.literal(currentText));
+        armorStand.setCustomName(CraftBukkitBridge.fromLegacyText(currentText));
 
         entity.syncMetadata();
         return entity;

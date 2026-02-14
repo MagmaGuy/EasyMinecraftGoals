@@ -3,21 +3,27 @@ package com.magmaguy.easyminecraftgoals.v1_21_R7_common;
 import com.magmaguy.easyminecraftgoals.constants.OverridableWanderPriority;
 import com.magmaguy.easyminecraftgoals.internal.AbstractPacketBundle;
 import com.magmaguy.easyminecraftgoals.internal.AbstractWanderBackToPoint;
+import com.magmaguy.easyminecraftgoals.internal.FakeItem;
+import com.magmaguy.easyminecraftgoals.internal.FakeItemSettings;
 import com.magmaguy.easyminecraftgoals.internal.FakeText;
 import com.magmaguy.easyminecraftgoals.internal.FakeTextSettings;
 import com.magmaguy.easyminecraftgoals.internal.PacketEntityInterface;
+import com.magmaguy.easyminecraftgoals.internal.PacketInteractionEntity;
 import com.magmaguy.easyminecraftgoals.internal.PacketModelEntity;
 import com.magmaguy.easyminecraftgoals.internal.PacketTextEntity;
 import com.magmaguy.easyminecraftgoals.v1_21_R7_common.entitydata.BodyRotation;
 import com.magmaguy.easyminecraftgoals.v1_21_R7_common.hitbox.Hitbox;
 import com.magmaguy.easyminecraftgoals.v1_21_R7_common.massblockedit.MassEditBlocks;
 import com.magmaguy.easyminecraftgoals.v1_21_R7_common.move.Move;
+import com.magmaguy.easyminecraftgoals.v1_21_R7_common.packets.FakeItemImpl;
 import com.magmaguy.easyminecraftgoals.v1_21_R7_common.packets.FakeTextImpl;
 import com.magmaguy.easyminecraftgoals.v1_21_R7_common.packets.PacketArmorStandEntity;
 import com.magmaguy.easyminecraftgoals.v1_21_R7_common.packets.PacketBundle;
 import com.magmaguy.easyminecraftgoals.v1_21_R7_common.packets.PacketDisplayEntity;
 import com.magmaguy.easyminecraftgoals.v1_21_R7_common.packets.PacketGenericEntity;
+import com.magmaguy.easyminecraftgoals.v1_21_R7_common.packets.PacketInteractionListener;
 import com.magmaguy.easyminecraftgoals.v1_21_R7_common.wanderbacktopoint.WanderBackToPointBehavior;
+import org.bukkit.plugin.Plugin;
 import com.magmaguy.easyminecraftgoals.v1_21_R7_common.wanderbacktopoint.WanderBackToPointGoal;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.PathfinderMob;
@@ -30,6 +36,8 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 
 public class NMSAdapter extends com.magmaguy.easyminecraftgoals.NMSAdapter {
+
+    private PacketInteractionListener packetInteractionListener;
 
     private PathfinderMob getPathfinderMob(Entity entity) {
         net.minecraft.world.entity.Entity nmsEntity = CraftBukkitBridge.getNMSEntity(entity);
@@ -167,5 +175,35 @@ public class NMSAdapter extends com.magmaguy.easyminecraftgoals.NMSAdapter {
     @Override
     public FakeText createFakeText(Location location, FakeTextSettings settings) {
         return new FakeTextImpl(location, settings);
+    }
+
+    @Override
+    public boolean supportsFakeItems() {
+        return true;
+    }
+
+    @Override
+    public FakeItem createFakeItem(Location location, FakeItemSettings settings) {
+        return new FakeItemImpl(location, settings);
+    }
+
+    @Override
+    public PacketInteractionEntity createPacketInteractionEntity(Location location, float width, float height) {
+        return new com.magmaguy.easyminecraftgoals.v1_21_R7_common.packets.PacketInteractionEntity(location, width, height);
+    }
+
+    @Override
+    public void initializePacketInteractionListener(Plugin plugin) {
+        packetInteractionListener = new PacketInteractionListener(plugin);
+        packetInteractionListener.initialize();
+    }
+
+    @Override
+    public void shutdownPacketInteractionListener() {
+        if (packetInteractionListener != null) {
+            packetInteractionListener.shutdown();
+            packetInteractionListener = null;
+        }
+        super.shutdownPacketInteractionListener();
     }
 }

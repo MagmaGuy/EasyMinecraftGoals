@@ -16,6 +16,7 @@ import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_20_R4.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_20_R4.util.CraftChatMessage;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.util.EulerAngle;
@@ -120,7 +121,7 @@ public void displayTo(Player player) {
     @Override
     public void setText(String text) {
         armorStand.setCustomNameVisible(true);
-        armorStand.setCustomName(Component.literal(text));
+        armorStand.setCustomName(CraftChatMessage.fromStringOrNull(text));
         sendPacket(createEntityDataPacket());
     }
 

@@ -93,6 +93,130 @@ public interface FakeText {
     boolean hasViewers();
 
     /**
+     * Sets the text opacity (TextDisplay only).
+     * For animated fade effects.
+     *
+     * @param opacity 0-255, where 255 is fully opaque
+     */
+    default void setTextOpacity(byte opacity) {
+        // Default no-op for backwards compatibility
+    }
+
+    /**
+     * Sets the scale of the text (TextDisplay only).
+     * For animated scale effects.
+     *
+     * @param scale The scale multiplier (1.0 = normal size)
+     */
+    default void setScale(float scale) {
+        // Default no-op for backwards compatibility
+    }
+
+    /**
+     * Sets the background color (TextDisplay only).
+     *
+     * @param color The background color
+     */
+    default void setBackgroundColor(Color color) {
+        // Default no-op for backwards compatibility
+    }
+
+    /**
+     * Sets the background color with alpha (TextDisplay only).
+     *
+     * @param argb ARGB color value
+     */
+    default void setBackgroundColor(int argb) {
+        // Default no-op for backwards compatibility
+    }
+
+    /**
+     * Sets whether the text has shadow (TextDisplay only).
+     *
+     * @param shadow true to enable shadow
+     */
+    default void setShadowed(boolean shadow) {
+        // Default no-op for backwards compatibility
+    }
+
+    /**
+     * Sets whether the text is see-through (TextDisplay only).
+     *
+     * @param seeThrough true to enable see-through
+     */
+    default void setSeeThrough(boolean seeThrough) {
+        // Default no-op for backwards compatibility
+    }
+
+    /**
+     * Sets the billboard mode (TextDisplay only).
+     *
+     * @param billboard The billboard mode
+     */
+    default void setBillboard(Display.Billboard billboard) {
+        // Default no-op for backwards compatibility
+    }
+
+    /**
+     * Makes this fake text ride on top of an entity.
+     * The client will handle positioning automatically - no need to teleport.
+     * Does NOT enable automatic visibility tracking - use attachTo() for that.
+     *
+     * @param vehicle The entity to mount (e.g., a Player)
+     */
+    default void mountTo(org.bukkit.entity.Entity vehicle) {
+        // Default no-op for backwards compatibility with older versions
+    }
+
+    /**
+     * Dismounts this fake text from any vehicle it's currently riding.
+     */
+    default void dismount() {
+        // Default no-op for backwards compatibility with older versions
+    }
+
+    /**
+     * Attaches this fake text to an entity with automatic visibility tracking.
+     * This will:
+     * - Mount the text to the entity
+     * - Register with PacketEntityTracker for automatic show/hide based on distance
+     * - Handle world changes, respawns, and other edge cases automatically
+     * <p>
+     * Use this instead of mountTo() for a fully managed experience.
+     *
+     * @param vehicle The entity to attach to (e.g., a Player)
+     */
+    default void attachTo(org.bukkit.entity.Entity vehicle) {
+        // Default no-op for backwards compatibility with older versions
+    }
+
+    /**
+     * Detaches this fake text from its vehicle and stops automatic tracking.
+     * Hides from all current viewers.
+     */
+    default void detach() {
+        // Default no-op for backwards compatibility with older versions
+    }
+
+    /**
+     * Gets the vehicle entity this fake text is attached to, if any.
+     *
+     * @return The vehicle entity, or null if not attached
+     */
+    default org.bukkit.entity.Entity getVehicle() {
+        return null;
+    }
+
+    /**
+     * Checks if this fake text is using automatic tracking via attachTo().
+     *
+     * @return true if auto-tracked
+     */
+    default boolean isAutoTracked() {
+        return false;
+    }
+
+    /**
      * Builder for creating FakeText instances with custom styling.
      * Styling options only affect TextDisplay (Java Edition players).
      */
@@ -163,6 +287,13 @@ public interface FakeText {
          * Default is 1.0.
          */
         Builder scale(float scale);
+
+        /**
+         * Sets the translation offset of the text (TextDisplay only).
+         * This offsets the text from its spawn location.
+         * Default is (0, 0, 0).
+         */
+        Builder translation(float x, float y, float z);
 
         /**
          * Builds the FakeText at the specified location.

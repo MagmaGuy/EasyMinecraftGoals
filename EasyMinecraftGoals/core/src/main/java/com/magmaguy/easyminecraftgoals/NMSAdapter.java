@@ -3,17 +3,23 @@ package com.magmaguy.easyminecraftgoals;
 import com.magmaguy.easyminecraftgoals.constants.OverridableWanderPriority;
 import com.magmaguy.easyminecraftgoals.internal.AbstractPacketBundle;
 import com.magmaguy.easyminecraftgoals.internal.AbstractWanderBackToPoint;
+import com.magmaguy.easyminecraftgoals.internal.FakeItem;
+import com.magmaguy.easyminecraftgoals.internal.FakeItemSettings;
 import com.magmaguy.easyminecraftgoals.internal.FakeText;
 import com.magmaguy.easyminecraftgoals.internal.FakeTextSettings;
 import com.magmaguy.easyminecraftgoals.internal.PacketEntityInterface;
+import com.magmaguy.easyminecraftgoals.internal.PacketEntityInteractionManager;
+import com.magmaguy.easyminecraftgoals.internal.PacketInteractionEntity;
 import com.magmaguy.easyminecraftgoals.internal.PacketModelEntity;
 import com.magmaguy.easyminecraftgoals.internal.PacketTextEntity;
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.World;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.inventory.ItemStack;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
@@ -124,6 +130,40 @@ public abstract class NMSAdapter {
     }
 
     /**
+     * Creates a packet-only Interaction entity for detecting player clicks.
+     * The entity exists only in packets - it's invisible but clickable.
+     * Use setRightClickCallback/setLeftClickCallback to handle interactions.
+     *
+     * @param location The spawn location
+     * @param width    The width (and depth) of the interaction hitbox
+     * @param height   The height of the interaction hitbox
+     * @return A packet interaction entity that can receive click events
+     */
+    public PacketInteractionEntity createPacketInteractionEntity(Location location, float width, float height) {
+        throw new UnsupportedOperationException("createPacketInteractionEntity is only supported in Minecraft 1.21.11+");
+    }
+
+    /**
+     * Initializes the packet interaction listener for detecting clicks on packet-only entities.
+     * This should be called once during plugin startup after the NMSAdapter is loaded.
+     * Default implementation does nothing - version-specific adapters should override.
+     *
+     * @param plugin The plugin instance
+     */
+    public void initializePacketInteractionListener(Plugin plugin) {
+        // Default no-op - version-specific adapters override this
+    }
+
+    /**
+     * Shuts down the packet interaction listener.
+     * Default implementation does nothing - version-specific adapters should override.
+     */
+    public void shutdownPacketInteractionListener() {
+        // Default no-op
+        PacketEntityInteractionManager.getInstance().shutdown();
+    }
+
+    /**
      * Creates a FakeText that automatically uses TextDisplay for Java Edition players
      * and ArmorStand for Bedrock Edition players.
      *
@@ -140,6 +180,37 @@ public abstract class NMSAdapter {
      */
     public FakeText.Builder fakeTextBuilder() {
         return new FakeTextBuilderImpl(this);
+    }
+
+    /**
+     * Checks if FakeItem is supported on this server version.
+     * FakeItem requires Minecraft 1.21.4+.
+     *
+     * @return true if FakeItem is supported, false otherwise
+     */
+    public boolean supportsFakeItems() {
+        return false;
+    }
+
+    /**
+     * Creates a FakeItem that displays an item visually without being pickable.
+     * Uses ItemDisplay for visual representation.
+     *
+     * @param location The spawn location
+     * @param settings The item display settings
+     * @return A FakeItem instance
+     */
+    public FakeItem createFakeItem(Location location, FakeItemSettings settings) {
+        throw new UnsupportedOperationException("createFakeItem is only supported in Minecraft 1.21.4+");
+    }
+
+    /**
+     * Creates a builder for FakeItem with customizable options.
+     *
+     * @return A new FakeItem.Builder
+     */
+    public FakeItem.Builder fakeItemBuilder() {
+        return new FakeItemBuilderImpl(this);
     }
 
     /**
@@ -220,8 +291,73 @@ public abstract class NMSAdapter {
         }
 
         @Override
+        public FakeText.Builder translation(float x, float y, float z) {
+            settings.setTranslation(x, y, z);
+            return this;
+        }
+
+        @Override
         public FakeText build(Location location) {
             return adapter.createFakeText(location, settings);
+        }
+    }
+
+    /**
+     * Default implementation of FakeItem.Builder.
+     */
+    private static class FakeItemBuilderImpl implements FakeItem.Builder {
+        private final NMSAdapter adapter;
+        private final FakeItemSettings settings = new FakeItemSettings();
+
+        FakeItemBuilderImpl(NMSAdapter adapter) {
+            this.adapter = adapter;
+        }
+
+        @Override
+        public FakeItem.Builder itemStack(ItemStack itemStack) {
+            settings.setItemStack(itemStack);
+            return this;
+        }
+
+        @Override
+        public FakeItem.Builder billboard(org.bukkit.entity.Display.Billboard billboard) {
+            settings.setBillboard(billboard);
+            return this;
+        }
+
+        @Override
+        public FakeItem.Builder scale(float scale) {
+            settings.setScale(scale);
+            return this;
+        }
+
+        @Override
+        public FakeItem.Builder viewRange(float range) {
+            settings.setViewRange(range);
+            return this;
+        }
+
+        @Override
+        public FakeItem.Builder glowing(boolean glowing) {
+            settings.setGlowing(glowing);
+            return this;
+        }
+
+        @Override
+        public FakeItem.Builder customName(String name) {
+            settings.setCustomName(name);
+            return this;
+        }
+
+        @Override
+        public FakeItem.Builder customNameVisible(boolean visible) {
+            settings.setCustomNameVisible(visible);
+            return this;
+        }
+
+        @Override
+        public FakeItem build(Location location) {
+            return adapter.createFakeItem(location, settings);
         }
     }
 

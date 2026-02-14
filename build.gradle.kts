@@ -6,7 +6,7 @@ plugins {
     id("com.gradleup.shadow") version "8.3.5" apply false
 }
 
-val projectVersion = "1.19.22"
+val projectVersion = "1.19.25"
 
 allprojects {
     group = "com.magmaguy"

@@ -117,7 +117,7 @@ public class PacketArmorStandEntity extends AbstractPacketEntity<ArmorStand> imp
     @Override
     public void setText(String text) {
         armorStand.setCustomNameVisible(true);
-        armorStand.setCustomName(Component.literal(text));
+        armorStand.setCustomName(CraftBukkitBridge.fromLegacyText(text));
         sendPacket(createEntityDataPacket());
     }
 

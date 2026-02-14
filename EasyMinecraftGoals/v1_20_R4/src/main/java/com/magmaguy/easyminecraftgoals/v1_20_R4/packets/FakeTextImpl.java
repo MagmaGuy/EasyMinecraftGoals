@@ -12,6 +12,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_20_R4.CraftWorld;
+import org.bukkit.craftbukkit.v1_20_R4.util.CraftChatMessage;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.TextDisplay;
 
@@ -41,9 +42,10 @@ public class FakeTextImpl implements FakeText {
             UUID uuid = entry.getKey();
             PacketEntityInterface entity = entry.getValue();
             if (bedrockPlayers.contains(uuid)) {
-                ArmorStand as = entity.getBukkitEntity();
+                @SuppressWarnings("unchecked")
+                ArmorStand as = ((AbstractPacketEntity<ArmorStand>) entity).getNMSEntity();
                 as.setCustomNameVisible(true);
-                as.setCustomName(Component.literal(text));
+                as.setCustomName(CraftChatMessage.fromStringOrNull(text));
             } else {
                 TextDisplay td = entity.getBukkitEntity();
                 td.setText(text);
@@ -92,7 +94,7 @@ public class FakeTextImpl implements FakeText {
     private PacketEntityInterface createArmorStandEntity(Location location) {
         ArmorStandTextEntity entity = new ArmorStandTextEntity(location);
         ArmorStand as = entity.getNMSEntity();
-        as.setInvisible(true); as.setMarker(true); as.setCustomNameVisible(true); as.setCustomName(Component.literal(currentText));
+        as.setInvisible(true); as.setMarker(true); as.setCustomNameVisible(true); as.setCustomName(CraftChatMessage.fromStringOrNull(currentText));
         entity.syncMetadata();
         return entity;
     }

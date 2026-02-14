@@ -5,6 +5,7 @@ import com.magmaguy.easyminecraftgoals.internal.AbstractPacketBundle;
 import com.magmaguy.easyminecraftgoals.internal.AbstractWanderBackToPoint;
 import com.magmaguy.easyminecraftgoals.internal.FakeText;
 import com.magmaguy.easyminecraftgoals.internal.FakeTextSettings;
+import com.magmaguy.easyminecraftgoals.internal.PacketInteractionEntity;
 import com.magmaguy.easyminecraftgoals.internal.PacketTextEntity;
 import com.magmaguy.easyminecraftgoals.v1_21_R1.packets.FakeTextImpl;
 import com.magmaguy.easyminecraftgoals.v1_21_R1.entitydata.BodyRotation;
@@ -16,7 +17,9 @@ import com.magmaguy.easyminecraftgoals.v1_21_R1.packets.PacketArmorStandEntity;
 import com.magmaguy.easyminecraftgoals.v1_21_R1.packets.PacketBundle;
 import com.magmaguy.easyminecraftgoals.v1_21_R1.packets.PacketDisplayEntity;
 import com.magmaguy.easyminecraftgoals.v1_21_R1.packets.PacketGenericEntity;
+import com.magmaguy.easyminecraftgoals.v1_21_R1.packets.PacketInteractionListener;
 import org.bukkit.entity.EntityType;
+import org.bukkit.plugin.Plugin;
 import com.magmaguy.easyminecraftgoals.v1_21_R1.wanderbacktopoint.WanderBackToPointBehavior;
 import com.magmaguy.easyminecraftgoals.v1_21_R1.wanderbacktopoint.WanderBackToPointGoal;
 import net.minecraft.world.entity.PathfinderMob;
@@ -31,6 +34,8 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 
 public class NMSAdapter extends com.magmaguy.easyminecraftgoals.NMSAdapter {
+
+    private PacketInteractionListener packetInteractionListener;
 
     private PathfinderMob getPathfinderMob(Entity entity) {
         if (((CraftEntity) entity).getHandle() instanceof PathfinderMob pathfinderMob1)
@@ -161,5 +166,25 @@ public class NMSAdapter extends com.magmaguy.easyminecraftgoals.NMSAdapter {
     @Override
     public FakeText createFakeText(Location location, FakeTextSettings settings) {
         return new FakeTextImpl(location, settings);
+    }
+
+    @Override
+    public PacketInteractionEntity createPacketInteractionEntity(Location location, float width, float height) {
+        return new com.magmaguy.easyminecraftgoals.v1_21_R1.packets.PacketInteractionEntity(location, width, height);
+    }
+
+    @Override
+    public void initializePacketInteractionListener(Plugin plugin) {
+        packetInteractionListener = new PacketInteractionListener(plugin);
+        packetInteractionListener.initialize();
+    }
+
+    @Override
+    public void shutdownPacketInteractionListener() {
+        if (packetInteractionListener != null) {
+            packetInteractionListener.shutdown();
+            packetInteractionListener = null;
+        }
+        super.shutdownPacketInteractionListener();
     }
 }

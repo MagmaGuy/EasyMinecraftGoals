@@ -203,6 +203,10 @@ public class CraftBukkitBridge {
         return "dimensions";
     }
 
+    // Cached method/class for CraftChatMessage
+    private static Class<?> craftChatMessageClass;
+    private static Method fromStringOrNullMethod;
+
     // Cached method for creating entities
     private static Method craftWorldCreateEntityMethod = null;
 
@@ -247,5 +251,39 @@ public class CraftBukkitBridge {
         } catch (Exception e) {
             throw new RuntimeException("Failed to create NMS entity for type: " + bukkitType, e);
         }
+    }
+
+    /**
+     * Converts a legacy color-coded string (with § codes) to a Minecraft Component.
+     * Uses CraftChatMessage.fromStringOrNull() to properly parse color codes including hex colors.
+     *
+     * @param text The text with legacy color codes
+     * @return The NMS Component, or a literal component if conversion fails
+     */
+    public static net.minecraft.network.chat.Component fromLegacyText(String text) {
+        if (text == null || text.isEmpty()) {
+            return net.minecraft.network.chat.Component.literal("");
+        }
+
+        try {
+            // Initialize CraftChatMessage class and method if not done yet
+            if (craftChatMessageClass == null) {
+                craftChatMessageClass = Class.forName(CB_PACKAGE + ".util.CraftChatMessage");
+                fromStringOrNullMethod = craftChatMessageClass.getMethod("fromStringOrNull", String.class);
+            }
+
+            // Call CraftChatMessage.fromStringOrNull(text)
+            net.minecraft.network.chat.Component component =
+                    (net.minecraft.network.chat.Component) fromStringOrNullMethod.invoke(null, text);
+
+            if (component != null) {
+                return component;
+            }
+        } catch (Exception e) {
+            // Fall through to literal fallback
+        }
+
+        // Fallback to literal if conversion fails
+        return net.minecraft.network.chat.Component.literal(text);
     }
 }
