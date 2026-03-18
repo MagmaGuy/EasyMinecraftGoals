@@ -9,6 +9,8 @@ paperweight.reobfArtifactConfiguration = io.papermc.paperweight.userdev.ReobfArt
 
 dependencies {
     paperweight.paperDevBundle("1.21.11-R0.1-SNAPSHOT")
+    // Paper dev-bundle snapshot has a missing version for this transitive dependency
+    compileOnly("net.kyori:adventure-text-serializer-ansi:4.26.1")
     compileOnly(project(":core"))
 }
 
