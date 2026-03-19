@@ -1,3 +1,9 @@
+# DEPRECATED
+
+This project has been merged into [MagmaCore](https://github.com/MagmaGuy/MagmaCore). All NMS adapter functionality is now available in the `com.magmaguy.easyminecraftgoals` package within MagmaCore 2.0.0+. No further releases will be made to this repository.
+
+---
+
 EasyMinecraftGoals aims to implement an easy interface to inject preset AI goals into Minecraft Entities using the
 Spigot API, NMS code with Mojang remapping and a minimal amount of reflections.
 
